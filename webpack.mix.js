@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const config = require('./webpack.config');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,5 +12,11 @@ const mix = require('laravel-mix');
  |
  */
 
+mix.webpackConfig(config);
+
 mix.ts('resources/js/app.ts', 'public/js')
     .sass('resources/sass/app.scss', 'public/css');
+
+mix.options({
+    extractVueStyles: 'public/css/style.css',
+});

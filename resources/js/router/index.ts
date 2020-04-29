@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import ExampleComponent from "../views/ExampleComponent.vue";
+import Login from "../views/Login.vue";
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 export default new VueRouter({
     mode: 'history',
@@ -10,7 +10,7 @@ export default new VueRouter({
         {
             path: '/',
             name: 'index',
-            component: ExampleComponent
+            component: Login
         }
     ]
 })
