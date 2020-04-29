@@ -1,16 +1,19 @@
 <template>
     <div class="login">
         <div class="login-form">
-            <h3 class="text-center mb-5">Panel logowania</h3>
-            <div class="form-group">
+            <h3 class="text-center">Panel logowania</h3>
+            <div class="alert alert-danger mt-5 text-center" role="alert" v-if="authError">
+                {{authError}}
+            </div>
+            <div class="form-group mt-5">
                 <i class="fas fa-user"></i>
-                <input type="text" class="form-control" aria-label="Użytkownik" placeholder="Użytkownik" />
+                <input v-model="formData.email" type="email" class="form-control" aria-label="Email" placeholder="Email" />
             </div>
             <div class="form-group">
                 <i class="fas fa-lock"></i>
-                <input type="password" class="form-control" aria-label="Hasło" placeholder="Hasło" />
+                <input v-model="formData.password" type="password" class="form-control" aria-label="Hasło" placeholder="Hasło" />
             </div>
-            <button class="btn btn-block btn-success">Zaloguj</button>
+            <button class="btn btn-block btn-success" @click="login">Zaloguj</button>
         </div>
     </div>
 </template>
@@ -18,10 +21,30 @@
 <script lang="ts">
     import Vue from "vue"
     import Component from "vue-class-component"
+    import { login } from "../helpers/auth";
 
     @Component
     export default class Login extends Vue {
-        //
+        formData: object = {
+            email: '',
+            password: ''
+        }
+
+        get authError(): string {
+            return this.$store.getters.authError;
+        }
+
+        login(): void {
+            this.$store.dispatch('login');
+            login(this.formData)
+                .then(res => {
+                    this.$store.commit("loginSuccess", res);
+                    this.$router.push({path: '/dashboard'});
+                })
+                .catch(error => {
+                    this.$store.commit("loginFailed", {error});
+                })
+        }
     }
 </script>
 
