@@ -17,12 +17,18 @@ if (token) {
 axios.interceptors.response.use(null, (error) => {
     if (error.response.status == 401) {
         store.dispatch('logout');
-        router.push('/login');
+        if(router.currentRoute.name != 'login') {
+            router.push('/login');
+        }
     }
 
     return Promise.reject(error);
 });
 
-if(isLoggedIn()) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${getLoggedInUserToken()}`
-}
+axios.interceptors.request.use(config => {
+    if(isLoggedIn()) {
+        config.headers["Authorization"] = `Bearer ${getLoggedInUserToken()}`
+    }
+
+    return config;
+})

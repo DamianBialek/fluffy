@@ -1,22 +1,40 @@
 import Vue from 'vue';
-import VueRouter from 'vue-router';
+import VueRouter, {RouteConfig} from 'vue-router';
+import { isLoggedIn } from "../helpers/auth";
 import Login from "../views/Login.vue";
-import Dashboard from "../views/Dashboard.vue";
+import Layout from '../layout/Layout';
+import modules from "./modulesRoutesLoader";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
-export default new VueRouter({
+const modulesRoutes: RouteConfig[] = Object.keys(modules).map(key => modules[key])
+
+const router: VueRouter = new VueRouter({
     mode: 'history',
     routes: [
         {
             path: '/login',
-            name: 'index',
+            name: 'login',
             component: Login
         },
         {
-            path: '/dashboard',
-            name: 'dashboard',
-            component: Dashboard
+            path: '/',
+            component: Layout,
+            redirect: '/dashboard',
+            children: [
+                ...modulesRoutes
+            ]
         }
     ]
 })
+
+router.beforeEach((to, from, next) => {
+    if(!isLoggedIn() && to.name != 'login') {
+        next({ name: 'login' });
+    } else {
+        next();
+    }
+})
+
+export const layoutRoutes = modules;
+export default router
