@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import VueRouter, {RouteConfig} from 'vue-router';
-import { isLoggedIn } from "../helpers/auth";
+import { isLoggedIn, checkIfTokenExpired, refreshToken } from "../helpers/auth";
 import Login from "../views/Login.vue";
 import Layout from '../layout/Layout';
 import modules from "./modulesRoutesLoader";
+import store from "../store";
 
 Vue.use(VueRouter);
 

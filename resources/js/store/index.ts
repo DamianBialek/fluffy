@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import {getLoggedInUser, getLoggedInUserToken} from '../helpers/auth';
+import axios from 'axios';
 
 const user = getLoggedInUser();
 const token = getLoggedInUserToken();
@@ -69,6 +70,10 @@ export default new Vuex.Store({
         registerFailed(state, payload){
             state.reg_error = payload.error;
         },
+        setAuthorizationToken(state, payload) {
+            state.currentUser = Object.assign({}, state.currentUser, {token: payload});
+            localStorage.setItem("user", JSON.stringify(state.currentUser));
+        }
     },
     actions: {
         login(context){
@@ -76,6 +81,9 @@ export default new Vuex.Store({
         },
         logout({ commit }) {
             commit("logout")
+        },
+        setAuthorizationToken({commit}, payload) {
+            commit("setAuthorizationToken", payload);
         }
     }
 })

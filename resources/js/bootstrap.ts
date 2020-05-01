@@ -14,7 +14,16 @@ if (token) {
 }
 
 // @ts-ignore
-axios.interceptors.response.use(null, (error) => {
+axios.interceptors.response.use(response => {
+    let headers = response.headers
+
+    // your 401 check here
+    // token refresh - update client session
+    if (headers.authorization !== undefined) {
+        store.dispatch("setAuthorizationToken", headers.authorization);
+    }
+    return response;
+}, (error) => {
     if (error.response.status == 401) {
         store.dispatch('logout');
         if(router.currentRoute.name != 'login') {
