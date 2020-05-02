@@ -1,12 +1,21 @@
 <template>
-    <div class="wrapper">
+    <div :class="['wrapper', {'mini-navbar': miniNavbar}]">
         <div class="sidebar">
             <ul class="list-group sidebar-navbar">
-                <router-link exact-active-class="" v-for="(route, index) in routes" :key="index" tag="li" class="list-group-item" :to="{name: route.name}" active-class="active"><i :class="`mr-2 ${route.icon}`"></i>{{route.title}}</router-link>
+                <router-link exact-active-class="" v-for="(route, index) in routes" :key="index" tag="li" class="list-group-item" :to="{name: route.name}" active-class="active"><i :class="`mr-2 ${route.icon}`"></i><span>{{route.title}}</span></router-link>
             </ul>
         </div>
         <div class="page-content">
-            <router-view></router-view>
+            <header>
+                <nav class="navbar" role="navigation">
+                    <div class="btn bars-btn" @click="miniNavbar = !miniNavbar">
+                        <i class="fa fa-bars"></i>
+                    </div>
+                </nav>
+            </header>
+            <main>
+                <router-view></router-view>
+            </main>
         </div>
     </div>
 </template>
@@ -18,6 +27,8 @@
 
     @Component
     export default class Layout extends Vue {
+        miniNavbar: boolean = false
+
         modulesIcons: { [key: string]: string } = {
             dashboard: 'fas fa-home',
             calendar: 'fas fa-calendar-alt',
@@ -55,10 +66,33 @@
         flex-wrap: wrap;
     }
 
+    .mini-navbar {
+        .sidebar {
+            width: 70px;
+
+            .list-group-item {
+                text-align: center;
+
+                i {
+                    margin-right: 0!important;
+                }
+
+                span {
+                    display: none;
+                }
+            }
+        }
+
+        .page-content {
+            width: calc(100% - 70px);
+        }
+    }
+
     .sidebar {
         background-color: $dark;
         min-height: 100vh;
         width: 220px;
+        transition: width .4s;
 
         .sidebar-navbar {
             margin-top: 100px;
@@ -72,6 +106,10 @@
                 &.active {
                     border-left: 4px solid $turquoise;
                     color: #ffffff;
+
+                    i {
+                        margin-left: -4px;
+                    }
                 }
 
                 &:not(.active) {
@@ -85,11 +123,29 @@
         }
     }
 
+    .navbar {
+        background-color: $dark;
+
+        .bars-btn {
+            border: 1px solid #A7B1C2;
+            color: #A7B1C2;
+
+            &:hover {
+                background-color: $black;
+                color: #ffffff;
+            }
+        }
+    }
+
     .page-content {
         width: calc(100% - 220px);
-        padding: 0 15px;
         background-color: #f3f3f4;
         color: $black;
+        transition: width .4s;
+
+        main {
+            padding: 0 15px;
+        }
 
         .page-wrapper {
             background-color: #fff;

@@ -17,8 +17,6 @@ if (token) {
 axios.interceptors.response.use(response => {
     let headers = response.headers
 
-    // your 401 check here
-    // token refresh - update client session
     if (headers.authorization !== undefined) {
         store.dispatch("setAuthorizationToken", headers.authorization);
     }

@@ -5,15 +5,17 @@
             <div class="alert alert-danger mt-5 text-center" role="alert" v-if="authError">
                 {{authError}}
             </div>
-            <div class="form-group mt-5">
-                <i class="fas fa-user"></i>
-                <input v-model="formData.email" type="email" class="form-control" aria-label="Email" placeholder="Email" />
-            </div>
-            <div class="form-group">
-                <i class="fas fa-lock"></i>
-                <input v-model="formData.password" type="password" class="form-control" aria-label="Hasło" placeholder="Hasło" />
-            </div>
-            <button class="btn btn-block btn-success" @click="login">Zaloguj</button>
+            <form @submit.prevent="login">
+                <div class="form-group mt-5">
+                    <i class="fas fa-user"></i>
+                    <input v-model="formData.email" type="email" class="form-control" aria-label="Email" placeholder="Email" />
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input v-model="formData.password" type="password" class="form-control" aria-label="Hasło" placeholder="Hasło" />
+                </div>
+                <button class="btn btn-block btn-success">Zaloguj</button>
+            </form>
         </div>
     </div>
 </template>
@@ -26,8 +28,8 @@
     @Component
     export default class Login extends Vue {
         formData: object = {
-            email: '',
-            password: ''
+            email: 'test@test.pl',
+            password: 'test'
         }
 
         get authError(): string {

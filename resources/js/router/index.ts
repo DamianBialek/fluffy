@@ -1,10 +1,9 @@
 import Vue from 'vue';
 import VueRouter, {RouteConfig} from 'vue-router';
-import { isLoggedIn, checkIfTokenExpired, refreshToken } from "../helpers/auth";
+import { isLoggedIn } from "../helpers/auth";
 import Login from "../views/Login.vue";
 import Layout from '../layout/Layout';
 import modules from "./modulesRoutesLoader";
-import store from "../store";
 
 Vue.use(VueRouter);
 
@@ -31,6 +30,7 @@ const router: VueRouter = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     if(!isLoggedIn() && to.name != 'login') {
+        console.log("redirect to login - router")
         next({ name: 'login' });
     } else {
         next();
