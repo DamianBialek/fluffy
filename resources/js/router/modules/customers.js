@@ -4,5 +4,7 @@ export default {
     path: '/customers',
     name: 'customers',
     component: Dashboard,
-    title: 'Klienci'
+    meta: {
+        title: 'Klienci'
+    }
 }

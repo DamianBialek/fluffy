@@ -6,19 +6,26 @@ export default {
     path: '/tasks',
     name: 'tasks',
     component: EmptyRouterView,
-    title: 'Zlecenia',
+    meta: {
+        title: 'Zlecenia',
+    },
+    redirect: '/tasks/list',
     children: [
         {
             path: 'list',
             name: 'tasksList',
             component: TasksList,
-            title: 'Lista zleceń'
+            meta: {
+                title: 'Lista zleceń'
+            }
         },
         {
             path: 'add',
             name: 'tasksAdd',
             component: TasksAdd,
-            title: 'Dodaj nowe zlecenie'
+            meta: {
+                title: 'Dodaj nowe zlecenie'
+            }
         }
     ]
 }

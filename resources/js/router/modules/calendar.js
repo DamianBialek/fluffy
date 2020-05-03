@@ -4,7 +4,9 @@ const route = {
     path: '/calendar',
     name: 'calendar',
     component: Dashboard,
-    title: 'Kalendarz'
+    meta: {
+        title: 'Kalendarz'
+    }
 }
 
 export default route;

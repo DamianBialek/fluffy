@@ -19,7 +19,7 @@
                     html += `<i class="\mr-2 ${this.route.icon}\"></i>`;
                 }
 
-                html += `<span>${this.route.title}</span>`;
+                html += `<span>${this.route.meta.title}</span>`;
 
                 return html;
             }
