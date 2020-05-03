@@ -20,58 +20,57 @@
     </div>
 </template>
 
-<script lang="ts">
-    import Vue from "vue"
-    import Component from "vue-class-component"
+<script>
     import { login } from "../helpers/auth";
 
-    @Component
-    export default class Login extends Vue {
-        formData: object = {
-            email: 'test@test.pl',
-            password: 'test'
-        }
-
-        get authError(): string {
-            return this.$store.getters.authError;
-        }
-
-        login(): void {
-            this.$store.dispatch('login');
-            login(this.formData)
-                .then(res => {
-                    this.$store.commit("loginSuccess", res);
-                    this.$router.push({path: '/dashboard'});
-                })
-                .catch(error => {
-                    this.$store.commit("loginFailed", {error});
-                })
+    export default {
+        name: "Login",
+        data() {
+            return {
+                formData: {
+                    email: 'test@test.pl',
+                    password: 'test'
+                }
+            }
+        },
+        computed: {
+            authError() {
+                return this.$store.getters.authError;
+            }
+        },
+        methods: {
+            login() {
+                this.$store.dispatch('login');
+                login(this.formData)
+                    .then(res => {
+                        this.$store.commit("loginSuccess", res);
+                        this.$router.push({path: '/dashboard'});
+                    })
+                    .catch(error => {
+                        this.$store.commit("loginFailed", {error});
+                    })
+            }
         }
     }
 </script>
 
 <style scoped lang="scss">
     @import "@scss/_variables";
-
     .login {
         justify-content: center;
         align-items: center;
         display: flex;
         min-height: 100vh;
         background-color: $dark;
-
         .login-form {
             width: 100%;
             max-width: 500px;
             padding: 15px;
-
             h3 {
                 color: #ffffff;
             }
-
             .form-group {
                 position: relative;
-
                 i {
                     position: absolute;
                     top: 11px;
@@ -79,22 +78,18 @@
                     color: $gray;
                 }
             }
-
             input {
                 background-color: $black;
                 border-color: $mediumDark;
                 color: #fff;
                 padding-left: 30px;
-
                 ::placeholder {
                     color: $gray;
                 }
             }
-
             button {
                 background-color: $turquoise;
                 margin-top: 40px;
-
                 &:hover {
                     background-color: darken($turquoise, 5%);
                 }

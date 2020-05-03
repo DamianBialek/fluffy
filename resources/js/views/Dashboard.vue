@@ -4,23 +4,25 @@
     </div>
 </template>
 
-<script lang="ts">
-    import Vue from "vue"
-    import Component from "vue-class-component"
-    import axios from "axios";
+<script>
+    import axios from 'axios';
 
-    @Component
-    export default class Dashboard extends Vue {
-        user: object = {}
-
+    export default {
+        name: "Dashboard",
+        data() {
+            return {
+                user: {}
+            }
+        },
+        computed: {
+            token() {
+                return this.$store.getters.currentUserToken;
+            }
+        },
         mounted() {
             axios.post("/api/auth/me").then(res => {
                 this.user = res.data;
             })
-        }
-
-        get token() {
-            return this.$store.getters.currentUserToken;
         }
     }
 </script>

@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import {getLoggedInUser, getLoggedInUserToken} from '../helpers/auth';
-import axios from 'axios';
 
 const user = getLoggedInUser();
 const token = getLoggedInUserToken();

@@ -1,9 +1,9 @@
 import axios from "axios";
 
-export function registerUser(credentials: any){
+export function registerUser(credentials){
     return new Promise((res,rej)=>{
         axios.post('/api/auth/register', credentials)
-            .then((response: { data: unknown; }) => {
+            .then(response => {
                 res(response.data);
             })
             .catch(() => {
@@ -12,10 +12,10 @@ export function registerUser(credentials: any){
     })
 }
 
-export function login(credentials: any){
+export function login(credentials){
     return new Promise((res,rej)=>{
         axios.post('/api/auth/login', credentials)
-            .then((response: { data: unknown; }) => {
+            .then(response => {
                 res(response.data);
             })
             .catch(() => {
@@ -34,11 +34,11 @@ export function getLoggedInUser(){
     return JSON.parse(userStr);
 }
 
-export function isLoggedIn(): boolean {
+export function isLoggedIn() {
     return !!getLoggedInUser();
 }
 
 
-export function getLoggedInUserToken(): string {
+export function getLoggedInUserToken() {
     return isLoggedIn() ? getLoggedInUser().token : null;
 }

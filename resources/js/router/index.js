@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import VueRouter, {RouteConfig} from 'vue-router';
+import VueRouter from 'vue-router';
 import { isLoggedIn } from "../helpers/auth";
 import Login from "../views/Login.vue";
 import Layout from '../layout/Layout';
@@ -7,9 +7,9 @@ import modules from "./modulesRoutesLoader";
 
 Vue.use(VueRouter);
 
-const modulesRoutes: RouteConfig[] = Object.keys(modules).map(key => modules[key])
+const modulesRoutes = Object.keys(modules).map(key => modules[key])
 
-const router: VueRouter = new VueRouter({
+const router = new VueRouter({
     mode: 'history',
     routes: [
         {
@@ -29,8 +29,7 @@ const router: VueRouter = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if(!isLoggedIn() && to.name != 'login') {
-        console.log("redirect to login - router")
+    if(!isLoggedIn() && to.name !== 'login') {
         next({ name: 'login' });
     } else {
         next();

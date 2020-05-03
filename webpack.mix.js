@@ -14,7 +14,7 @@ const config = require('./webpack.config');
 
 mix.webpackConfig(config);
 
-mix.ts('resources/js/app.ts', 'public/js')
+mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css');
 
 mix.options({

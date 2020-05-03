@@ -1,5 +1,4 @@
-// @ts-ignore
-import Dashboard from "../../views/Dashboard.vue";
+import Dashboard from "../../views/Dashboard";
 
 export default {
     path: '/tasks',

@@ -2,10 +2,15 @@ import axios from 'axios';
 import { isLoggedIn, getLoggedInUserToken } from "./helpers/auth";
 import router from './router';
 import store from './store';
+import 'bootstrap';
+import jquery from 'jquery';
+import PopperJs from 'popper.js';
+
+window.$ = window.jQuery = jquery;
 
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-let token: HTMLMetaElement | null = document.head.querySelector('meta[name="csrf-token"]');
+let token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
@@ -22,9 +27,9 @@ axios.interceptors.response.use(response => {
     }
     return response;
 }, (error) => {
-    if (error.response.status == 401) {
+    if (error.response.status === 401) {
         store.dispatch('logout');
-        if(router.currentRoute.name != 'login') {
+        if(router.currentRoute.name !== 'login') {
             router.push('/login');
         }
     }

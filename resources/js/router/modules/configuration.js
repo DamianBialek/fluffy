@@ -1,9 +1,8 @@
-// @ts-ignore
 import Dashboard from "../../views/Dashboard.vue";
 
 export default {
-    path: '/mechanics',
-    name: 'mechanics',
+    path: '/configuration',
+    name: 'configuration',
     component: Dashboard,
-    title: 'Mechanicy'
+    title: 'Konfiguracja'
 }
