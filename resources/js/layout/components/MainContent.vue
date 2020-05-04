@@ -1,7 +1,9 @@
 <template>
     <main>
         <PageHeader v-if="activePageHeader" />
-        <router-view></router-view>
+        <transition name="fade">
+            <router-view></router-view>
+        </transition>
     </main>
 </template>
 
@@ -23,6 +25,6 @@
     }
 </script>
 
-<style scoped>
+<style>
 
 </style>
