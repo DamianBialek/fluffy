@@ -1,10 +1,14 @@
-const { resolve } = require('path');
+const path = require('path');
+const scssFullPath = path.resolve(__dirname, 'resources/sass');
 
-module.exports = {
+const config = {
     resolve: {
         extensions: ['.js', '.vue'],
         alias: {
-            '@scss': resolve(__dirname, 'resources/sass')
+            '@scss': scssFullPath,
+            '~': path.join(__dirname, 'resources/assets/js')
         }
-    }
-};
+    },
+}
+
+module.exports = config;

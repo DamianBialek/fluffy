@@ -19,4 +19,5 @@ mix.js('resources/js/app.js', 'public/js')
 
 mix.options({
     extractVueStyles: 'public/css/style.css',
+    globalVueStyles: 'resources/sass/_variables.scss',
 });

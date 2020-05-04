@@ -1,6 +1,6 @@
 <template>
     <div>
-        User: {{this.user.email}}
+        <h1 class="text-center">Dashboard</h1>
     </div>
 </template>
 

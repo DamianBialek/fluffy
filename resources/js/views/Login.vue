@@ -55,7 +55,6 @@
 </script>
 
 <style scoped lang="scss">
-    @import "@scss/_variables";
     .login {
         justify-content: center;
         align-items: center;
