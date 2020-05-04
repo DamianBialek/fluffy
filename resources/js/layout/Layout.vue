@@ -120,23 +120,6 @@
         color: $black;
         transition: width .4s;
 
-        main {
-            padding: 0 15px;
-
-            .page-header {
-                background-color: #ffffff;
-                margin: 0 -15px;
-                padding: 15px;
-
-                .breadcrumb {
-                    background-color: transparent;
-                    margin-bottom: 0;
-                    padding-left: 0;
-                    padding-bottom: 0;
-                }
-            }
-        }
-
         .page-wrapper {
             background-color: #fff;
             margin-top: 1rem;
