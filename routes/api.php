@@ -25,4 +25,9 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
+Route::middleware("apiJwt")->group(function () {
+    Route::resource('parameters', 'ParameterController');
+    Route::resource('customers', 'CustomerController');
+});
+
 

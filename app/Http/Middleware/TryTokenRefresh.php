@@ -14,7 +14,8 @@ class TryTokenRefresh extends BaseMiddleware
 {
     public function handle($request, Closure $next)
     {
-        $newToken = $this->tryRefresh();
+//        $newToken = $this->tryRefresh();
+        $newToken = false;
         if ($newToken) {
             // in case there's anything further to be done with the token
             // we want that code to have a valid one
