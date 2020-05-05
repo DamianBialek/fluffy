@@ -16,8 +16,10 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->bigInteger("vehicle_id")->unsigned();
+            $table->boolean("active")->default(0);
             $table->string("name", 255)->nullable();
             $table->text("note")->nullable();
+            $table->dateTime("date")->nullable();
             $table->timestamps();
             $table->timestamp("finished_at")->nullable();
 
