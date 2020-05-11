@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Customer;
+use App\CustomerVehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CustomerController extends Controller
+class CustomerVehicleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return $this->success(['customers' => Customer::all()], 'Data found');
+        return $this->success(['vehicles' => CustomerVehicle::all()], 'Data found');
     }
 
     /**
@@ -32,17 +32,20 @@ class CustomerController extends Controller
             return $this->error(['fields' => $validator->errors()], "The given data was invalid.", 422);
         }
 
-        $customer = Customer::create([
-            'type' => $request->get("type"),
-            'name' => $request->get("name"),
-            'surname' => $request->get("surname")
+        $vehicle = CustomerVehicle::create([
+            'customer_id' => $request->get("customer_id"),
+            'vin' => $request->get("vin"),
+            'registration_number' => $request->get("registration_number"),
+            'mark' => $request->get("mark"),
+            'model' => $request->get("model"),
+            'production_year' => $request->get("production_year")
         ]);
 
-        if($customer) {
-            return $this->success(['customer' => $customer], 'Customer created', 201);
+        if($vehicle) {
+            return $this->success(['vehicle' => $vehicle], 'Vehicle created', 201);
         }
 
-        return $this->error([], 'Customer not created');
+        return $this->error([], 'Vehicle not created');
     }
 
     /**
@@ -53,10 +56,10 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        $customer = Customer::find($id);
+        $vehicle = CustomerVehicle::find($id);
 
-        if($customer) {
-            return $this->success(['customer' => $customer], 'Data found');
+        if($vehicle) {
+            return $this->success(['vehicle' => $vehicle], 'Data found');
         }
 
         return $this->error([], 'Data not found', 404);
@@ -77,19 +80,22 @@ class CustomerController extends Controller
             return $this->error(['fields' => $validator->errors()], "The given data was invalid.", 422);
         }
 
-        $customer = Customer::find($id);
+        $vehicle = CustomerVehicle::find($id);
 
-        if(!$customer) {
+        if(!$vehicle) {
             return $this->error([], 'Data not found', 404);
         }
 
-        $customer->update([
-            'type' => $request->get("type"),
-            'name' => $request->get("name"),
-            'surname' => $request->get("surname")
+        $vehicle->update([
+            'customer_id' => $request->get("customer_id"),
+            'vin' => $request->get("vin"),
+            'registration_number' => $request->get("registration_number"),
+            'mark' => $request->get("mark"),
+            'model' => $request->get("model"),
+            'production_year' => $request->get("production_year")
         ]);
 
-        return $this->success(['customer' => $customer], 'Customer updated', 200);
+        return $this->success(['vehicle' => $vehicle], 'Vehicle updated', 200);
     }
 
     /**
@@ -100,27 +106,26 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        $customer = Customer::find($id);
+        $parameter = CustomerVehicle::find($id);
 
-        if(!$customer) {
+        if(!$parameter) {
             return $this->error([], 'Data not found', 404);
         }
 
-        if($customer->vehicles()->exists()) {
-            return $this->error([], 'The customer cannot be removed because he has vehicles', 422);
-        }
+        $parameter->delete();
 
-        $customer->delete();
-
-        return $this->success([], 'Customer deleted', 200);
+        return $this->success([], 'Vehicle deleted', 200);
     }
 
     protected function validate($request)
     {
         return Validator::make($request->all(), [
-            'type' => 'required|in:natural_person,company',
-            'name' => 'required|max:64',
-            'surname' => 'required|max:64'
+            'customer_id' => 'required|exists:customers,id',
+            'vin' => 'required|max:191|unique:customers_vehicles,vin',
+            'registration_number' => 'required|max:64',
+            'mark' => 'required|max:45',
+            'model' => 'required|max:45',
+            'production_year' => 'required|numeric|digits:4'
         ]);
     }
 }

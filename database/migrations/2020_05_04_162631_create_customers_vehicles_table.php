@@ -16,7 +16,7 @@ class CreateCustomersVehiclesTable extends Migration
         Schema::create('customers_vehicles', function (Blueprint $table) {
             $table->id();
             $table->bigInteger("customer_id")->unsigned();
-            $table->string("vin", 255);
+            $table->string("vin")->unique();
             $table->string("registration_number", 64);
             $table->string("mark", 45);
             $table->string("model", 45);

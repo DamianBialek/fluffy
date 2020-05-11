@@ -15,7 +15,7 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger("vehicle_id")->unsigned();
+            $table->bigInteger("vehicle_id")->unsigned()->nullable();
             $table->boolean("active")->default(0);
             $table->string("name", 255)->nullable();
             $table->text("note")->nullable();
@@ -23,7 +23,7 @@ class CreateOrdersTable extends Migration
             $table->timestamps();
             $table->timestamp("finished_at")->nullable();
 
-            $table->foreign("vehicle_id")->references("id")->on("customers_vehicles");
+            $table->foreign("vehicle_id")->references("id")->on("customers_vehicles")->onDelete("set null");
         });
     }
 
