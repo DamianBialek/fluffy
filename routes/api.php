@@ -30,6 +30,7 @@ Route::middleware("apiJwt")->group(function () {
     Route::resource('customers', 'CustomerController');
     Route::resource('vehicles', 'CustomerVehicleController');
     Route::resource('services', 'ServiceController');
+    Route::resource('orders', 'OrderController');
 });
 
 

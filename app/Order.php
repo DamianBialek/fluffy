@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+    protected $fillable = ['vehicle_id', 'name', 'note', 'active', 'date', 'finished_at'];
+
     public function vehicle()
     {
         return $this->belongsTo(CustomerVehicle::class);
@@ -13,6 +15,6 @@ class Order extends Model
 
     public function services()
     {
-        return $this->belongsToMany(Service::class, 'orders_services');
+        return $this->hasMany(OrderService::class, 'order_id', 'id');
     }
 }
