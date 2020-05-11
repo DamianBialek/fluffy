@@ -72,10 +72,10 @@
     .mini-navbar {
         .sidebar {
             width: 70px;
+        }
 
-            .page-content {
-                width: calc(100% - 70px);
-            }
+        .page-content {
+            width: calc(100% - 70px);
         }
     }
 
