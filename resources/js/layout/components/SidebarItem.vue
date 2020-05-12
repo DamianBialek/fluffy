@@ -3,7 +3,7 @@
     <div v-else :class="['list-group-root', 'list-group-item', 'flex-column', {'expanded': expanded}]">
         <div class="d-flex align-items-center w-100 route-title-box" v-html="routeTitle" :data-target="`#${route.name}-children`" data-toggle="collapse" :data-expanded="expanded"></div>
         <div :class="['list-group', 'route-list-children', 'collapse', {'show': expanded}]" :id="`${route.name}-children`">
-            <SidebarItem v-for="(route, index) in route.children" :key="index" :route="route" />
+            <SidebarItem v-for="(route, index) in routeChildrenSidebar" :key="index" :route="route" />
         </div>
     </div>
 </template>
@@ -22,7 +22,7 @@
         },
         computed: {
             hasChildren() {
-                return !!this.route.children;
+                return !!this.route.children && this.route.children.some(child => child.meta.inSidebar == null ? false : child.meta.inSidebar);
             },
             routeTitle() {
                 let html = '<span class="route-info">';
@@ -41,6 +41,9 @@
                 }
 
                 return html;
+            },
+            routeChildrenSidebar() {
+                return this.route.children.filter(child => child.meta.inSidebar == null ? false : child.meta.inSidebar)
             }
         },
         mounted() {
