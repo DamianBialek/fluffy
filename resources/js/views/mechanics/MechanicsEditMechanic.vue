@@ -13,7 +13,7 @@
     import MechanicForm from "./components/MechanicForm";
 
     export default {
-        name: "MechanicsAddMechanic",
+        name: "MechanicsEditMechanic",
         components: {MechanicForm},
         data() {
             return {
@@ -24,27 +24,32 @@
                 errorFields: {}
             }
         },
+        mounted() {
+            this.$api.get(`/api/mechanics/${this.$route.params.id}`).then(res => {
+                this.mechanic = res.data.data.mechanic;
+            })
+        },
         methods: {
             saveMechanic() {
                 this.errorFields = {};
-                this.$api.post("/api/mechanics", this.mechanic)
-                .then(res => {
-                    if(res.data.success) {
-                        this.$router.push({name: 'mechanicsList'})
-                    }
-                })
-                .catch(err => {
-                    if(err.response.status !== 422) {
-                        return;
-                    }
+                this.$api.put(`/api/mechanics/${this.mechanic.id}`, this.mechanic)
+                    .then(res => {
+                        if(res.data.success) {
+                            this.$router.push({name: 'mechanicsList'})
+                        }
+                    })
+                    .catch(err => {
+                        if(err.response.status !== 422) {
+                            return;
+                        }
 
-                    this.errorFields = err.response.data.data.fields;
-                })
+                        this.errorFields = err.response.data.data.fields;
+                    })
             }
         }
     }
 </script>
 
-<style>
+<style scoped>
 
 </style>

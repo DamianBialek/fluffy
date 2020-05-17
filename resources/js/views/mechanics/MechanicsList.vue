@@ -20,7 +20,8 @@
                         <td>{{mechanic.name}}</td>
                         <td>{{mechanic.surname}}</td>
                         <td class="text-center">
-                            <button class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button>
+                            <router-link tag="button" :to="{name: 'mechanicsEditMechanic', params: {id: mechanic.id}}" class="btn btn-outline-secondary m-1"><i class="fas fa-user-edit"></i></router-link>
+                            <button class="btn btn-outline-danger m-1" @click="deleteMechanic(mechanic)"><i class="fas fa-trash-alt"></i></button>
                         </td>
                     </tr>
                     </tbody>
@@ -39,10 +40,24 @@
             }
         },
         mounted() {
-            this.$api.get("/api/mechanics")
-            .then(res => {
-                this.mechanics = res.data.data.mechanics;
-            })
+            this.getMechanics();
+        },
+        methods: {
+            deleteMechanic(mechanic) {
+                this.$confirm(`Czy na pewno chcesz usunać tego mechanika ${mechanic.name} ${mechanic.surname} ?`)
+                .then(() => {
+                    this.$api.delete(`/api/mechanics/${mechanic.id}`)
+                    .then(() => {
+                        this.getMechanics();
+                    })
+                })
+            },
+            getMechanics() {
+                this.$api.get("/api/mechanics")
+                    .then(res => {
+                        this.mechanics = res.data.data.mechanics;
+                    })
+            }
         }
     }
 </script>

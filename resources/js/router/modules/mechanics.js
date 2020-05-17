@@ -1,6 +1,7 @@
 import EmptyRouterView from "../../components/EmptyRouterView";
 import MechanicsList from "../../views/mechanics/MechanicsList";
 import MechanicsAddMechanic from "../../views/mechanics/MechanicsAddMechanic";
+import MechanicsEditMechanic from "../../views/mechanics/MechanicsEditMechanic";
 
 export default {
     path: '/mechanics',
@@ -25,6 +26,14 @@ export default {
             component: MechanicsAddMechanic,
             meta: {
                 title: 'Dodawanie nowego mechanika'
+            }
+        },
+        {
+            path: 'edit/:id',
+            name: 'mechanicsEditMechanic',
+            component: MechanicsEditMechanic,
+            meta: {
+                title: 'Edycja danych mechanika'
             }
         }
     ]
