@@ -25,13 +25,16 @@
             }
         },
         mounted() {
+            this.setLoading(true);
             this.$api.get(`/api/mechanics/${this.$route.params.id}`).then(res => {
                 this.mechanic = res.data.data.mechanic;
+                this.setLoading(false);
             })
         },
         methods: {
             saveMechanic() {
                 this.errorFields = {};
+                this.setLoading(true);
                 this.$api.put(`/api/mechanics/${this.mechanic.id}`, this.mechanic)
                     .then(res => {
                         if(res.data.success) {
@@ -44,6 +47,9 @@
                         }
 
                         this.errorFields = err.response.data.data.fields;
+                    })
+                    .finally(() => {
+                        this.setLoading(false);
                     })
             }
         }

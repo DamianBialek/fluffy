@@ -72,6 +72,9 @@ export default new Vuex.Store({
         setAuthorizationToken(state, payload) {
             state.currentUser = Object.assign({}, state.currentUser, {token: payload});
             localStorage.setItem("user", JSON.stringify(state.currentUser));
+        },
+        setLoading(state, payload) {
+            state.loading = payload;
         }
     },
     actions: {
@@ -83,6 +86,9 @@ export default new Vuex.Store({
         },
         setAuthorizationToken({commit}, payload) {
             commit("setAuthorizationToken", payload);
+        },
+        setLoading({commit}, state) {
+            commit("setLoading", state);
         }
     }
 })

@@ -53,9 +53,11 @@
                 })
             },
             getMechanics() {
+                this.setLoading(true);
                 this.$api.get("/api/mechanics")
                     .then(res => {
                         this.mechanics = res.data.data.mechanics;
+                        this.setLoading(false);
                     })
             }
         }

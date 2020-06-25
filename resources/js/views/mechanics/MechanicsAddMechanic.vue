@@ -27,6 +27,7 @@
         methods: {
             saveMechanic() {
                 this.errorFields = {};
+                this.setLoading(true);
                 this.$api.post("/api/mechanics", this.mechanic)
                 .then(res => {
                     if(res.data.success) {
@@ -39,6 +40,9 @@
                     }
 
                     this.errorFields = err.response.data.data.fields;
+                })
+                .finally(() => {
+                    this.setLoading(false);
                 })
             }
         }

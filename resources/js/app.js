@@ -9,6 +9,14 @@ Vue.use(dialogPlugin);
 
 Vue.prototype.$api = axios;
 
+Vue.mixin({
+    methods: {
+        setLoading(state) {
+            this.$store.dispatch("setLoading", state);
+        }
+    }
+});
+
 new Vue({
     el: '#app',
     router,

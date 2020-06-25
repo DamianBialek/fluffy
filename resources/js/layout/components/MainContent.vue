@@ -1,11 +1,14 @@
 <template>
     <main>
         <PageHeader v-if="activePageHeader" />
-        <transition name="fade">
-            <div class="content">
-                <router-view></router-view>
+        <div v-show="!loading" class="content">
+            <router-view></router-view>
+        </div>
+        <div v-if="loading" class="d-flex justify-content-center py-5">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
             </div>
-        </transition>
+        </div>
     </main>
 </template>
 
@@ -17,6 +20,11 @@
         data() {
             return {
                 activePageHeader: this.$route.name !== 'dashboard'
+            }
+        },
+        computed: {
+            loading() {
+                return this.$store.getters.isLoading;
             }
         },
         watch: {
