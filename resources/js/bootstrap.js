@@ -4,7 +4,7 @@ import router from './router';
 import store from './store';
 import 'bootstrap';
 import jquery from 'jquery';
-import PopperJs from 'popper.js';
+import swal from 'sweetalert';
 
 window.$ = window.jQuery = jquery;
 
@@ -32,6 +32,10 @@ axios.interceptors.response.use(response => {
         if(router.currentRoute.name !== 'login') {
             router.push('/login');
         }
+    }
+
+    if(error.response.status === 500) {
+        swal("Wystąpił błąd podczas połączenia z serwerem !", "", "error");
     }
 
     return Promise.reject(error);

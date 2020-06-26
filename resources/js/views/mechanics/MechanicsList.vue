@@ -32,6 +32,8 @@
 </template>
 
 <script>
+    import swal from "sweetalert";
+
     export default {
         name: "MechanicsList",
         data() {
@@ -48,7 +50,9 @@
                 .then(() => {
                     this.$api.delete(`/api/mechanics/${mechanic.id}`)
                     .then(() => {
-                        this.getMechanics();
+                        swal("Pomyślnie usunięto mechanika !", "", "success").then(() => {
+                            this.getMechanics();
+                        })
                     })
                 })
             },
