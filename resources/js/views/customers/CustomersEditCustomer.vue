@@ -1,7 +1,7 @@
 <template>
     <div class="page">
         <div class="my-3 text-right">
-            <router-link tag="button" :to="{name: 'mechanicsList'}" class="btn btn-info"><i class="fas fa-level-up-alt"></i></router-link>
+            <router-link tag="button" :to="{name: 'customersList'}" class="btn btn-info"><i class="fas fa-level-up-alt"></i></router-link>
         </div>
         <section>
             <CustomerForm @submit="saveCustomer" :customer="this.customer" :error-fields="errorFields" />
