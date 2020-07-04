@@ -106,10 +106,6 @@ class CustomerController extends Controller
             return $this->error([], 'Data not found', 404);
         }
 
-        if($customer->vehicles()->exists()) {
-            return $this->error([], 'The customer cannot be removed because he has vehicles', 422);
-        }
-
         $customer->delete();
 
         return $this->success([], 'Customer deleted', 200);
