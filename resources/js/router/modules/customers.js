@@ -17,7 +17,8 @@ export default {
             name: 'customersList',
             component: CustomersList,
             meta: {
-                title: 'Lista klientów'
+                title: 'Lista klientów',
+                inSidebar: true
             }
         },
         {
@@ -35,6 +36,27 @@ export default {
             meta: {
                 title: 'Edycja danych klienta'
             }
+        },
+        {
+            path: 'cars',
+            component: EmptyRouterView,
+            redirect: '/customers/cars/list',
+            name: "cars",
+            meta: {
+                title: 'Samochody',
+                inSidebar: true
+            },
+            children: [
+                {
+                    path: 'list',
+                    component: CustomersList,
+                    name: 'customersCarsList',
+                    meta: {
+                        title: "Lista samochodów"
+                    }
+
+                }
+            ]
         }
     ]
 }
