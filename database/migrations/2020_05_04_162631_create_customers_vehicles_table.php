@@ -15,7 +15,7 @@ class CreateCustomersVehiclesTable extends Migration
     {
         Schema::create('customers_vehicles', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger("customer_id")->unsigned();
+            $table->bigInteger("customer_id")->unsigned()->nullable();
             $table->string("vin")->unique();
             $table->string("registration_number", 64);
             $table->string("mark", 45);
@@ -23,7 +23,7 @@ class CreateCustomersVehiclesTable extends Migration
             $table->string("production_year", 4);
             $table->timestamps();
 
-            $table->foreign("customer_id")->references("id")->on("customers");
+            $table->foreign("customer_id")->references("id")->on("customers")->onDelete('set null');
         });
     }
 

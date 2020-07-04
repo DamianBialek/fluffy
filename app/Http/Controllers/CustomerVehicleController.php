@@ -120,7 +120,7 @@ class CustomerVehicleController extends Controller
     protected function validate($request)
     {
         return Validator::make($request->all(), [
-            'customer_id' => 'required|exists:customers,id',
+            'customer_id' => 'nullable|exists:customers,id',
             'vin' => 'required|max:191|unique:customers_vehicles,vin',
             'registration_number' => 'required|max:64',
             'mark' => 'required|max:45',
