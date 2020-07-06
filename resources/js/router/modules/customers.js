@@ -2,6 +2,9 @@ import CustomersList from "../../views/customers/CustomersList";
 import CustomersAddCustomer from "../../views/customers/CustomersAddCustomer";
 import CustomersEditCustomer from "../../views/customers/CustomersEditCustomer";
 import EmptyRouterView from "../../components/EmptyRouterView";
+import CustomersVehiclesList from "../../views/customersVehicles/CustomersVehiclesList";
+import CustomersVehiclesAdd from "../../views/customersVehicles/CustomersVehiclesAdd";
+import CustomersVehiclesEdit from "../../views/customersVehicles/CustomersVehiclesEdit";
 
 export default {
     path: '/customers',
@@ -49,12 +52,29 @@ export default {
             children: [
                 {
                     path: 'list',
-                    component: CustomersList,
+                    component: CustomersVehiclesList,
                     name: 'customersCarsList',
                     meta: {
                         title: "Lista samochodów"
                     }
 
+                },
+                {
+                    path: 'add',
+                    component: CustomersVehiclesAdd,
+                    name: 'customersCarsAdd',
+                    meta: {
+                        title: "Dodawanie nowego samochodu"
+                    }
+
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'customersCarsEdit',
+                    component: CustomersVehiclesEdit,
+                    meta: {
+                        title: 'Edycja danych samochodu'
+                    }
                 }
             ]
         }
