@@ -74,16 +74,16 @@ class CustomerVehicleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = $this->validate($request);
-
-        if($validator->fails()) {
-            return $this->error(['fields' => $validator->errors()], "The given data was invalid.", 422);
-        }
-
         $vehicle = CustomerVehicle::find($id);
 
         if(!$vehicle) {
             return $this->error([], 'Data not found', 404);
+        }
+
+        $validator = $this->validate($request, $id);
+
+        if($validator->fails()) {
+            return $this->error(['fields' => $validator->errors()], "The given data was invalid.", 422);
         }
 
         $vehicle->update([
@@ -117,15 +117,21 @@ class CustomerVehicleController extends Controller
         return $this->success([], 'Vehicle deleted', 200);
     }
 
-    protected function validate($request)
+    protected function validate($request, $exceptId = null)
     {
-        return Validator::make($request->all(), [
+        $rules = [
             'customer_id' => 'nullable|exists:customers,id',
             'vin' => 'required|max:191|unique:customers_vehicles,vin',
             'registration_number' => 'required|max:64',
             'mark' => 'required|max:45',
             'model' => 'required|max:45',
             'production_year' => 'required|numeric|digits:4'
-        ]);
+        ];
+
+        if(!empty($exceptId)) {
+            $rules['vin'] .= ','.$exceptId;
+        }
+
+        return Validator::make($request->all(), $rules);
     }
 }
