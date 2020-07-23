@@ -53,7 +53,7 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        $customer = Customer::find($id);
+        $customer = Customer::with("vehicles")->where("id", $id)->firstOrFail();
 
         if($customer) {
             return $this->success(['customer' => $customer], 'Data found');

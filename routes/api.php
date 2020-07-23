@@ -28,6 +28,7 @@ Route::group(['prefix' => 'auth'], function () {
 Route::middleware("apiJwt")->group(function () {
     Route::resource('parameters', 'ParameterController');
     Route::resource('customers', 'CustomerController');
+    Route::get("/vehicles/getUnassignedVehicles", 'CustomerVehicleController@getUnassignedVehicles');
     Route::resource('vehicles', 'CustomerVehicleController');
     Route::resource('services', 'ServiceController');
     Route::resource('orders', 'OrderController');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\CustomerVehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class CustomerVehicleController extends Controller
@@ -96,6 +97,28 @@ class CustomerVehicleController extends Controller
         ]);
 
         return $this->success(['vehicle' => $vehicle], 'Vehicle updated', 200);
+    }
+
+    public function getUnassignedVehicles(Request $request)
+    {
+        DB::enableQueryLog();
+
+        $query = CustomerVehicle::where("customer_id", null);
+
+        if(!empty($request->get("query"))) {
+            $queryString = $request->get("query");
+            $query->where(function ($query) use($queryString) {
+                $query->orWhere("vin", "LIKE", "%{$queryString}%");
+                $query->orWhere("registration_number", "LIKE", "%{$queryString}%");
+                $query->orWhere("mark", "LIKE", "%{$queryString}%");
+                $query->orWhere("model", "LIKE", "%{$queryString}%");
+                $query->orWhere("production_year", "LIKE", "%{$queryString}%");
+            });
+        }
+
+        $vehicles = $query->get();
+
+        return $this->success(['vehicles' => $vehicles, 'debug' => DB::getQueryLog()]);
     }
 
     /**
