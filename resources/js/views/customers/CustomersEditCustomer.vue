@@ -4,7 +4,7 @@
             <router-link tag="button" :to="{name: 'customersList'}" class="btn btn-info"><i class="fas fa-level-up-alt"></i></router-link>
         </div>
         <section>
-            <CustomerForm @submit="saveCustomer" :customer="this.customer" :error-fields="errorFields" />
+            <CustomerForm @submit="saveCustomer" @unassignCustomerVehicle="unassignCustomerVehicle" @assignCustomerVehicle="assignCustomerVehicle" :customer="this.customer" :error-fields="errorFields" />
         </section>
     </div>
 </template>
@@ -22,6 +22,11 @@
             return {
                 customer: {},
                 errorFields: {}
+            }
+        },
+        computed: {
+            vehicles() {
+                return this.$store.getters.unassignedCustomerVehicles;
             }
         },
         mounted() {
@@ -59,6 +64,38 @@
                     .finally(() => {
                         this.setLoading(false);
                     })
+            },
+            unassignCustomerVehicle(vehicle) {
+                vehicle = Object.assign(vehicle, {
+                    customer_id: null
+                })
+
+                this.updateCustomerVehicleData(vehicle)
+                    .then(res => {
+                        if(res.data.success) {
+                            swal("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
+                                this.customer.vehicles.splice(this.customer.vehicles.findIndex(v => v.id === vehicle.id), 1);
+                            })
+                        }
+                    })
+            },
+            assignCustomerVehicle(vehicle) {
+                vehicle = Object.assign(vehicle, {
+                    customer_id: this.customer.id
+                })
+
+                this.updateCustomerVehicleData(vehicle)
+                    .then(res => {
+                        if(res.data.success) {
+                            swal("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
+                                this.customer.vehicles.push(vehicle);
+                                this.$store.commit("removeUnassignedCustomerVehicles", vehicle.id);
+                            })
+                        }
+                    })
+            },
+            updateCustomerVehicleData(vehicle) {
+                return this.$api.put(`/api/vehicles/${vehicle.id}`, vehicle);
             }
         }
     }

@@ -128,8 +128,6 @@
 </template>
 
 <script>
-    import swal from "sweetalert";
-
     export default {
         name: "CustomerForm",
         props: {
@@ -156,7 +154,6 @@
                     'natural_person',
                     'company'
                 ],
-                vehicles: [],
                 customerVehiclesSearchQuery: '',
                 customersVehiclesLoading: false
             }
@@ -180,6 +177,9 @@
 
                     return error;
                 }
+            },
+            vehicles() {
+                return this.$store.getters.unassignedCustomerVehicles;
             }
         },
         methods: {
@@ -191,44 +191,18 @@
                 if(e instanceof KeyboardEvent && e.code !== 'Enter') {
                     return;
                 }
-                
+
                 this.customersVehiclesLoading = true;
                 this.$api.get("/api/vehicles/getUnassignedVehicles", {params: {query: this.customerVehiclesSearchQuery}}).then(res => {
-                    this.vehicles = res.data.data.vehicles;
+                    this.$store.commit("setUnassignedCustomerVehicles", res.data.data.vehicles);
                     this.customersVehiclesLoading = false;
                 })
             },
             unassignCustomerVehicle(vehicle) {
-                vehicle = Object.assign(vehicle, {
-                    customer_id: null
-                })
-
-                this.updateCustomerVehicleData(vehicle)
-                    .then(res => {
-                        if(res.data.success) {
-                            swal("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
-                                this.customer.vehicles.splice(this.vehicles.findIndex(v => v.id === vehicle.id), 1);
-                            })
-                        }
-                    })
+                this.$emit("unassignCustomerVehicle", vehicle);
             },
             assignCustomerVehicle(vehicle) {
-                vehicle = Object.assign(vehicle, {
-                    customer_id: this.customer.id
-                })
-
-                this.updateCustomerVehicleData(vehicle)
-                    .then(res => {
-                        if(res.data.success) {
-                            swal("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
-                                this.customer.vehicles.push(vehicle);
-                                this.vehicles.splice(this.vehicles.findIndex(v => v.id === vehicle.id), 1);
-                            })
-                        }
-                    })
-            },
-            updateCustomerVehicleData(vehicle) {
-                return this.$api.put(`/api/vehicles/${vehicle.id}`, vehicle);
+                this.$emit("assignCustomerVehicle", vehicle);
             }
         }
     }
