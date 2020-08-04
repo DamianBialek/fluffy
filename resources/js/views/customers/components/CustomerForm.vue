@@ -90,11 +90,7 @@
                             </div>
                         </div>
                         <hr />
-                        <div v-if="customersVehiclesLoading" class="d-flex justify-content-center py-5">
-                            <div class="spinner-border" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>
+                        <Loading v-if="customersVehiclesLoading" />
                         <div v-show="!customersVehiclesLoading" class="table-responsive">
                             <table class="table">
                                 <thead>
@@ -128,8 +124,10 @@
 </template>
 
 <script>
+    import Loading from "../../../components/Loading";
     export default {
         name: "CustomerForm",
+        components: {Loading},
         props: {
             customer: {
                 type: Object,

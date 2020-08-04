@@ -4,19 +4,20 @@
         <div v-show="!loading" class="content">
             <router-view></router-view>
         </div>
-        <div v-if="loading" class="d-flex justify-content-center py-5">
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
+        <Loading v-if="loading" />
     </main>
 </template>
 
 <script>
     import PageHeader from "./PageHeader";
+    import Loading from "../../components/Loading";
+
     export default {
         name: "MainContent",
-        components: {PageHeader},
+        components: {
+            PageHeader,
+            Loading
+        },
         data() {
             return {
                 activePageHeader: this.$route.name !== 'dashboard'
