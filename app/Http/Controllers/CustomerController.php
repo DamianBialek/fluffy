@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use App\CustomerVehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
@@ -32,17 +34,26 @@ class CustomerController extends Controller
             return $this->error(['fields' => $validator->errors()], "The given data was invalid.", 422);
         }
 
-        $customer = Customer::create([
-            'type' => $request->get("type"),
-            'name' => $request->get("name"),
-            'surname' => $request->get("surname")
-        ]);
+        return DB::transaction(function () use ($request) {
+            $customer = Customer::create([
+                'type' => $request->get("type"),
+                'name' => $request->get("name"),
+                'surname' => $request->get("surname")
+            ]);
 
-        if($customer) {
-            return $this->success(['customer' => $customer], 'Customer created', 201);
-        }
+            if($customer) {
+                if(!empty($request->get("vehicles"))) {
+                    foreach ($request->get("vehicles") as $vehicle) {
+                        if($cVehicle = CustomerVehicle::find($vehicle['id'])) {
+                            $cVehicle->customer()->associate($customer)->save();
+                        }
+                    }
+                }
+                return $this->success(['customer' => $customer], 'Customer created', 201);
+            }
 
-        return $this->error([], 'Customer not created');
+            return $this->error([], 'Customer not created');
+        });
     }
 
     /**

@@ -101,8 +101,6 @@ class CustomerVehicleController extends Controller
 
     public function getUnassignedVehicles(Request $request)
     {
-        DB::enableQueryLog();
-
         $query = CustomerVehicle::where("customer_id", null);
 
         if(!empty($request->get("query"))) {
@@ -118,7 +116,7 @@ class CustomerVehicleController extends Controller
 
         $vehicles = $query->get();
 
-        return $this->success(['vehicles' => $vehicles, 'debug' => DB::getQueryLog()]);
+        return $this->success(['vehicles' => $vehicles]);
     }
 
     /**
