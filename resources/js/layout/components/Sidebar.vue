@@ -7,9 +7,9 @@
 </template>
 
 <script>
-    import SidebarItem from "./SidebarItem";
+import SidebarItem from "./SidebarItem";
 
-    export default {
+export default {
         name: "Sidebar",
         components: {SidebarItem},
         props: {
@@ -19,7 +19,7 @@
         },
         methods: {
             getCurrentMatchedRouteParentRoute() {
-                return this.$route.matched[this.$route.matched.length - 2];
+                return this.$route.matched.find(matchedRoute => matchedRoute.parent && matchedRoute.parent.name === 'start');
             },
             isRouteExpanded(route) {
                 const parentMatchedRoute = this.getCurrentMatchedRouteParentRoute();
