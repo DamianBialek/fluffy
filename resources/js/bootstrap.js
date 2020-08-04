@@ -27,15 +27,16 @@ axios.interceptors.response.use(response => {
     }
     return response;
 }, (error) => {
+    if(!error.response || !error.response.status || error.response.status === 500) {
+        swal("Wystąpił błąd podczas połączenia z serwerem !", "", "error");
+        return Promise.reject(error);
+    }
+
     if (error.response.status === 401) {
         store.dispatch('logout');
         if(router.currentRoute.name !== 'login') {
             router.push('/login');
         }
-    }
-
-    if(error.response.status === 500) {
-        swal("Wystąpił błąd podczas połączenia z serwerem !", "", "error");
     }
 
     return Promise.reject(error);
