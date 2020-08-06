@@ -27,19 +27,27 @@
                     </tbody>
                 </table>
             </div>
+            <div class="mt-3 pb-3 d-flex justify-content-center">
+                <Pagination :pagination="paginationData" @paginate="getVehicles()" :offset="2"></Pagination>
+            </div>
         </section>
     </div>
 </template>
 
 <script>
     import swal from "sweetalert";
+    import Pagination from "../../components/Pagination";
 
     export default {
         name: "CustomersVehiclesList",
         data() {
             return {
-                vehicles: []
+                vehicles: [],
+                paginationData: {}
             }
+        },
+        components: {
+            Pagination
         },
         mounted() {
             this.getVehicles();
@@ -58,9 +66,10 @@
             },
             getVehicles() {
                 this.setLoading(true);
-                this.$api.get("/api/vehicles")
+                this.$api.get("/api/vehicles", { params: {page: this.paginationData.current_page} })
                     .then(res => {
                         this.vehicles = res.data.data.vehicles;
+                        this.paginationData = res.data.data.pagination;
                         this.setLoading(false);
                     })
             }

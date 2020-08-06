@@ -15,7 +15,11 @@ class MechanicController extends Controller
      */
     public function index()
     {
-        return $this->success(['mechanics' => Mechanic::all()], 'Data found');
+        $mechanicsData = Mechanic::paginate(30);
+        $paginationData = $mechanicsData->toArray();
+        unset($paginationData['data']);
+
+        return $this->success(['mechanics' => $mechanicsData->items(), 'pagination' => $paginationData], 'Data found');
     }
 
     /**

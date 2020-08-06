@@ -17,7 +17,10 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return $this->success(['customers' => Customer::all()], 'Data found');
+        $customersData = Customer::paginate(30);
+        $paginationData = $customersData->toArray();
+        unset($paginationData['data']);
+        return $this->success(['customers' => $customersData->items(), 'pagination' => $paginationData], 'Data found');
     }
 
     /**

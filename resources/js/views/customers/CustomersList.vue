@@ -27,19 +27,27 @@
                     </tbody>
                 </table>
             </div>
+            <div class="mt-3 pb-3 d-flex justify-content-center">
+                <Pagination :pagination="paginationData" @paginate="getCustomers()" :offset="2"></Pagination>
+            </div>
         </section>
     </div>
 </template>
 
 <script>
     import swal from "sweetalert";
+    import Pagination from "../../components/Pagination";
 
     export default {
         name: "CustomersList",
         data() {
             return {
-                customers: []
+                customers: [],
+                paginationData: {}
             }
+        },
+        components: {
+            Pagination
         },
         mounted() {
             this.getCustomers();
@@ -58,9 +66,10 @@
             },
             getCustomers() {
                 this.setLoading(true);
-                this.$api.get("/api/customers")
+                this.$api.get("/api/customers", { params: {page: this.paginationData.current_page} })
                     .then(res => {
                         this.customers = res.data.data.customers;
+                        this.paginationData = res.data.data.pagination;
                         this.setLoading(false);
                     })
             }

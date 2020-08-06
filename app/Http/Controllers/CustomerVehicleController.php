@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\CustomerVehicle;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class CustomerVehicleController extends Controller
@@ -16,7 +15,11 @@ class CustomerVehicleController extends Controller
      */
     public function index()
     {
-        return $this->success(['vehicles' => CustomerVehicle::all()], 'Data found');
+        $customersVehiclesData = CustomerVehicle::paginate(30);
+        $paginationData = $customersVehiclesData->toArray();
+        unset($paginationData['data']);
+
+        return $this->success(['vehicles' => $customersVehiclesData->items(), 'pagination' => $paginationData], 'Data found');
     }
 
     /**

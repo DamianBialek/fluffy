@@ -27,19 +27,27 @@
                     </tbody>
                 </table>
             </div>
+            <div class="mt-3 pb-3 d-flex justify-content-center">
+                <Pagination :pagination="paginationData" @paginate="getMechanics()" :offset="2"></Pagination>
+            </div>
         </section>
     </div>
 </template>
 
 <script>
     import swal from "sweetalert";
+    import Pagination from "../../components/Pagination";
 
     export default {
         name: "MechanicsList",
         data() {
             return {
-                mechanics: []
+                mechanics: [],
+                paginationData: {}
             }
+        },
+        components: {
+            Pagination
         },
         mounted() {
             this.getMechanics();
@@ -58,9 +66,10 @@
             },
             getMechanics() {
                 this.setLoading(true);
-                this.$api.get("/api/mechanics")
+                this.$api.get("/api/mechanics", { params: {page: this.paginationData.current_page} })
                     .then(res => {
                         this.mechanics = res.data.data.mechanics;
+                        this.paginationData = res.data.data.pagination;
                         this.setLoading(false);
                     })
             }
