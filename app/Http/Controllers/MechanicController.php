@@ -11,11 +11,17 @@ class MechanicController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $mechanicsData = Mechanic::paginate(30);
+        if(!empty($request->get("query")))
+            $mechanicsData = Mechanic::search($request->get("query"));
+        else
+            $mechanicsData = Mechanic::query();
+
+        $mechanicsData = $mechanicsData->paginate(30);
         $paginationData = $mechanicsData->toArray();
         unset($paginationData['data']);
 

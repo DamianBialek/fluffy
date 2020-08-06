@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class CustomerVehicle extends Model
@@ -18,5 +19,20 @@ class CustomerVehicle extends Model
     public function orders()
     {
         return $this->hasMany(Order::class, 'vehicle_id');
+    }
+
+    public static function search($queryString, Builder $query = null)
+    {
+        if($query === null) {
+            $query = static::query();
+        }
+
+        $query->orWhere("vin", "LIKE", "%{$queryString}%");
+        $query->orWhere("registration_number", "LIKE", "%{$queryString}%");
+        $query->orWhere("mark", "LIKE", "%{$queryString}%");
+        $query->orWhere("model", "LIKE", "%{$queryString}%");
+        $query->orWhere("production_year", "LIKE", "%{$queryString}%");
+
+        return $query;
     }
 }

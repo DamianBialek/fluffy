@@ -11,11 +11,17 @@ class CustomerVehicleController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $customersVehiclesData = CustomerVehicle::paginate(30);
+        if(!empty($request->get("query")))
+            $customersVehiclesData = CustomerVehicle::search($request->get("query"));
+        else
+            $customersVehiclesData = CustomerVehicle::query();
+
+        $customersVehiclesData = $customersVehiclesData->paginate(30);
         $paginationData = $customersVehiclesData->toArray();
         unset($paginationData['data']);
 
@@ -109,11 +115,7 @@ class CustomerVehicleController extends Controller
         if(!empty($request->get("query"))) {
             $queryString = $request->get("query");
             $query->where(function ($query) use($queryString) {
-                $query->orWhere("vin", "LIKE", "%{$queryString}%");
-                $query->orWhere("registration_number", "LIKE", "%{$queryString}%");
-                $query->orWhere("mark", "LIKE", "%{$queryString}%");
-                $query->orWhere("model", "LIKE", "%{$queryString}%");
-                $query->orWhere("production_year", "LIKE", "%{$queryString}%");
+                CustomerVehicle::search($queryString, $query);
             });
         }
 

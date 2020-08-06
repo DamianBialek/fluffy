@@ -4,7 +4,20 @@
             <router-link tag="button" :to="{name: 'mechanicsAddMechanic'}" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Dodaj nowego mechanika</router-link>
         </div>
         <section>
-            <div class="table-responsive">
+            <div class="d-flex justify-content-center">
+                <div class="col-8">
+                    <div class="input-group">
+                        <input @keyup="onSearchInputKeyUp" v-model="searchQuery" aria-label="Szukaj samochodu" type="text" class="form-control" />
+                        <div class="input-group-append" v-show="searchQuery.length">
+                            <button @click="resetSearchQuery" type="button" class="btn btn-outline-secondary"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="input-group-append">
+                            <button @click="getMechanics" type="button" class="btn btn-outline-secondary"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive mt-3">
                 <table class="table">
                     <thead>
                     <tr>
@@ -43,7 +56,8 @@
         data() {
             return {
                 mechanics: [],
-                paginationData: {}
+                paginationData: {},
+                searchQuery: ''
             }
         },
         components: {
@@ -66,12 +80,21 @@
             },
             getMechanics() {
                 this.setLoading(true);
-                this.$api.get("/api/mechanics", { params: {page: this.paginationData.current_page} })
+                this.$api.get("/api/mechanics", { params: {page: this.paginationData.current_page, query: this.searchQuery} })
                     .then(res => {
                         this.mechanics = res.data.data.mechanics;
                         this.paginationData = res.data.data.pagination;
                         this.setLoading(false);
                     })
+            },
+            onSearchInputKeyUp(e) {
+                if (e instanceof KeyboardEvent && e.code === 'Enter') {
+                    this.getMechanics();
+                }
+            },
+            resetSearchQuery() {
+                this.searchQuery = '';
+                this.getMechanics();
             }
         }
     }

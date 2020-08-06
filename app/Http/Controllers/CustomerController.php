@@ -13,11 +13,17 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $customersData = Customer::paginate(30);
+        if(!empty($request->get("query")))
+            $customersData = Customer::search($request->get("query"));
+        else
+            $customersData = Customer::query();
+
+        $customersData = $customersData->paginate(30);
         $paginationData = $customersData->toArray();
         unset($paginationData['data']);
         return $this->success(['customers' => $customersData->items(), 'pagination' => $paginationData], 'Data found');
