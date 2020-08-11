@@ -11,11 +11,21 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        return $this->success(['orders' => Order::all()], 'Data found');
+        if(!empty($request->get("query")))
+            $ordersData = Order::search($request->get("query"));
+        else
+            $ordersData = Order::query();
+
+        $ordersData = $ordersData->paginate(30);
+        $paginationData = $ordersData->toArray();
+        unset($paginationData['data']);
+
+        return $this->success(['orders' => $ordersData->items(), 'pagination' => $paginationData], 'Data found');
     }
 
     /**

@@ -16,7 +16,8 @@ export default new Vuex.Store({
         auth_error: null,
         reg_error:null,
         registeredUser: null,
-        unassignedCustomerVehicles: []
+        unassignedCustomerVehicles: [],
+        customerVehicles: [],
     },
     getters: {
         isLoading(state){
@@ -42,6 +43,9 @@ export default new Vuex.Store({
         },
         unassignedCustomerVehicles(state) {
             return state.unassignedCustomerVehicles;
+        },
+        customerVehicles(state) {
+            return state.customerVehicles;
         }
     },
     mutations: {
@@ -85,6 +89,9 @@ export default new Vuex.Store({
         },
         removeUnassignedCustomerVehicles(state, vehicleId) {
             state.unassignedCustomerVehicles.splice(state.unassignedCustomerVehicles.findIndex(v => v.id === vehicleId), 1);
+        },
+        setCustomerVehicles(state, payload) {
+            state.customerVehicles = payload;
         }
     },
     actions: {

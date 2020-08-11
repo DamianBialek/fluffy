@@ -8,6 +8,14 @@ class Order extends Model
 {
     protected $fillable = ['vehicle_id', 'name', 'note', 'active', 'date', 'finished_at'];
 
+    public static function query()
+    {
+        $query = parent::query();
+        $query->with("vehicle");
+
+        return $query;
+    }
+
     public function vehicle()
     {
         return $this->belongsTo(CustomerVehicle::class);
