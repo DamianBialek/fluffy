@@ -27,7 +27,7 @@
                 modulesIcons: {
                     dashboard: 'fas fa-home',
                     calendar: 'fas fa-calendar-alt',
-                    tasks: 'fas fa-list-ol',
+                    orders: 'fas fa-list-ol',
                     customers: 'fas fa-users',
                     mechanics: 'fas fa-users-cog',
                     configuration: 'fas fa-cogs',

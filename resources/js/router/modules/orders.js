@@ -1,28 +1,28 @@
 import EmptyRouterView from "../../components/EmptyRouterView";
-import TasksList from "../../views/tasks/TasksList";
-import TasksAdd from "../../views/tasks/TasksAdd";
+import OrdersList from "../../views/orders/OrdersList";
+import OrdersAdd from "../../views/orders/OrdersAdd";
 
 export default {
-    path: '/tasks',
-    name: 'tasks',
+    path: '/orders',
+    name: 'orders',
     component: EmptyRouterView,
     meta: {
         title: 'Zlecenia',
     },
-    redirect: '/tasks/list',
+    redirect: '/orders/list',
     children: [
         {
             path: 'list',
-            name: 'tasksList',
-            component: TasksList,
+            name: 'ordersList',
+            component: OrdersList,
             meta: {
                 title: 'Lista zleceń'
             }
         },
         {
             path: 'add',
-            name: 'tasksAdd',
-            component: TasksAdd,
+            name: 'ordersAdd',
+            component: OrdersAdd,
             meta: {
                 title: 'Dodaj nowe zlecenie'
             }
