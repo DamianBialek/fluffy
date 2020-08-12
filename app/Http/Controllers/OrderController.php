@@ -66,7 +66,7 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $order = Order::find($id);
+        $order = Order::with("vehicle")->where("id", $id)->firstOrFail();
 
         if($order) {
             return $this->success(['order' => $order], 'Data found');
@@ -132,8 +132,8 @@ class OrderController extends Controller
         return Validator::make($request->all(), [
             'vehicle_id' => 'exists:customers_vehicles,id',
             'active' => 'numeric|in:0,1',
-            'date' => 'date',
-            'finished_at' => 'date'
+            'date' => 'date|nullable',
+            'finished_at' => 'date|nullable'
         ]);
     }
 }

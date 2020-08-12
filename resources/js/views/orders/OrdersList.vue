@@ -71,7 +71,7 @@
         },
         methods: {
             deleteOrder(order) {
-                this.$confirm(`Czy na pewno chcesz usunać to zlecenie ${order.name} (#${order.id}) ?`)
+                this.$confirm(`Czy na pewno chcesz usunać to zlecenie ${order.name ? order.name : ''} (#${order.id}) ?`)
                     .then(() => {
                         this.$api.delete(`/api/orders/${order.id}`)
                             .then(() => {

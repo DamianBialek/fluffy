@@ -2,9 +2,9 @@
     <div>
         <form @submit.prevent="$emit('submit')">
             <div class="form-group row">
-                <label for="vehicle" class="col-sm-2 col-form-label">Pojazd</label>
+                <label class="col-sm-2 col-form-label">Pojazd</label>
                 <div class="col-sm-10">
-                    <div @click="openCustomerVehiclesModal" class="form-control">{{order.vehicle.mark ? `${order.vehicle.mark} ${order.vehicle.model} (${order.vehicle.registration_number})` : ''}}</div>
+                    <div @click="openCustomerVehiclesModal" class="form-control">{{order.vehicle && order.vehicle.mark ? `${order.vehicle.mark} ${order.vehicle.model} (${order.vehicle.registration_number})` : ''}}</div>
                 </div>
             </div>
             <div class="form-group row">
@@ -62,6 +62,9 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="mt-3 pb-3 d-flex justify-content-center">
+                            <Pagination :pagination="customersVehiclesPaginationData" @paginate="loadCustomersVehicles()" :offset="2"></Pagination>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
@@ -74,16 +77,19 @@
 
 <script>
 import Loading from "../../../components/Loading";
+import Pagination from "../../../components/Pagination";
 
 export default {
     name: "OrderForm",
     components: {
-        Loading
+        Loading,
+        Pagination
     },
     data() {
         return {
             customerVehiclesSearchQuery: '',
-            customersVehiclesLoading: false
+            customersVehiclesLoading: false,
+            customersVehiclesPaginationData: {}
         }
     },
     props: {
@@ -135,9 +141,10 @@ export default {
         },
         loadCustomersVehicles() {
             this.customersVehiclesLoading = true;
-            this.$api.get("/api/vehicles", {params: {query: this.customerVehiclesSearchQuery}}).then(res => {
+            this.$api.get("/api/vehicles", {params: {query: this.customerVehiclesSearchQuery, page: this.customersVehiclesPaginationData.current_page}}).then(res => {
                 this.$store.commit("setCustomerVehicles", res.data.data.vehicles);
                 this.customersVehiclesLoading = false;
+                this.customersVehiclesPaginationData = res.data.data.pagination;
             })
         },
         searchCustomerVehiclesByQuery(e) {

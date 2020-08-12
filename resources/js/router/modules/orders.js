@@ -1,6 +1,7 @@
 import EmptyRouterView from "../../components/EmptyRouterView";
 import OrdersList from "../../views/orders/OrdersList";
 import OrdersAdd from "../../views/orders/OrdersAdd";
+import OrdersEdit from "../../views/orders/OrdersEdit";
 
 export default {
     path: '/orders',
@@ -25,6 +26,14 @@ export default {
             component: OrdersAdd,
             meta: {
                 title: 'Dodaj nowe zlecenie'
+            }
+        },
+        {
+            path: 'edit/:id',
+            name: 'ordersEdit',
+            component: OrdersEdit,
+            meta: {
+                title: 'Edycja zlecenia'
             }
         }
     ]
