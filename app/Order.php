@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -12,6 +13,26 @@ class Order extends Model
     {
         $query = parent::query();
         $query->with("vehicle");
+
+        return $query;
+    }
+
+    public static function search($queryString, Builder $query = null)
+    {
+        if($query === null) {
+            $query = static::query();
+        }
+
+        $query->orWhere("name", "LIKE", "%{$queryString}%");
+        $query->orWhereHas("vehicle", function ($q) use($queryString) {
+            $q->where(function ($q) use($queryString) {
+                $q->orWhere("registration_number", "LIKE", "%{$queryString}%");
+                $q->orWhere("vin", "LIKE", "%{$queryString}%");
+                $q->orWhere("mark", "LIKE", "%{$queryString}%");
+                $q->orWhere("model", "LIKE", "%{$queryString}%");
+            });
+        });
+
 
         return $query;
     }
