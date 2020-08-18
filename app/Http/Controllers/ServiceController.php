@@ -34,7 +34,7 @@ class ServiceController extends Controller
 
         $service = Service::create([
             'name' => $request->get("name"),
-            'price_net' => $request->get("price_net")
+            'price' => $request->get("price")
         ]);
 
         if($service) {
@@ -84,7 +84,7 @@ class ServiceController extends Controller
 
         $service->update([
             'name' => $request->get("name"),
-            'price_net' => $request->get("price_net")
+            'price' => $request->get("price")
         ]);
 
         return $this->success(['service' => $service], 'Service updated', 200);
@@ -113,7 +113,7 @@ class ServiceController extends Controller
     {
         return Validator::make($request->all(), [
             'name' => 'required',
-            'price_net' => 'required|numeric'
+            'price' => 'required|numeric'
         ]);
     }
 }

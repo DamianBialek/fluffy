@@ -26,7 +26,8 @@
                         model: '',
                         registration_number: ''
                     },
-                    name: ''
+                    name: '',
+                    services: []
                 },
                 errorFields: {}
             }
@@ -59,6 +60,9 @@
                     .finally(() => {
                         this.setLoading(false);
                     })
+            },
+            removeService(service) {
+                console.log(service)
             }
         }
     }

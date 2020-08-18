@@ -17,7 +17,7 @@ class CreateOrdersServicesTable extends Migration
             $table->id();
             $table->bigInteger("order_id")->unsigned();
             $table->string("name", 255);
-            $table->decimal("price_net", 10, 2);
+            $table->decimal("price", 10, 2);
             $table->integer("quantity")->default(1);
             $table->timestamps();
 

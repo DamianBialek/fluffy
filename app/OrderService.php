@@ -7,4 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class OrderService extends Model
 {
     public $table = 'orders_services';
+
+    protected $fillable = ['name', 'price', 'quantity'];
 }

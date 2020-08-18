@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ControllerActionException;
 use App\Order;
+use App\OrderService;
+use App\Service;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -66,7 +70,7 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $order = Order::with("vehicle")->where("id", $id)->firstOrFail();
+        $order = Order::with("vehicle", "services")->where("id", $id)->firstOrFail();
 
         if($order) {
             return $this->success(['order' => $order], 'Data found');
@@ -125,6 +129,78 @@ class OrderController extends Controller
         $order->delete();
 
         return $this->success([], 'Order deleted', 200);
+    }
+
+    public function addService($id, Request $request)
+    {
+        $validator = $this->validateOrderService($request);
+
+        if($validator->fails()) {
+            return $this->error(['fields' => $validator->errors()], "The given data was invalid.", 422);
+        }
+
+        $order = Order::find($id);
+
+        if($order) {
+            $service = $order->services()->create([
+                'name' => $request->get("name"),
+                'price' => $request->get("price"),
+                'quantity' => $request->get("quantity", 1)
+            ]);
+
+            return $this->success(['service' => $service], 'Data found');
+        }
+
+        return $this->error([], 'Data not found', 404);
+    }
+
+    public function updateService($id, $serviceId, Request $request)
+    {
+        $service = Order::find($id)->services()->find($serviceId);
+
+        if($service) {
+            $validator = $this->validateOrderService($request);
+
+            if($validator->fails()) {
+                return $this->error(['fields' => $validator->errors(), 'service' => $service], "The given data was invalid.", 422);
+            }
+
+            $service->update([
+                'name' => $request->get("name"),
+                'price' => $request->get("price"),
+                'quantity' => $request->get("quantity", 1)
+            ]);
+
+            return $this->success(['service' => $service], 'Service updated');
+        }
+
+        return $this->error([], 'Data not found', 404);
+    }
+
+    public function destroyService($id, $serviceId)
+    {
+        $order = Order::find($id);
+
+        if(!$order) {
+            return $this->error([], 'Data not found', 404);
+        }
+
+        $res = $order->services()->where("id", $serviceId)->delete();
+
+        if($res) {
+            return $this->success([], 'Service deleted');
+        } else {
+            return $this->error([], "Service not found", 404);
+        }
+    }
+
+    protected function validateOrderService($request)
+    {
+        return Validator::make($request->all(), [
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'quantity' => 'required|numeric',
+        ]);
     }
 
     protected function validate($request)

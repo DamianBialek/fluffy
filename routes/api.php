@@ -31,6 +31,9 @@ Route::middleware("apiJwt")->group(function () {
     Route::get("/vehicles/getUnassignedVehicles", 'CustomerVehicleController@getUnassignedVehicles');
     Route::resource('vehicles', 'CustomerVehicleController');
     Route::resource('services', 'ServiceController');
+    Route::post("/orders/{id}/service", 'OrderController@addService');
+    Route::delete("/orders/{id}/service/{serviceId}", 'OrderController@destroyService');
+    Route::put("/orders/{id}/service/{serviceId}", 'OrderController@updateService');
     Route::resource('orders', 'OrderController');
     Route::resource('mechanics', 'MechanicController');
 });
