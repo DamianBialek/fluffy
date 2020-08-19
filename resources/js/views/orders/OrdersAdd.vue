@@ -4,7 +4,14 @@
             <router-link tag="button" :to="{name: 'ordersList'}" class="btn btn-info"><i class="fas fa-level-up-alt"></i></router-link>
         </div>
         <section>
-            <OrderForm :order="order" :error-fields="errorFields" @submit="saveOrder" />
+            <OrderForm
+                :order="order"
+                :error-fields="errorFields"
+                @submit="saveOrder"
+                @saveNewService="saveNewService"
+                @removeService="removeService"
+                @saveEditedService="saveEditedService"
+            />
         </section>
     </div>
 </template>
@@ -61,8 +68,29 @@
                         this.setLoading(false);
                     })
             },
+            saveNewService(data) {
+                this.order.services.push(data.newService);
+                swal("Pomyślnie dodano usługę !", "", "success").then(() => {
+                    data.done();
+                })
+            },
             removeService(service) {
-                console.log(service)
+                swal("Pomyślnie usunięto usługę !", "", "success").then(() => {
+                    this.order.services.splice(this.order.services.findIndex(s => s.id === service.id), 1);
+                })
+            },
+            saveEditedService(data) {
+                swal("Pomyślnie zaktualizowano usługę !", "", "success").then(() => {
+                    this.updateOrderService(data.service)
+                    data.done();
+                })
+            },
+            updateOrderService(service) {
+                const index = this.order.services.findIndex(s => s.id === service.id);
+
+                if(index >= 0) {
+                    this.order.services[index] = service;
+                }
             }
         }
     }

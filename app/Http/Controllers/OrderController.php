@@ -56,6 +56,19 @@ class OrderController extends Controller
         ]);
 
         if($order) {
+            if(!empty($request->get("services"))) {
+                $services = [];
+                foreach ($request->get("services") as $service) {
+                    $services[] = new OrderService([
+                        'name' => $service["name"],
+                        'price' => $service["price"],
+                        'quantity' => $service["quantity"]
+                    ]);
+                }
+
+                $order->services()->saveMany($services);
+            }
+
             return $this->success(['order' => $order], 'Order created', 201);
         }
 

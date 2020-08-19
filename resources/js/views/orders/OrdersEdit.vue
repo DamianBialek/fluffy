@@ -143,7 +143,6 @@
 
                 if(index >= 0) {
                     this.order.services[index] = service;
-                    console.log(this.order.services[index], service);
                 }
             }
         }
