@@ -8,9 +8,9 @@
                 :order="order"
                 :error-fields="errorFields"
                 @submit="saveOrder"
-                @saveNewService="saveNewService"
-                @removeService="removeService"
-                @saveEditedService="saveEditedService"
+                @saveNewPosition="saveNewPosition"
+                @removePosition="removePosition"
+                @saveEditedPosition="saveEditedPosition"
             />
         </section>
     </div>
@@ -34,7 +34,7 @@
                         registration_number: ''
                     },
                     name: '',
-                    services: []
+                    positions: []
                 },
                 errorFields: {}
             }
@@ -75,11 +75,11 @@
                         this.setLoading(false);
                     })
             },
-            saveNewService(data) {
-                this.$api.post(`/api/orders/${this.order.id}/service`, data.newService).then(res => {
-                    if(res.data.success && res.data.data.service) {
-                        this.order.services.push(res.data.data.service);
-                        swal("Pomyślnie dodano usługę !", "", "success").then(() => {
+            saveNewPosition(data) {
+                this.$api.post(`/api/orders/${this.order.id}/position`, data.newPosition).then(res => {
+                    if(res.data.success && res.data.data.position) {
+                        this.order.positions.push(res.data.data.position);
+                        swal("Pomyślnie dodano pozycję !", "", "success").then(() => {
                             data.done();
                         })
                     }
@@ -93,26 +93,25 @@
                     if(Object.keys(this.errorFields).length) {
                         swal("Proszę poprawić błędy w formularzu !", "", "error");
                     } else {
-                        swal("Wystąpił błąd podczas dodawania nowej usługi !", "", "error");
+                        swal("Wystąpił błąd podczas dodawania nowej pozycji !", "", "error");
                     }
                 })
             },
-            removeService(service) {
-                this.$api.delete(`/api/orders/${this.order.id}/service/${service.id}`).then(res => {
+            removePosition(position) {
+                this.$api.delete(`/api/orders/${this.order.id}/position/${position.id}`).then(res => {
                     if(res.data.success){
-                        swal("Pomyślnie usunięto usługę !", "", "success").then(() => {
-                            this.order.services.splice(this.order.services.findIndex(s => s.id === service.id), 1);
+                        swal("Pomyślnie usunięto pozycję !", "", "success").then(() => {
+                            this.order.positions.splice(this.order.positions.findIndex(p => p.id === position.id), 1);
                         })
                     }
                 }).catch(() => {
-                    swal("Wystąpił błąd podczas usuwania usługi !", "", "error");
+                    swal("Wystąpił błąd podczas usuwania pozycji !", "", "error");
                 })
             },
-            saveEditedService(data) {
-                this.$api.put(`/api/orders/${this.order.id}/service/${data.service.id}`, data.service).then(res => {
-                    if(res.data.success && res.data.data.service) {
-                        // this.order.services.push(res.data.data.service);
-                        swal("Pomyślnie zaktualizowano usługę !", "", "success").then(() => {
+            saveEditedPosition(data) {
+                this.$api.put(`/api/orders/${this.order.id}/position/${data.position.id}`, data.position).then(res => {
+                    if(res.data.success && res.data.data.position) {
+                        swal("Pomyślnie zaktualizowano pozycję !", "", "success").then(() => {
                             data.done();
                         })
                     }
@@ -128,21 +127,21 @@
                     if(Object.keys(this.errorFields).length) {
                         swal("Proszę poprawić błędy w formularzu !", "", "error");
                     } else {
-                        swal("Wystąpił błąd podczas aktualizacji usługi !", "", "error");
+                        swal("Wystąpił błąd podczas aktualizacji pozycji !", "", "error");
                     }
 
                     return err.response;
                 }).then(res => {
-                    if(res.data.data.service) {
-                        this.updateOrderService(res.data.data.service)
+                    if(res.data.data.position) {
+                        this.updateOrderPosition(res.data.data.position)
                     }
                 })
             },
-            updateOrderService(service) {
-                const index = this.order.services.findIndex(s => s.id === service.id);
+            updateOrderPosition(position) {
+                const index = this.order.positions.findIndex(p => p.id === position.id);
 
                 if(index >= 0) {
-                    this.order.services[index] = service;
+                    this.order.positions[index] = position;
                 }
             }
         }

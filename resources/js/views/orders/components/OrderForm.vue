@@ -6,7 +6,7 @@
                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Dane</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="services-tab" data-toggle="tab" href="#services" role="tab" aria-controls="profile" aria-selected="false">Usługi</a>
+                    <a class="nav-link" id="positions-tab" data-toggle="tab" href="#positions" role="tab" aria-controls="profile" aria-selected="false">Pozycje zlecenia</a>
                 </li>
             </ul>
             <div class="tab-content m-3" id="myTabContent">
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="services" role="tabpanel" aria-labelledby="services-tab">
+                <div class="tab-pane fade" id="positions" role="tabpanel" aria-labelledby="positions-tab">
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
@@ -38,26 +38,26 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-if="!order.services.length"><td colspan="5" class="text-center"><strong>Brak usług</strong></td></tr>
-                            <tr v-for="(service, index) in order.services" :key="service.id">
-                                <td @click="editService(service)" class="align-middle">{{index+1}}</td>
-                                <td @click="editService(service)" class="align-middle">{{service.name}}</td>
-                                <td @click="editService(service)" class="text-center align-middle">{{moneyFormat(service.price)}}</td>
-                                <td @click="editService(service)" class="text-center align-middle">{{service.quantity}}</td>
-                                <td @click="editService(service)" class="text-center align-middle">{{moneyFormat(serviceTotalSum(service))}}</td>
+                            <tr v-if="!order.positions.length"><td colspan="5" class="text-center"><strong>Brak usług</strong></td></tr>
+                            <tr v-for="(position, index) in order.positions" :key="position.id">
+                                <td @click="editPosition(position)" class="align-middle">{{index+1}}</td>
+                                <td @click="editPosition(position)" class="align-middle">{{position.name}}</td>
+                                <td @click="editPosition(position)" class="text-center align-middle">{{moneyFormat(position.price)}}</td>
+                                <td @click="editPosition(position)" class="text-center align-middle">{{position.quantity}}</td>
+                                <td @click="editPosition(position)" class="text-center align-middle">{{moneyFormat(positionTotalSum(position))}}</td>
                                 <td class="text-center align-middle">
-                                    <button type="button" class="btn btn-outline-danger m-1" @click="removeService(service)"><i class="fas fa-trash-alt"></i></button>
+                                    <button type="button" class="btn btn-outline-danger m-1" @click="removePosition(position)"><i class="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>
-                            <tr class="lead text-dark" v-if="order.services.length">
+                            <tr class="lead text-dark" v-if="order.positions.length">
                                 <td colspan="4" class="text-right"><strong>Razem:</strong></td>
-                                <td class="font-weight-bold text-center">{{moneyFormat(orderServicesTotalSum)}}</td>
+                                <td class="font-weight-bold text-center">{{moneyFormat(orderPositionsTotalSum)}}</td>
                                 <td></td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
-                    <button @click="createNewService" type="button" class="btn btn-outline-secondary"><i class="fa fa-plus text-success mr-2" />Dodaj nową usługę</button>
+                    <button @click="createNewPosition" type="button" class="btn btn-outline-secondary"><i class="fa fa-plus text-success mr-2" />Dodaj nową pozycję</button>
                 </div>
             </div>
 
@@ -66,11 +66,11 @@
                 <button class="btn btn-primary">Zapisz</button>
             </div>
         </form>
-        <div id="editedServiceModal" class="modal" tabindex="-1" role="dialog">
+        <div id="editedPositionModal" class="modal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">{{editedServiceModalMode === 'create' ? 'Nowa usługa' : 'Edycja usługi'}}</h5>
+                        <h5 class="modal-title">{{editedPositionModalMode === 'create' ? 'Nowa pozycja' : 'Edycja pozycji'}}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -89,24 +89,24 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <input aria-label="Nazwa usługi" :class="['form-control', {'is-invalid': fieldHasError('name')}]" v-model="editedService.name" />
+                                        <input aria-label="Nazwa pozycji" :class="['form-control', {'is-invalid': fieldHasError('name')}]" v-model="editedPosition.name" />
                                         <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('name')"></div>
                                     </td>
                                     <td>
-                                        <input type="number" step="0.01" min="0" aria-label="Cena usługi" :class="['form-control', {'is-invalid': fieldHasError('price')}]" v-model="editedService.price" />
+                                        <input type="number" step="0.01" min="0" aria-label="Cena pozycji" :class="['form-control', {'is-invalid': fieldHasError('price')}]" v-model="editedPosition.price" />
                                         <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('price')"></div>
                                     </td>
                                     <td>
-                                        <input aria-label="Ilość" :class="['form-control', {'is-invalid': fieldHasError('quantity')}]" v-model="editedService.quantity" />
+                                        <input aria-label="Ilość" :class="['form-control', {'is-invalid': fieldHasError('quantity')}]" v-model="editedPosition.quantity" />
                                         <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('quantity')"></div>
                                     </td>
-                                    <td class="text-center">{{moneyFormat(serviceTotalSum(editedService))}}</td>
+                                    <td class="text-center">{{moneyFormat(positionTotalSum(editedPosition))}}</td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="text-center mt-2">
-                            <button @click="submitEditServiceModal" class="btn btn-primary">Zapisz</button>
+                            <button @click="submitEditPositionModal" class="btn btn-primary">Zapisz</button>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -188,12 +188,12 @@ export default {
             customerVehiclesSearchQuery: '',
             customersVehiclesLoading: false,
             customersVehiclesPaginationData: {},
-            editedService: {
+            editedPosition: {
                 name: '',
                 price: '',
                 quantity: 1
             },
-            editedServiceModalMode: null
+            editedPositionModalMode: null
         }
     },
     props: {
@@ -208,7 +208,7 @@ export default {
                         registration_number: ''
                     },
                     name: '',
-                    services: []
+                    positions: []
                 }
             }
         },
@@ -238,24 +238,24 @@ export default {
         customerVehicles() {
             return this.$store.getters.customerVehicles;
         },
-        serviceTotalSum() {
-            return service => Number(service.price) * service.quantity
+        positionTotalSum() {
+            return position => Number(position.price) * position.quantity
         },
         moneyFormat() {
             return value => moneyFormat(value);
         },
-        orderServicesTotalSum() {
-            return this.order.services.reduce((curr, service) => curr + this.serviceTotalSum(service), 0);
+        orderPositionsTotalSum() {
+            return this.order.positions.reduce((curr, position) => curr + this.positionTotalSum(position), 0);
         }
     },
     mounted() {
-        $("#editedServiceModal").on('hidden.bs.modal', () => {
-            this.editedService = {
+        $("#editedPositionModal").on('hidden.bs.modal', () => {
+            this.editedPosition = {
                 name: '',
                 price: '',
                 quantity: 1
             };
-            this.editedServiceModalMode = null;
+            this.editedPositionModalMode = null;
         })
     },
     methods: {
@@ -263,11 +263,11 @@ export default {
             $("#customerVehiclesModal").modal("show");
             this.loadCustomersVehicles();
         },
-        openEditServiceModal() {
-            $("#editedServiceModal").modal("show");
+        openEditPositionModal() {
+            $("#editedPositionModal").modal("show");
         },
-        hideEditServiceModal() {
-            $("#editedServiceModal").modal("hide");
+        hideEditPositionModal() {
+            $("#editedPositionModal").modal("hide");
         },
         loadCustomersVehicles() {
             this.customersVehiclesLoading = true;
@@ -289,50 +289,50 @@ export default {
             this.order.vehicle_id = vehicle.id
             $("#customerVehiclesModal").modal("hide");
         },
-        submitEditServiceModal() {
-            if(this.editedServiceModalMode === 'create') {
-                this.saveNewService();
-            } else if(this.editedServiceModalMode === 'edit') {
-                this.saveEditedService();
+        submitEditPositionModal() {
+            if(this.editedPositionModalMode === 'create') {
+                this.saveNewPosition();
+            } else if(this.editedPositionModalMode === 'edit') {
+                this.saveEditedPosition();
             }
         },
-        saveNewService() {
-            this.$emit('saveNewService', {
-                newService: this.editedService,
+        saveNewPosition() {
+            this.$emit('saveNewPosition', {
+                newPosition: this.editedPosition,
                 done: () => {
-                    this.editedService = {
+                    this.editedPosition = {
                         name: '',
                         price: '',
                         quantity: 1
                     };
-                    this.hideEditServiceModal();
+                    this.hideEditPositionModal();
                 }
             })
         },
-        saveEditedService() {
-            this.$emit('saveEditedService', {
-                service: this.editedService,
+        saveEditedPosition() {
+            this.$emit('saveEditedPosition', {
+                position: this.editedPosition,
                 done: () => {
-                    this.editedService = {
+                    this.editedPosition = {
                         name: '',
                         price: '',
                         quantity: 1
                     };
-                    this.hideEditServiceModal();
+                    this.hideEditPositionModal();
                 }
             })
         },
-        removeService(service) {
-            this.$emit('removeService', service);
+        removePosition(position) {
+            this.$emit('removePosition', position);
         },
-        editService(service) {
-            this.editedService = Object.assign({}, service);
-            this.editedServiceModalMode = 'edit';
-            this.openEditServiceModal();
+        editPosition(position) {
+            this.editedPosition = Object.assign({}, position);
+            this.editedPositionModalMode = 'edit';
+            this.openEditPositionModal();
         },
-        createNewService() {
-            this.editedServiceModalMode = 'create';
-            this.openEditServiceModal();
+        createNewPosition() {
+            this.editedPositionModalMode = 'create';
+            this.openEditPositionModal();
         }
     }
 }

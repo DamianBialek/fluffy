@@ -8,9 +8,9 @@
                 :order="order"
                 :error-fields="errorFields"
                 @submit="saveOrder"
-                @saveNewService="saveNewService"
-                @removeService="removeService"
-                @saveEditedService="saveEditedService"
+                @saveNewPosition="saveNewPosition"
+                @removePosition="removePosition"
+                @saveEditedPosition="saveEditedPosition"
             />
         </section>
     </div>
@@ -34,7 +34,7 @@
                         registration_number: ''
                     },
                     name: '',
-                    services: []
+                    positions: []
                 },
                 errorFields: {}
             }
@@ -68,28 +68,28 @@
                         this.setLoading(false);
                     })
             },
-            saveNewService(data) {
-                this.order.services.push(data.newService);
-                swal("Pomyślnie dodano usługę !", "", "success").then(() => {
+            saveNewPosition(data) {
+                this.order.positions.push(data.newPosition);
+                swal("Pomyślnie dodano pozycję !", "", "success").then(() => {
                     data.done();
                 })
             },
-            removeService(service) {
-                swal("Pomyślnie usunięto usługę !", "", "success").then(() => {
-                    this.order.services.splice(this.order.services.findIndex(s => s.id === service.id), 1);
+            removePosition(position) {
+                swal("Pomyślnie usunięto pozycję !", "", "success").then(() => {
+                    this.order.positions.splice(this.order.positions.findIndex(p => p.id === position.id), 1);
                 })
             },
-            saveEditedService(data) {
-                swal("Pomyślnie zaktualizowano usługę !", "", "success").then(() => {
-                    this.updateOrderService(data.service)
+            saveEditedPosition(data) {
+                swal("Pomyślnie zaktualizowano pozycję !", "", "success").then(() => {
+                    this.updateOrderPosition(data.position)
                     data.done();
                 })
             },
-            updateOrderService(service) {
-                const index = this.order.services.findIndex(s => s.id === service.id);
+            updateOrderPosition(position) {
+                const index = this.order.positions.findIndex(p => p.id === position.id);
 
                 if(index >= 0) {
-                    this.order.services[index] = service;
+                    this.order.positions[index] = position;
                 }
             }
         }

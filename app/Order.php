@@ -42,8 +42,8 @@ class Order extends Model
         return $this->belongsTo(CustomerVehicle::class);
     }
 
-    public function services()
+    public function positions()
     {
-        return $this->hasMany(OrderService::class, 'order_id', 'id');
+        return $this->hasMany(OrderPosition::class, 'order_id', 'id');
     }
 }

@@ -12,6 +12,6 @@ class OrdersSeeder extends Seeder
     public function run()
     {
         \App\CustomerVehicle::find(1)->orders()->save(new \App\Order());
-        \App\Order::find(1)->services()->save(new \App\OrderService(['name' => 'test', 'price_net' => 25]));
+        \App\Order::find(1)->positions()->save(new \App\OrderPosition(['name' => 'test', 'price' => 25]));
     }
 }

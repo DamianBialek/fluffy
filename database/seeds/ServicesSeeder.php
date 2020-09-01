@@ -13,7 +13,7 @@ class ServicesSeeder extends Seeder
     {
         \App\Service::create([
             'name' => 'Wymiana oleju',
-            'price_net' => '50'
+            'price' => '50'
         ]);
     }
 }

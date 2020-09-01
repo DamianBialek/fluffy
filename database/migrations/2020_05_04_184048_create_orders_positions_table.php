@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdersServicesTable extends Migration
+class CreateOrdersPositionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateOrdersServicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders_services', function (Blueprint $table) {
+        Schema::create('orders_positions', function (Blueprint $table) {
             $table->id();
             $table->bigInteger("order_id")->unsigned();
             $table->string("name", 255);
