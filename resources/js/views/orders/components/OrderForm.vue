@@ -11,6 +11,12 @@
             </ul>
             <div class="tab-content m-3" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="form-group row" v-if="order.number">
+                        <label for="number" class="col-sm-2 col-form-label">Numer</label>
+                        <div class="col-sm-10">
+                            <input disabled v-model="order.number" type="text" class="form-control" id="number">
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Pojazd</label>
                         <div class="col-sm-10">

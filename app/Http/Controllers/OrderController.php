@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Order;
 use App\OrderPosition;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
@@ -43,7 +44,7 @@ class OrderController extends Controller
             return $this->error(['fields' => $validator->errors()], "The given data was invalid.", 422);
         }
 
-        $order = Order::create([
+        $order = new Order([
             'vehicle_id' => $request->get("vehicle_id", null),
             'active' => $request->get("active", 0),
             'name' => $request->get("name", null),
@@ -51,6 +52,9 @@ class OrderController extends Controller
             'date' => $request->get("date", null),
             'finished_at' => $request->get("finished_at", null)
         ]);
+
+        $order->generateAndSetNewNumber();
+        $order->save();
 
         if($order) {
             if(!empty($request->get("positions"))) {
