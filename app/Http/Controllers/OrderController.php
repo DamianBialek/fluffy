@@ -50,6 +50,7 @@ class OrderController extends Controller
             'name' => $request->get("name", null),
             'note' => $request->get("note", null),
             'date' => $request->get("date", null),
+            'vehicle_mileage' => $request->get("vehicle_mileage", null),
             'finished_at' => $request->get("finished_at", null)
         ]);
 
@@ -120,6 +121,7 @@ class OrderController extends Controller
             'name' => $request->get("name", null),
             'note' => $request->get("note", null),
             'date' => $request->get("date", null),
+            'vehicle_mileage' => $request->get("vehicle_mileage", null),
             'finished_at' => $request->get("finished_at", null)
         ]);
 

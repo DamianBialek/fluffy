@@ -24,6 +24,12 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="vehicle_mileage" class="col-sm-2 col-form-label">Przebieg pojazdu</label>
+                        <div class="col-sm-10">
+                            <input v-model="order.vehicle_mileage" type="text" class="form-control" id="vehicle_mileage">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="name" class="col-sm-2 col-form-label">Nazwa</label>
                         <div class="col-sm-10">
                             <input v-model="order.name" type="text" class="form-control" id="name">

@@ -21,6 +21,7 @@ class CreateOrdersTable extends Migration
             $table->string("name", 255)->nullable();
             $table->text("note")->nullable();
             $table->dateTime("date")->nullable();
+            $table->integer("vehicle_mileage")->nullable();
             $table->timestamps();
             $table->timestamp("finished_at")->nullable();
 
