@@ -8,5 +8,5 @@ class OrderPosition extends Model
 {
     public $table = 'orders_positions';
 
-    protected $fillable = ['name', 'price', 'quantity'];
+    protected $fillable = ['type', 'name', 'price', 'quantity'];
 }

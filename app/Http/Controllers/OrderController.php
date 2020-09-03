@@ -159,6 +159,7 @@ class OrderController extends Controller
 
         if($order) {
             $position = $order->positions()->create([
+                'type' => $request->get("type", 'service'),
                 'name' => $request->get("name"),
                 'price' => $request->get("price"),
                 'quantity' => $request->get("quantity", 1)
@@ -182,6 +183,7 @@ class OrderController extends Controller
             }
 
             $position->update([
+                'type' => $request->get("type", 'service'),
                 'name' => $request->get("name"),
                 'price' => $request->get("price"),
                 'quantity' => $request->get("quantity", 1)

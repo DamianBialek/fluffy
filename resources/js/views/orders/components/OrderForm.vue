@@ -8,6 +8,9 @@
                 <li class="nav-item">
                     <a class="nav-link" id="positions-tab" data-toggle="tab" href="#positions" role="tab" aria-controls="profile" aria-selected="false">Pozycje zlecenia</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="parts-tab" data-toggle="tab" href="#parts" role="tab" aria-controls="profile" aria-selected="false">Części</a>
+                </li>
             </ul>
             <div class="tab-content m-3" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -50,8 +53,8 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-if="!order.positions.length"><td colspan="5" class="text-center"><strong>Brak usług</strong></td></tr>
-                            <tr v-for="(position, index) in order.positions" :key="position.id">
+                            <tr v-if="!orderPositionsServices.length"><td colspan="5" class="text-center"><strong>Brak usług</strong></td></tr>
+                            <tr v-for="(position, index) in orderPositionsServices" :key="position.id">
                                 <td @click="editPosition(position)" class="align-middle">{{index+1}}</td>
                                 <td @click="editPosition(position)" class="align-middle">{{position.name}}</td>
                                 <td @click="editPosition(position)" class="text-center align-middle">{{moneyFormat(position.price)}}</td>
@@ -61,15 +64,50 @@
                                     <button type="button" class="btn btn-outline-danger m-1" @click="removePosition(position)"><i class="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>
-                            <tr class="lead text-dark" v-if="order.positions.length">
+                            <tr class="lead text-dark" v-if="orderPositionsServices.length">
                                 <td colspan="4" class="text-right"><strong>Razem:</strong></td>
-                                <td class="font-weight-bold text-center">{{moneyFormat(orderPositionsTotalSum)}}</td>
+                                <td class="font-weight-bold text-center">{{moneyFormat(orderPositionsServicesTotalSum)}}</td>
                                 <td></td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
-                    <button @click="createNewPosition" type="button" class="btn btn-outline-secondary"><i class="fa fa-plus text-success mr-2" />Dodaj nową pozycję</button>
+                    <button @click="createNewPosition('service')" type="button" class="btn btn-outline-secondary"><i class="fa fa-plus text-success mr-2" />Dodaj nową pozycję</button>
+                </div>
+                <div class="tab-pane fade" id="parts" role="tabpanel" aria-labelledby="parts-tab">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Lp</th>
+                                <th>Nazwa</th>
+                                <th class="text-center">Cena</th>
+                                <th class="text-center">Ilość</th>
+                                <th class="text-center">Wartość</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-if="!orderPositionsParts.length"><td colspan="5" class="text-center"><strong>Brak części</strong></td></tr>
+                            <tr v-for="(position, index) in orderPositionsParts" :key="position.id">
+                                <td @click="editPosition(position)" class="align-middle">{{index+1}}</td>
+                                <td @click="editPosition(position)" class="align-middle">{{position.name}}</td>
+                                <td @click="editPosition(position)" class="text-center align-middle">{{moneyFormat(position.price)}}</td>
+                                <td @click="editPosition(position)" class="text-center align-middle">{{position.quantity}}</td>
+                                <td @click="editPosition(position)" class="text-center align-middle">{{moneyFormat(positionTotalSum(position))}}</td>
+                                <td class="text-center align-middle">
+                                    <button type="button" class="btn btn-outline-danger m-1" @click="removePosition(position)"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="lead text-dark" v-if="orderPositionsParts.length">
+                                <td colspan="4" class="text-right"><strong>Razem:</strong></td>
+                                <td class="font-weight-bold text-center">{{moneyFormat(orderPositionsPartsTotalSum)}}</td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button @click="createNewPosition('part')" type="button" class="btn btn-outline-secondary"><i class="fa fa-plus text-success mr-2" />Dodaj nową część</button>
                 </div>
             </div>
 
@@ -202,6 +240,7 @@ export default {
             customersVehiclesPaginationData: {},
             editedPosition: {
                 name: '',
+                type: null,
                 price: '',
                 quantity: 1
             },
@@ -256,14 +295,24 @@ export default {
         moneyFormat() {
             return value => moneyFormat(value);
         },
-        orderPositionsTotalSum() {
-            return this.order.positions.reduce((curr, position) => curr + this.positionTotalSum(position), 0);
+        orderPositionsServicesTotalSum() {
+            return this.orderPositionsServices.reduce((curr, position) => curr + this.positionTotalSum(position), 0);
+        },
+        orderPositionsPartsTotalSum() {
+            return this.orderPositionsParts.reduce((curr, position) => curr + this.positionTotalSum(position), 0);
+        },
+        orderPositionsServices() {
+            return this.order.positions.filter(p => p.type === 'service');
+        },
+        orderPositionsParts() {
+            return this.order.positions.filter(p => p.type === 'part');
         }
     },
     mounted() {
         $("#editedPositionModal").on('hidden.bs.modal', () => {
             this.editedPosition = {
                 name: '',
+                type: null,
                 price: '',
                 quantity: 1
             };
@@ -313,6 +362,7 @@ export default {
                 newPosition: this.editedPosition,
                 done: () => {
                     this.editedPosition = {
+                        type: null,
                         name: '',
                         price: '',
                         quantity: 1
@@ -327,6 +377,7 @@ export default {
                 done: () => {
                     this.editedPosition = {
                         name: '',
+                        type: null,
                         price: '',
                         quantity: 1
                     };
@@ -342,8 +393,9 @@ export default {
             this.editedPositionModalMode = 'edit';
             this.openEditPositionModal();
         },
-        createNewPosition() {
+        createNewPosition(type) {
             this.editedPositionModalMode = 'create';
+            this.editedPosition.type = type;
             this.openEditPositionModal();
         }
     }

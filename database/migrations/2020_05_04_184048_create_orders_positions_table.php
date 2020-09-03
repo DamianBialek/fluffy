@@ -16,6 +16,7 @@ class CreateOrdersPositionsTable extends Migration
         Schema::create('orders_positions', function (Blueprint $table) {
             $table->id();
             $table->bigInteger("order_id")->unsigned();
+            $table->string("type", 16)->default("service");
             $table->string("name", 255);
             $table->decimal("price", 10, 2);
             $table->integer("quantity")->default(1);
