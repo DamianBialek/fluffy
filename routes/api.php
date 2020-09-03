@@ -25,6 +25,8 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
+Route::get("/orders/{id}/invoice", 'OrderController@generatePdf');
+
 Route::middleware("apiJwt")->group(function () {
     Route::resource('parameters', 'ParameterController');
     Route::resource('customers', 'CustomerController');

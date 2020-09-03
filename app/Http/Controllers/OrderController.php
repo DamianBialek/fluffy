@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Order;
 use App\OrderPosition;
+use App\Pdf\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -202,6 +203,22 @@ class OrderController extends Controller
         } else {
             return $this->error([], "Position not found", 404);
         }
+    }
+
+    public function generatePdf($id)
+    {
+        $order = Order::with("positions")->where("id", $id)->firstOrFail();
+
+        if(!$order) {
+            return $this->error([], 'Data not found', 404);
+        }
+
+        $data = [
+            'date' => date("d-m-y"),
+            'positions' => $order->positions
+        ];
+
+        return response((Pdf::loadView("pdf.orderInvoice", $data))->Output());
     }
 
     protected function validateOrderPosition($request)
