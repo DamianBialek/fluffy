@@ -211,7 +211,7 @@ class OrderController extends Controller
 
     public function generatePdf($id)
     {
-        $order = Order::with("positions")->where("id", $id)->firstOrFail();
+        $order = Order::with("positions", "vehicle")->where("id", $id)->firstOrFail();
 
         if(!$order) {
             return $this->error([], 'Data not found', 404);
@@ -219,7 +219,7 @@ class OrderController extends Controller
 
         $data = [
             'date' => date("d-m-y"),
-            'positions' => $order->positions
+            'order' => $order
         ];
 
         return response((Pdf::loadView("pdf.orderInvoice", $data))->Output());

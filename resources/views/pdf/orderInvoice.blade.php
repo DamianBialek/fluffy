@@ -10,14 +10,14 @@
             margin: 0pt;
         }
 
-        table.items {
+        table.items, table.vehicle {
             border: 0.1mm solid #000000;
         }
 
         td {
             vertical-align: top;
         }
-        .items td {
+        .items td, table.vehicle td {
             border-left: 0.1mm solid #000000;
             border-right: 0.1mm solid #000000;
         }
@@ -47,7 +47,7 @@
 <htmlpageheader name="myheader">
 <table width="100%"><tr>
 <td width="50%" style="color:#0000BB; "><span style="font-weight: bold; font-size: 14pt;">Acme Trading Co.</span><br />123 Anystreet<br />Your City<br />GD12 4LP<br /><span style="font-family:dejavusanscondensed;">&#9742;</span> 01777 123 567</td>
-<td width="50%" style="text-align: right;">Invoice No.<br /><span style="font-weight: bold; font-size: 12pt;">0012345</span></td>
+<td width="50%" style="text-align: right;">Invoice No.<br /><span style="font-weight: bold; font-size: 12pt;">{{ $order->number  }}</span></td>
 </tr></table>
 </htmlpageheader>
 <htmlpagefooter name="myfooter">
@@ -64,10 +64,32 @@ mpdf-->
     <td width="55%">&nbsp;</td>
 </tr></table>
 <br />
+<table class="vehicle" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
+    <thead>
+    <tr>
+        <td width="15%">Marka</td>
+        <td width="35%">Model</td>
+        <td width="20%">Vin</td>
+        <td width="15%">Numer rejestracyjny</td>
+        <td width="15%">Przebieg</td>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr>
+        <td align="center">{{$order->vehicle->mark}}</td>
+        <td>{{$order->vehicle->model}}</td>
+        <td align="center" class="cost">{{$order->vehicle->vin}}</td>
+        <td align="center">{{$order->vehicle->registration_number}}</td>
+        <td class="cost"></td>
+    </tr>
+    </tbody>
+</table>
+<br />
 <table class="items" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
     <thead>
     <tr>
-        <td width="15%">Lp</td>
+        <td width="10%">Lp</td>
         <td width="45%">Nazwa</td>
         <td width="10%">Cena</td>
         <td width="15%">Ilość</td>
@@ -76,7 +98,7 @@ mpdf-->
     </thead>
     <tbody>
 
-    @foreach($positions as $position)
+    @foreach($order->positions as $position)
         <tr>
             <td align="center">{{$loop->index+1}}</td>
             <td>{{$position->name}}</td>
