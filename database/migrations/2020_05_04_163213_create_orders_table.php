@@ -17,6 +17,7 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->bigInteger("vehicle_id")->unsigned()->nullable();
             $table->boolean("active")->default(0);
+            $table->string("number")->unique();
             $table->string("name", 255)->nullable();
             $table->text("note")->nullable();
             $table->dateTime("date")->nullable();

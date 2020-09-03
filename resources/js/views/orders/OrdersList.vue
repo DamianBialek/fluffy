@@ -22,6 +22,7 @@
                     <thead>
                     <tr>
                         <th scope="col">#</th>
+                        <th>Numer</th>
                         <th>Rejestracja samochodu</th>
                         <th>Nazwa</th>
                         <th></th>
@@ -30,6 +31,7 @@
                     <tbody>
                     <tr v-for="order in orders" :key="order.id">
                         <th scope="row">{{order.id}}</th>
+                        <th>{{order.number}}</th>
                         <td>{{order.vehicle ? `${order.vehicle.mark} ${order.vehicle.model} (${order.vehicle.registration_number})` : ''}}</td>
                         <td>{{order.name && order.name.length ? order.name : '---'}}</td>
                         <td class="text-center">
