@@ -62,6 +62,7 @@ class OrderController extends Controller
                 $positions = [];
                 foreach ($request->get("positions") as $position) {
                     $positions[] = new OrderPosition([
+                        'type' => $position["type"],
                         'name' => $position["name"],
                         'price' => $position["price"],
                         'quantity' => $position["quantity"]

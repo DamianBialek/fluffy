@@ -141,7 +141,7 @@
                 const index = this.order.positions.findIndex(p => p.id === position.id);
 
                 if(index >= 0) {
-                    this.order.positions[index] = position;
+                    this.$set(this.order.positions, index, position);
                 }
             }
         }

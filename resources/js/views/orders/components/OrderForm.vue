@@ -55,11 +55,11 @@
                             <tbody>
                             <tr v-if="!orderPositionsServices.length"><td colspan="5" class="text-center"><strong>Brak usług</strong></td></tr>
                             <tr v-for="(position, index) in orderPositionsServices" :key="position.id">
-                                <td @click="editPosition(position)" class="align-middle">{{index+1}}</td>
-                                <td @click="editPosition(position)" class="align-middle">{{position.name}}</td>
-                                <td @click="editPosition(position)" class="text-center align-middle">{{moneyFormat(position.price)}}</td>
-                                <td @click="editPosition(position)" class="text-center align-middle">{{position.quantity}}</td>
-                                <td @click="editPosition(position)" class="text-center align-middle">{{moneyFormat(positionTotalSum(position))}}</td>
+                                <td @click="editPosition(position, position.origIndexInArray)" class="align-middle">{{index+1}}</td>
+                                <td @click="editPosition(position, position.origIndexInArray)" class="align-middle">{{position.name}}</td>
+                                <td @click="editPosition(position, position.origIndexInArray)" class="text-center align-middle">{{moneyFormat(position.price)}}</td>
+                                <td @click="editPosition(position, position.origIndexInArray)" class="text-center align-middle">{{position.quantity}}</td>
+                                <td @click="editPosition(position, position.origIndexInArray)" class="text-center align-middle">{{moneyFormat(positionTotalSum(position))}}</td>
                                 <td class="text-center align-middle">
                                     <button type="button" class="btn btn-outline-danger m-1" @click="removePosition(position)"><i class="fas fa-trash-alt"></i></button>
                                 </td>
@@ -90,11 +90,11 @@
                             <tbody>
                             <tr v-if="!orderPositionsParts.length"><td colspan="5" class="text-center"><strong>Brak części</strong></td></tr>
                             <tr v-for="(position, index) in orderPositionsParts" :key="position.id">
-                                <td @click="editPosition(position)" class="align-middle">{{index+1}}</td>
-                                <td @click="editPosition(position)" class="align-middle">{{position.name}}</td>
-                                <td @click="editPosition(position)" class="text-center align-middle">{{moneyFormat(position.price)}}</td>
-                                <td @click="editPosition(position)" class="text-center align-middle">{{position.quantity}}</td>
-                                <td @click="editPosition(position)" class="text-center align-middle">{{moneyFormat(positionTotalSum(position))}}</td>
+                                <td @click="editPosition(position, position.origIndexInArray)" class="align-middle">{{index+1}}</td>
+                                <td @click="editPosition(position, position.origIndexInArray)" class="align-middle">{{position.name}}</td>
+                                <td @click="editPosition(position, position.origIndexInArray)" class="text-center align-middle">{{moneyFormat(position.price)}}</td>
+                                <td @click="editPosition(position, position.origIndexInArray)" class="text-center align-middle">{{position.quantity}}</td>
+                                <td @click="editPosition(position, position.origIndexInArray)" class="text-center align-middle">{{moneyFormat(positionTotalSum(position))}}</td>
                                 <td class="text-center align-middle">
                                     <button type="button" class="btn btn-outline-danger m-1" @click="removePosition(position)"><i class="fas fa-trash-alt"></i></button>
                                 </td>
@@ -301,11 +301,14 @@ export default {
         orderPositionsPartsTotalSum() {
             return this.orderPositionsParts.reduce((curr, position) => curr + this.positionTotalSum(position), 0);
         },
+        orderPositions() {
+            return this.order.positions.map((p, i) => Object.assign(p, {origIndexInArray: i}))
+        },
         orderPositionsServices() {
-            return this.order.positions.filter(p => p.type === 'service');
+            return this.orderPositions.filter(p => p.type === 'service');
         },
         orderPositionsParts() {
-            return this.order.positions.filter(p => p.type === 'part');
+            return this.orderPositions.filter(p => p.type === 'part');
         }
     },
     mounted() {
@@ -388,8 +391,8 @@ export default {
         removePosition(position) {
             this.$emit('removePosition', position);
         },
-        editPosition(position) {
-            this.editedPosition = Object.assign({}, position);
+        editPosition(position, indexInArray) {
+            this.editedPosition = Object.assign({}, position, {indexInArray: indexInArray});
             this.editedPositionModalMode = 'edit';
             this.openEditPositionModal();
         },
