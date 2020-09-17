@@ -10,6 +10,7 @@
                 @submit="saveOrder"
                 @saveNewPosition="saveNewPosition"
                 @removePosition="removePosition"
+                @copyPosition="copyPosition"
                 @saveEditedPosition="saveEditedPosition"
             />
         </section>
@@ -143,6 +144,22 @@
                 if(index >= 0) {
                     this.$set(this.order.positions, index, position);
                 }
+            },
+            copyPosition(position) {
+                this.$api.post(`/api/orders/${this.order.id}/position`, position).then(res => {
+                    if(res.data.success && res.data.data.position) {
+                        this.order.positions.push(res.data.data.position);
+                        swal("Pomyślnie skopiowano pozycję !", "", "success").then(() => {
+                            data.done();
+                        })
+                    }
+                }).catch(err => {
+                    if(err.response.status !== 422) {
+                        return;
+                    }
+
+                    swal("Wystąpił błąd podczas kopiowanie pozycji !", "", "error");
+                })
             }
         }
     }

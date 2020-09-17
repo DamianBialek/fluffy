@@ -10,6 +10,7 @@
                 @submit="saveOrder"
                 @saveNewPosition="saveNewPosition"
                 @removePosition="removePosition"
+                @copyPosition="copyPosition"
                 @saveEditedPosition="saveEditedPosition"
             />
         </section>
@@ -86,12 +87,15 @@
                 })
             },
             updateOrderPosition(position) {
-                console.log(position)
                 if(typeof position.indexInArray != 'undefined') {
                     const index = position.indexInArray;
                     delete position.indexInArray;
                     this.$set(this.order.positions, index, position);
                 }
+            },
+            copyPosition(position) {
+                this.order.positions.push(position);
+                swal("Pomyślnie skopiowano pozycję !", "", "success")
             }
         }
     }
