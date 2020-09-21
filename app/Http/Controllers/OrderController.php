@@ -213,6 +213,21 @@ class OrderController extends Controller
         }
     }
 
+    public function copy($id)
+    {
+        $order = Order::find($id);
+
+        if($order) {
+            $newOrder = $order->copyOrder();
+
+            if($newOrder) {
+                return $this->success(['order' => $newOrder], 'Data found');
+            }
+        }
+
+        return $this->error([], 'Data not found', 404);
+    }
+
     protected function validateOrderPosition($request)
     {
         return Validator::make($request->all(), [

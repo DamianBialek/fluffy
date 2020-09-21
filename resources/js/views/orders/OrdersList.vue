@@ -36,6 +36,7 @@
                         <td>{{order.name && order.name.length ? order.name : '---'}}</td>
                         <td class="text-center">
                             <router-link tag="button" :to="{name: 'ordersEdit', params: {id: order.id}}" class="btn btn-outline-secondary m-1"><i class="fas fa-user-edit"></i></router-link>
+                            <button type="button" class="btn btn-outline-secondary m-1" @click="copyOrder(order)"><i class="fas fa-clone"></i></button>
                             <button class="btn btn-outline-danger m-1" @click="deleteOrder(order)"><i class="fas fa-trash-alt"></i></button>
                         </td>
                     </tr>
@@ -100,6 +101,17 @@
             resetSearchQuery() {
                 this.searchQuery = '';
                 this.getOrders();
+            },
+            copyOrder(order) {
+                this.$confirm(`Czy na pewno chcesz skopiować to zlecenie ${order.name ? order.name : ''} (#${order.id}) ?`)
+                    .then(() => {
+                        this.$api.get(`/api/orders/${order.id}/copy`)
+                            .then(() => {
+                                swal("Pomyślnie skopiowano zlecenie !", "", "success").then(() => {
+                                    this.getOrders();
+                                })
+                            })
+                    })
             }
         }
     }

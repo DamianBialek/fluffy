@@ -78,4 +78,33 @@ class Order extends Model
     {
         return $this->hasMany(OrderPosition::class, 'order_id', 'id');
     }
+
+    public function copyOrder()
+    {
+        $new = $this->replicate(array_diff(array_keys($this->getAttributes()), ["vehicle_id", 'name', 'note']));
+        $new->generateAndSetNewNumber();
+
+        if(!empty($new->name)) {
+            $new->name .= ' - Kopia';
+        }
+
+        $new->push();
+
+        $this->relations = [];
+
+        $this->load("positions");
+
+        foreach ($this->relations as $relationName => $items){
+            if(method_exists($new->{$relationName}, "sync")) {
+                $new->{$relationName}()->sync($items);
+            } else {
+                foreach($items as $item){
+                    unset($item->id);
+                    $new->{$relationName}()->create($item->toArray());
+                }
+            }
+        }
+
+        return $new;
+    }
 }
