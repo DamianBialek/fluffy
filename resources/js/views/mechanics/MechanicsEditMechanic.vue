@@ -10,7 +10,6 @@
 </template>
 
 <script>
-    import swal from "sweetalert";
     import MechanicForm from "./components/MechanicForm";
 
     export default {
@@ -39,7 +38,7 @@
                 this.$api.put(`/api/mechanics/${this.mechanic.id}`, this.mechanic)
                     .then(res => {
                         if(res.data.success) {
-                            swal("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
+                            this.$notify("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
                                 this.$router.push({name: 'mechanicsList'})
                             })
                         }
@@ -52,9 +51,9 @@
                         this.errorFields = err.response.data.data.fields;
 
                         if(Object.keys(this.errorFields).length) {
-                            swal("Proszę poprawić błędy w formularzu !", "", "error");
+                            this.$notify("Proszę poprawić błędy w formularzu !", "", "error");
                         } else {
-                            swal("Wystąpił błąd podczas zapisywania danych !", "", "error");
+                            this.$notify("Wystąpił błąd podczas zapisywania danych !", "", "error");
                         }
                     })
                     .finally(() => {

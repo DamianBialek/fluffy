@@ -51,6 +51,7 @@ class OrderController extends Controller
             'name' => $request->get("name", null),
             'note' => $request->get("note", null),
             'date' => $request->get("date", null),
+            'vehicle_mileage' => $request->get("vehicle_mileage", null),
             'finished_at' => $request->get("finished_at", null)
         ]);
 
@@ -62,6 +63,7 @@ class OrderController extends Controller
                 $positions = [];
                 foreach ($request->get("positions") as $position) {
                     $positions[] = new OrderPosition([
+                        'type' => $position["type"],
                         'name' => $position["name"],
                         'price' => $position["price"],
                         'quantity' => $position["quantity"]
@@ -121,6 +123,7 @@ class OrderController extends Controller
             'name' => $request->get("name", null),
             'note' => $request->get("note", null),
             'date' => $request->get("date", null),
+            'vehicle_mileage' => $request->get("vehicle_mileage", null),
             'finished_at' => $request->get("finished_at", null)
         ]);
 
@@ -158,6 +161,7 @@ class OrderController extends Controller
 
         if($order) {
             $position = $order->positions()->create([
+                'type' => $request->get("type", 'service'),
                 'name' => $request->get("name"),
                 'price' => $request->get("price"),
                 'quantity' => $request->get("quantity", 1)
@@ -181,6 +185,7 @@ class OrderController extends Controller
             }
 
             $position->update([
+                'type' => $request->get("type", 'service'),
                 'name' => $request->get("name"),
                 'price' => $request->get("price"),
                 'quantity' => $request->get("quantity", 1)
@@ -213,7 +218,7 @@ class OrderController extends Controller
     {
         $order = Order::with("positions", "vehicle")->where("id", $id)->firstOrFail();
 
-        if(!$order) {
+        if (!$order) {
             return $this->error([], 'Data not found', 404);
         }
 
@@ -223,6 +228,21 @@ class OrderController extends Controller
         ];
 
         return response((Pdf::loadView("pdf.orderInvoice", $data))->Output());
+    }
+
+    public function copy($id)
+    {
+        $order = Order::find($id);
+
+        if($order) {
+            $newOrder = $order->copyOrder();
+
+            if($newOrder) {
+                return $this->success(['order' => $newOrder], 'Data found');
+            }
+        }
+
+        return $this->error([], 'Data not found', 404);
     }
 
     protected function validateOrderPosition($request)
