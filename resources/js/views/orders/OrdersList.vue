@@ -54,7 +54,6 @@
 </template>
 
 <script>
-    import swal from "sweetalert";
     import Pagination from "../../components/Pagination";
 
     export default {
@@ -78,7 +77,7 @@
                     .then(() => {
                         this.$api.delete(`/api/orders/${order.id}`)
                             .then(() => {
-                                swal("Pomyślnie usunięto zlecenie !", "", "success").then(() => {
+                                this.$notify("Pomyślnie usunięto zlecenie !", "", "success").then(() => {
                                     this.getOrders();
                                 })
                             })
@@ -107,7 +106,7 @@
                     .then(() => {
                         this.$api.get(`/api/orders/${order.id}/copy`)
                             .then(() => {
-                                swal("Pomyślnie skopiowano zlecenie !", "", "success").then(() => {
+                                this.$notify("Pomyślnie skopiowano zlecenie !", "", "success").then(() => {
                                     this.getOrders();
                                 })
                             })

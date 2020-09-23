@@ -48,7 +48,6 @@
 </template>
 
 <script>
-    import swal from "sweetalert";
     import Pagination from "../../components/Pagination";
 
     export default {
@@ -72,7 +71,7 @@
                     .then(() => {
                         this.$api.delete(`/api/vehicles/${vehicle.id}`)
                             .then(() => {
-                                swal("Pomyślnie usunięto samochód !", "", "success").then(() => {
+                                this.$notify("Pomyślnie usunięto samochód !", "", "success").then(() => {
                                     this.getVehicles();
                                 })
                             })

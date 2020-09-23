@@ -19,7 +19,6 @@
 
 <script>
     import OrderForm from "./components/OrderForm";
-    import swal from "sweetalert";
 
     export default {
         name: "OrdersAdd",
@@ -47,7 +46,7 @@
                 this.$api.post("/api/orders", this.order)
                     .then(res => {
                         if(res.data.success) {
-                            swal("Pomyślnie dodano nowe zlecenie !", "", "success").then(() => {
+                            this.$notify("Pomyślnie dodano nowe zlecenie !", "", "success").then(() => {
                                 this.$router.push({name: 'ordersList'})
                             })
                         }
@@ -60,9 +59,9 @@
                         this.errorFields = err.response.data.data.fields;
 
                         if(Object.keys(this.errorFields).length) {
-                            swal("Proszę poprawić błędy w formularzu !", "", "error");
+                            this.$notify("Proszę poprawić błędy w formularzu !", "", "error");
                         } else {
-                            swal("Wystąpił błąd podczas dodawania nowego zlecenia !", "", "error");
+                            this.$notify("Wystąpił błąd podczas dodawania nowego zlecenia !", "", "error");
                         }
                     })
                     .finally(() => {
@@ -71,17 +70,17 @@
             },
             saveNewPosition(data) {
                 this.order.positions.push(data.newPosition);
-                swal("Pomyślnie dodano pozycję !", "", "success").then(() => {
+                this.$notify("Pomyślnie dodano pozycję !", "", "success").then(() => {
                     data.done();
                 })
             },
             removePosition(position) {
-                swal("Pomyślnie usunięto pozycję !", "", "success").then(() => {
+                this.$notify("Pomyślnie usunięto pozycję !", "", "success").then(() => {
                     this.order.positions.splice(this.order.positions.findIndex(p => p.id === position.id), 1);
                 })
             },
             saveEditedPosition(data) {
-                swal("Pomyślnie zaktualizowano pozycję !", "", "success").then(() => {
+                this.$notify("Pomyślnie zaktualizowano pozycję !", "", "success").then(() => {
                     this.updateOrderPosition(data.position)
                     data.done();
                 })
@@ -95,7 +94,7 @@
             },
             copyPosition(position) {
                 this.order.positions.push(position);
-                swal("Pomyślnie skopiowano pozycję !", "", "success")
+                this.$notify("Pomyślnie skopiowano pozycję !", "", "success")
             }
         }
     }

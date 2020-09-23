@@ -11,7 +11,6 @@
 
 <script>
     import CustomerForm from "./components/CustomerForm";
-    import swal from "sweetalert";
 
     export default {
         name: "CustomersAddCustomer",
@@ -38,7 +37,7 @@
                 this.$api.post("/api/customers", this.customer)
                     .then(res => {
                         if(res.data.success) {
-                            swal("Pomyślnie dodano nowego klienta !", "", "success").then(() => {
+                            this.$notify("Pomyślnie dodano nowego klienta !", "", "success").then(() => {
                                 this.$router.push({name: 'customersList'})
                             })
                         }
@@ -51,9 +50,9 @@
                         this.errorFields = err.response.data.data.fields;
 
                         if(Object.keys(this.errorFields).length) {
-                            swal("Proszę poprawić błędy w formularzu !", "", "error");
+                            this.$notify("Proszę poprawić błędy w formularzu !", "", "error");
                         } else {
-                            swal("Wystąpił błąd podczas dodawania nowego klienta !", "", "error");
+                            this.$notify("Wystąpił błąd podczas dodawania nowego klienta !", "", "error");
                         }
                     })
                     .finally(() => {

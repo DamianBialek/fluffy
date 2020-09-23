@@ -11,7 +11,6 @@
 
 <script>
     import CustomerForm from "./components/CustomerForm";
-    import swal from "sweetalert";
 
     export default {
         name: "CustomersEditCustomer",
@@ -43,7 +42,7 @@
                 this.$api.put(`/api/customers/${this.customer.id}`, this.customer)
                     .then(res => {
                         if(res.data.success) {
-                            swal("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
+                            this.$notify("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
                                 this.$router.push({name: 'customersList'})
                             })
                         }
@@ -56,9 +55,9 @@
                         this.errorFields = err.response.data.data.fields;
 
                         if(Object.keys(this.errorFields).length) {
-                            swal("Proszę poprawić błędy w formularzu !", "", "error");
+                            this.$notify("Proszę poprawić błędy w formularzu !", "", "error");
                         } else {
-                            swal("Wystąpił błąd podczas dodawania nowego klienta !", "", "error");
+                            this.$notify("Wystąpił błąd podczas dodawania nowego klienta !", "", "error");
                         }
                     })
                     .finally(() => {
@@ -73,7 +72,7 @@
                 this.updateCustomerVehicleData(vehicle)
                     .then(res => {
                         if(res.data.success) {
-                            swal("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
+                            this.$notify("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
                                 this.customer.vehicles.splice(this.customer.vehicles.findIndex(v => v.id === vehicle.id), 1);
                             })
                         }
@@ -87,7 +86,7 @@
                 this.updateCustomerVehicleData(vehicle)
                     .then(res => {
                         if(res.data.success) {
-                            swal("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
+                            this.$notify("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
                                 this.customer.vehicles.push(vehicle);
                                 this.$store.commit("removeUnassignedCustomerVehicles", vehicle.id);
                             })

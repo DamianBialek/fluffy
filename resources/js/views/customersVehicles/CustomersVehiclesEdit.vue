@@ -11,7 +11,6 @@
 
 <script>
     import CustomerVehicleForm from "./components/CustomersVehicleForm";
-    import swal from "sweetalert";
 
     export default {
         name: "CustomersVehiclesEdit",
@@ -38,7 +37,7 @@
                 this.$api.put(`/api/vehicles/${this.vehicle.id}`, this.vehicle)
                     .then(res => {
                         if(res.data.success) {
-                            swal("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
+                            this.$notify("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
                                 this.$router.push({name: 'customersCarsList'})
                             })
                         }
@@ -51,9 +50,9 @@
                         this.errorFields = err.response.data.data.fields;
 
                         if(Object.keys(this.errorFields).length) {
-                            swal("Proszę poprawić błędy w formularzu !", "", "error");
+                            this.$notify("Proszę poprawić błędy w formularzu !", "", "error");
                         } else {
-                            swal("Wystąpił błąd podczas edytowania danych samochodu !", "", "error");
+                            this.$notify("Wystąpił błąd podczas edytowania danych samochodu !", "", "error");
                         }
                     })
                     .finally(() => {
