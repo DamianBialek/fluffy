@@ -1,9 +1,9 @@
-import Dashboard from "../../views/Dashboard.vue";
+import Configuration from "../../views/Configuration.vue";
 
 export default {
     path: '/configuration',
     name: 'configuration',
-    component: Dashboard,
+    component: Configuration,
     meta: {
         title: 'Konfiguracja'
     }

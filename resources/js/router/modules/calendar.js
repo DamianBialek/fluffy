@@ -1,9 +1,9 @@
-import Dashboard from "../../views/Dashboard.vue";
+import Calendar from "../../views/Calendar.vue";
 
 const route = {
     path: '/calendar',
     name: 'calendar',
-    component: Dashboard,
+    component: Calendar,
     meta: {
         title: 'Kalendarz'
     }
