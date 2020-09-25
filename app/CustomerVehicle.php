@@ -21,6 +21,14 @@ class CustomerVehicle extends Model
         return $this->hasMany(Order::class, 'vehicle_id');
     }
 
+    public static function query()
+    {
+        $query = parent::query();
+        $query->with("customer");
+
+        return $query;
+    }
+
     public static function search($queryString, Builder $query = null)
     {
         if($query === null) {

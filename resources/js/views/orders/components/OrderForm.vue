@@ -3,9 +3,9 @@
         <form @submit.prevent="$emit('submit')">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Dane</a>
+                    <a class="nav-link active" id="order-data-tab" data-toggle="tab" href="#order-data" role="tab" aria-controls="order-data" aria-selected="true">Dane</a>
                 </li>
-                <li class="nav-item" v-if="order.invoice_number">
+                <li class="nav-item" v-if="order.id">
                     <a class="nav-link" id="documents-tab" data-toggle="tab" href="#documents" role="tab" aria-controls="documents" aria-selected="true">Dokumenty</a>
                 </li>
                 <li class="nav-item">
@@ -16,7 +16,7 @@
                 </li>
             </ul>
             <div class="tab-content m-3" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="tab-pane fade show active" id="order-data" role="tabpanel" aria-labelledby="order-data-tab">
                     <div class="form-group row" v-if="order.number">
                         <label for="number" class="col-sm-2 col-form-label">Numer</label>
                         <div class="col-sm-10">
@@ -27,6 +27,12 @@
                         <label class="col-sm-2 col-form-label">Pojazd</label>
                         <div class="col-sm-10">
                             <div @click="openCustomerVehiclesModal" class="form-control">{{order.vehicle && order.vehicle.mark ? `${order.vehicle.mark} ${order.vehicle.model} (${order.vehicle.registration_number})` : ''}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Klient</label>
+                        <div class="col-sm-10">
+                            <div @click="openCustomerDataModal" class="form-control">{{order.customer && order.customer.name ? `${order.customer.name} ${order.customer.surname}` : ''}}</div>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -42,7 +48,7 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="order.invoice_number" class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
+                <div v-if="order.id" class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
                     <div class="form-group row">
                         <label for="number" class="col-sm-2 col-form-label">Faktura VAT</label>
                         <div class="col-sm-10">
@@ -234,6 +240,72 @@
                 </div>
             </div>
         </div>
+        <div id="customerDataModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Dane klienta</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label for="customerCompany" class="col-sm-2 col-form-label">Firma</label>
+                            <div class="col-sm-10">
+                                <input v-model="order.customer.company" type="text" :class="['form-control', {'is-invalid': fieldHasError('company')}]" id="customerCompany">
+                                <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('company')"></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="customerName" class="col-sm-2 col-form-label">Imię</label>
+                            <div class="col-sm-10">
+                                <input v-model="order.customer.name" type="text" :class="['form-control', {'is-invalid': fieldHasError('name')}]" id="customerName">
+                                <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('name')"></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="surname" class="col-sm-2 col-form-label">Nazwisko</label>
+                            <div class="col-sm-10">
+                                <input v-model="order.customer.surname" type="text" class="form-control" :class="['form-control', {'is-invalid': fieldHasError('surname')}]" id="surname">
+                                <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('surname')"></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="address" class="col-sm-2 col-form-label">Adres</label>
+                            <div class="col-sm-10">
+                                <input v-model="order.customer.address" type="text" class="form-control" :class="['form-control', {'is-invalid': fieldHasError('address')}]" id="address">
+                                <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('address')"></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="postcode" class="col-sm-2 col-form-label">Kod pocztowy</label>
+                            <div class="col-sm-10">
+                                <input v-model="order.customer.postcode" type="text" class="form-control" :class="['form-control', {'is-invalid': fieldHasError('postcode')}]" id="postcode">
+                                <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('postcode')"></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="city" class="col-sm-2 col-form-label">Miasto</label>
+                            <div class="col-sm-10">
+                                <input v-model="order.customer.city" type="text" class="form-control" :class="['form-control', {'is-invalid': fieldHasError('city')}]" id="city">
+                                <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('city')"></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="phone" class="col-sm-2 col-form-label">Telefon</label>
+                            <div class="col-sm-10">
+                                <input v-model="order.customer.phone" type="text" class="form-control" :class="['form-control', {'is-invalid': fieldHasError('phone')}]" id="phone">
+                                <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('phone')"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zapisz</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -241,12 +313,14 @@
 import Loading from "../../../components/Loading";
 import Pagination from "../../../components/Pagination";
 import { moneyFormat } from "../../../helpers/utils";
+import CustomerForm from "../../customers/components/CustomerForm";
 
 export default {
     name: "OrderForm",
     components: {
         Loading,
-        Pagination
+        Pagination,
+        CustomerForm
     },
     data() {
         return {
@@ -259,7 +333,11 @@ export default {
                 price: '',
                 quantity: 1
             },
-            editedPositionModalMode: null
+            editedPositionModalMode: null,
+            availableTypes: [
+                'natural_person',
+                'company'
+            ],
         }
     },
     props: {
@@ -348,6 +426,9 @@ export default {
         hideEditPositionModal() {
             $("#editedPositionModal").modal("hide");
         },
+        openCustomerDataModal() {
+            $("#customerDataModal").modal("show");
+        },
         loadCustomersVehicles() {
             this.customersVehiclesLoading = true;
             this.$api.get("/api/vehicles", {params: {query: this.customerVehiclesSearchQuery, page: this.customersVehiclesPaginationData.current_page}}).then(res => {
@@ -365,7 +446,8 @@ export default {
         },
         selectCustomerVehicle(vehicle) {
             this.order.vehicle = vehicle;
-            this.order.vehicle_id = vehicle.id
+            this.order.vehicle_id = vehicle.id;
+            this.order.customer = vehicle.customer;
             $("#customerVehiclesModal").modal("hide");
         },
         submitEditPositionModal() {

@@ -16,8 +16,13 @@ class CreateCustomersTable extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->enum("type", ['natural_person', 'company']);
-            $table->string("name", 64);
-            $table->string("surname", 64);
+            $table->string("company")->nullable();
+            $table->string("name");
+            $table->string("surname");
+            $table->string("address")->nullable();
+            $table->string("city")->nullable();
+            $table->string("postcode")->nullable();
+            $table->string("phone")->nullable();
             $table->timestamps();
         });
     }

@@ -6,6 +6,7 @@ use App\Order;
 use App\OrderPosition;
 use App\Pdf\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Mpdf\Output\Destination;
@@ -52,6 +53,13 @@ class OrderController extends Controller
             'name' => $request->get("name", null),
             'note' => $request->get("note", null),
             'date' => $request->get("date", null),
+            'customer_company' => Arr::get($request->get("customer", []), 'company', null),
+            'customer_name' => Arr::get($request->get("customer", []), 'name', null),
+            'customer_surname' => Arr::get($request->get("customer", []), 'surname', null),
+            'customer_address' => Arr::get($request->get("customer", []), 'address', null),
+            'customer_city' => Arr::get($request->get("customer", []), 'city', null),
+            'customer_postcode' => Arr::get($request->get("customer", []), 'postcode', null),
+            'customer_phone' => Arr::get($request->get("customer", []), 'phone', null),
             'vehicle_mileage' => $request->get("vehicle_mileage", null),
             'finished_at' => $request->get("finished_at", null)
         ]);
@@ -124,6 +132,13 @@ class OrderController extends Controller
             'name' => $request->get("name", null),
             'note' => $request->get("note", null),
             'date' => $request->get("date", null),
+            'customer_company' => Arr::get($request->get("customer", []), 'company', null),
+            'customer_name' => Arr::get($request->get("customer", []), 'name', null),
+            'customer_surname' => Arr::get($request->get("customer", []), 'surname', null),
+            'customer_address' => Arr::get($request->get("customer", []), 'address', null),
+            'customer_city' => Arr::get($request->get("customer", []), 'city', null),
+            'customer_postcode' => Arr::get($request->get("customer", []), 'postcode', null),
+            'customer_phone' => Arr::get($request->get("customer", []), 'phone', null),
             'vehicle_mileage' => $request->get("vehicle_mileage", null),
             'finished_at' => $request->get("finished_at", null)
         ]);

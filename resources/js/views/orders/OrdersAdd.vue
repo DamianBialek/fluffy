@@ -34,7 +34,16 @@
                         registration_number: ''
                     },
                     name: '',
-                    positions: []
+                    positions: [],
+                    customer: {
+                        company: '',
+                        name: '',
+                        surname: '',
+                        address: '',
+                        city: '',
+                        postcode: '',
+                        phone: '',
+                    }
                 },
                 errorFields: {}
             }

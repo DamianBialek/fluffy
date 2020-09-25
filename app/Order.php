@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['number', 'vehicle_id', 'name', 'note', 'active', 'date', 'vehicle_mileage', 'finished_at'];
+    protected $fillable = ['number', 'vehicle_id', 'name', 'note', 'active', 'date', 'customer_company', 'customer_name', 'customer_surname', 'customer_address', 'customer_city', 'customer_postcode', 'customer_phone', 'vehicle_mileage', 'finished_at'];
+
+    protected $appends = ['customer'];
+
+    protected $hidden = ['customer_company', 'customer_name', 'customer_surname', 'customer_address', 'customer_city', 'customer_postcode', 'customer_phone'];
 
     public static function query()
     {
@@ -176,5 +180,23 @@ class Order extends Model
         return $this->getServicesPositions()->sum(function ($pos) {
             return $pos->price * $pos->quantity;
         });
+    }
+
+    public function getTotalSum()
+    {
+        return $this->getPartsTotalSum() + $this->getServicesTotalSum();
+    }
+
+    public function getCustomerAttribute()
+    {
+        return [
+            'company' => $this->customer_company,
+            'name' => $this->customer_name,
+            'surname' => $this->customer_surname,
+            'address' => $this->customer_address,
+            'city' => $this->customer_city,
+            'postcode' => $this->customer_postcode,
+            'phone' => $this->customer_phone,
+        ];
     }
 }

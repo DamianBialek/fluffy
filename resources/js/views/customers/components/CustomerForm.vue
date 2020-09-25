@@ -12,12 +12,10 @@
             <div class="tab-content m-3" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <div class="form-group row">
-                        <label for="type" class="col-sm-2 col-form-label">Typ</label>
+                        <label for="customerCompany" class="col-sm-2 col-form-label">Firma</label>
                         <div class="col-sm-10">
-                            <select v-model="customer.type" :class="['form-control', {'is-invalid': fieldHasError('type')}]" id="type">
-                                <option v-for="type in availableTypes" :value="type">{{type}}</option>
-                            </select>
-                            <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('type')"></div>
+                            <input v-model="customer.company" type="text" :class="['form-control', {'is-invalid': fieldHasError('company')}]" id="customerCompany">
+                            <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('company')"></div>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -32,6 +30,34 @@
                         <div class="col-sm-10">
                             <input v-model="customer.surname" type="text" class="form-control" :class="['form-control', {'is-invalid': fieldHasError('surname')}]" id="surname">
                             <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('surname')"></div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="address" class="col-sm-2 col-form-label">Adres</label>
+                        <div class="col-sm-10">
+                            <input v-model="customer.address" type="text" class="form-control" :class="['form-control', {'is-invalid': fieldHasError('address')}]" id="address">
+                            <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('address')"></div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="postcode" class="col-sm-2 col-form-label">Kod pocztowy</label>
+                        <div class="col-sm-10">
+                            <input v-model="customer.postcode" type="text" class="form-control" :class="['form-control', {'is-invalid': fieldHasError('postcode')}]" id="postcode">
+                            <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('postcode')"></div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="city" class="col-sm-2 col-form-label">Miasto</label>
+                        <div class="col-sm-10">
+                            <input v-model="customer.city" type="text" class="form-control" :class="['form-control', {'is-invalid': fieldHasError('city')}]" id="city">
+                            <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('city')"></div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="phone" class="col-sm-2 col-form-label">Telefon</label>
+                        <div class="col-sm-10">
+                            <input v-model="customer.phone" type="text" class="form-control" :class="['form-control', {'is-invalid': fieldHasError('phone')}]" id="phone">
+                            <div class="invalid-feedback text-center" v-html="fieldInvalidFeedback('phone')"></div>
                         </div>
                     </div>
                 </div>

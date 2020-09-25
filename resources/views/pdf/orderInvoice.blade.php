@@ -60,7 +60,7 @@
 mpdf-->
 <div style="text-align: right">Data: {{ \Carbon\Carbon::parse($order->invoice_date)->format("d-m-Y") }}</div>
 <table width="100%" style="font-family: serif; border: 0" cellpadding="10"><tr>
-    <td width="45%" style="border: 0.1mm solid #888888; ">345 Anotherstreet<br />Little Village<br />Their City<br />CB22 6SO</td>
+    <td width="45%" style="border: 0.1mm solid #888888; ">{{$order->customer_name}} {{$order->customer_surname}} <br /> {{$order->customer_address}} <br /> {{$order->customer_postcode}} {{$order->customer_city}}</td>
     <td width="55%" style="border: 0">&nbsp;</td>
 </tr></table>
 <br />
@@ -85,7 +85,7 @@ mpdf-->
     </tr>
     </tbody>
 </table>
-<br />
+<h4>Części</h4>
 <table width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
     <thead>
     <tr>
@@ -115,7 +115,7 @@ mpdf-->
     @endforeach
     </tbody>
 </table>
-<br />
+<h4>Robocizna</h4>
 <table width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
     <thead>
     <tr>
@@ -165,7 +165,7 @@ mpdf-->
     </tr>
     <tr style="border: 0.1mm solid #000000;">
         <th style="font-size: 12pt;">Razem do zapłaty</th>
-        <th class="cost totals" style="font-size: 12pt;">{{$order->getServicesTotalSum()}}</th>
+        <th class="cost totals" style="font-size: 12pt;">{{$order->getTotalSum()}}</th>
     </tr>
     </tbody>
 </table>

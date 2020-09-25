@@ -46,8 +46,13 @@ class CustomerController extends Controller
         return DB::transaction(function () use ($request) {
             $customer = Customer::create([
                 'type' => $request->get("type"),
+                'company' => $request->get("company", null),
                 'name' => $request->get("name"),
-                'surname' => $request->get("surname")
+                'surname' => $request->get("surname"),
+                'address' => $request->get("address", null),
+                'city' => $request->get("city", null),
+                'postcode' => $request->get("postcode", null),
+                'phone' => $request->get("phone", null)
             ]);
 
             if($customer) {
@@ -105,8 +110,13 @@ class CustomerController extends Controller
 
         $customer->update([
             'type' => $request->get("type"),
+            'company' => $request->get("company", null),
             'name' => $request->get("name"),
-            'surname' => $request->get("surname")
+            'surname' => $request->get("surname"),
+            'address' => $request->get("address", null),
+            'city' => $request->get("city", null),
+            'postcode' => $request->get("postcode", null),
+            'phone' => $request->get("phone", null)
         ]);
 
         return $this->success(['customer' => $customer], 'Customer updated', 200);
@@ -134,7 +144,6 @@ class CustomerController extends Controller
     protected function validate($request)
     {
         return Validator::make($request->all(), [
-            'type' => 'required|in:natural_person,company',
             'name' => 'required|max:64',
             'surname' => 'required|max:64'
         ]);

@@ -21,6 +21,13 @@ class CreateOrdersTable extends Migration
             $table->string("name", 255)->nullable();
             $table->text("note")->nullable();
             $table->dateTime("date")->nullable();
+            $table->string("customer_company")->nullable();
+            $table->string("customer_name")->nullable();
+            $table->string("customer_surname")->nullable();
+            $table->string("customer_address")->nullable();
+            $table->string("customer_city")->nullable();
+            $table->string("customer_postcode")->nullable();
+            $table->string("customer_phone")->nullable();
             $table->integer("vehicle_mileage")->nullable();
             $table->string("invoice_number")->nullable()->unique();
             $table->timestamp("invoice_date")->nullable();

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
-    protected $fillable = ['type', 'name', 'surname'];
+    protected $fillable = ['type', 'company', 'name', 'surname', 'address', 'city', 'postcode', 'phone'];
 
     public function vehicles()
     {
