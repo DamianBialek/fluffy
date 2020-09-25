@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,6 +21,11 @@ class Order extends Model
     public static function getNumberRegex()
     {
         return "(Z)(?<number>[0-9]*)(\/".date("Y").")";
+    }
+
+    public static function getInvoiceNumberRegex()
+    {
+        return "(FV)(?<number>[0-9]*)(\/".date("Y").")";
     }
 
     public function generateAndSetNewNumber()
@@ -44,9 +50,37 @@ class Order extends Model
         $this->number = "Z{$number}/2020";
     }
 
+    public function generateAndSetInvoiceNumber()
+    {
+        $lastNumber = self::getLastInvoiceNumber();
+
+        if($lastNumber !== null) {
+            $lastNumber = $lastNumber->invoice_number;
+
+            if(preg_match("%".self::getInvoiceNumberRegex()."%", $lastNumber, $matches)) {
+                $number = (int)$matches['number'];
+                $number += 1;
+            } else {
+                $number = 1;
+            }
+        } else {
+            $number = 1;
+        }
+
+        $number = str_pad($number, 4, "0", STR_PAD_LEFT);
+
+        $this->invoice_number = "FV{$number}/".date("Y");
+        $this->invoice_date = Carbon::now();
+    }
+
     public static function getLastNumber()
     {
         return self::where("number", "REGEXP", self::getNumberRegex())->orderBy("id", "desc")->take(1)->get()->first();
+    }
+
+    public static function getLastInvoiceNumber()
+    {
+        return self::where("invoice_number", "REGEXP", self::getInvoiceNumberRegex())->orderBy("invoice_number", "desc")->take(1)->get()->first();
     }
 
     public static function search($queryString, Builder $query = null)
@@ -106,5 +140,41 @@ class Order extends Model
         }
 
         return $new;
+    }
+
+    public function getPartsPositions()
+    {
+        if(!$this->relationLoaded("positions")) {
+            $this->load("positions");
+        }
+
+        return $this->positions->filter(function ($position) {
+            return $position->type == 'part';
+        });
+    }
+
+    public function getServicesPositions()
+    {
+        if(!$this->relationLoaded("positions")) {
+            $this->load("positions");
+        }
+
+        return $this->positions->filter(function ($position) {
+            return $position->type == 'service';
+        });
+    }
+
+    public function getPartsTotalSum()
+    {
+        return $this->getPartsPositions()->sum(function ($pos) {
+            return $pos->price * $pos->quantity;
+        });
+    }
+
+    public function getServicesTotalSum()
+    {
+        return $this->getServicesPositions()->sum(function ($pos) {
+            return $pos->price * $pos->quantity;
+        });
     }
 }

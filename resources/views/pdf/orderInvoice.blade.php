@@ -10,14 +10,14 @@
             margin: 0pt;
         }
 
-        table.items, table.vehicle {
+        table {
             border: 0.1mm solid #000000;
         }
 
-        td {
+        td, th {
             vertical-align: top;
         }
-        .items td, table.vehicle td {
+        table td, table th {
             border-left: 0.1mm solid #000000;
             border-right: 0.1mm solid #000000;
         }
@@ -25,7 +25,7 @@
             text-align: center;
             border: 0.1mm solid #000000;
         }
-        .items td.blanktotal {
+        table .blanktotal {
             background-color: #EEEEEE;
             border: 0.1mm solid #000000;
             background-color: #FFFFFF;
@@ -33,38 +33,38 @@
             border-top: 0.1mm solid #000000;
             border-right: 0.1mm solid #000000;
         }
-        .items td.totals {
+        table td.totals, table th.totals {
             text-align: right;
-            border: 0.1mm solid #000000;
         }
-        .items td.cost {
+        table td.cost, table th {
             text-align: "." center;
         }
     </style>
+    <title>Faktura VAT nr {{$order->invoice_number}}</title>
 </head>
 <body>
 <!--mpdf
 <htmlpageheader name="myheader">
-<table width="100%"><tr>
-<td width="50%" style="color:#0000BB; "><span style="font-weight: bold; font-size: 14pt;">Acme Trading Co.</span><br />123 Anystreet<br />Your City<br />GD12 4LP<br /><span style="font-family:dejavusanscondensed;">&#9742;</span> 01777 123 567</td>
-<td width="50%" style="text-align: right;">Invoice No.<br /><span style="font-weight: bold; font-size: 12pt;">{{ $order->number  }}</span></td>
+<table width="100%" style="border: 0"><tr>
+<td width="50%" style="color:#0000BB; border: 0"></td>
+<td width="50%" style="text-align: right; border: 0"><span style="font-weight: bold; font-size: 12pt;">Faktura VAT nr {{$order->invoice_number}}</span><br />dla <b>{{ $order->number  }}</b></td>
 </tr></table>
 </htmlpageheader>
 <htmlpagefooter name="myfooter">
 <div style="border-top: 1px solid #000000; font-size: 9pt; text-align: center; padding-top: 3mm; ">
-Page {PAGENO} of {nb}
+{PAGENO}/{nb}
 </div>
 </htmlpagefooter>
 <sethtmlpageheader name="myheader" value="on" show-this-page="1" />
 <sethtmlpagefooter name="myfooter" value="on" />
 mpdf-->
-<div style="text-align: right">Data: {{ $date }}</div>
-<table width="100%" style="font-family: serif;" cellpadding="10"><tr>
+<div style="text-align: right">Data: {{ \Carbon\Carbon::parse($order->invoice_date)->format("d-m-Y") }}</div>
+<table width="100%" style="font-family: serif; border: 0" cellpadding="10"><tr>
     <td width="45%" style="border: 0.1mm solid #888888; ">345 Anotherstreet<br />Little Village<br />Their City<br />CB22 6SO</td>
-    <td width="55%">&nbsp;</td>
+    <td width="55%" style="border: 0">&nbsp;</td>
 </tr></table>
 <br />
-<table class="vehicle" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
+<table width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
     <thead>
     <tr>
         <td width="15%">Marka</td>
@@ -81,34 +81,93 @@ mpdf-->
         <td>{{$order->vehicle->model}}</td>
         <td align="center" class="cost">{{$order->vehicle->vin}}</td>
         <td align="center">{{$order->vehicle->registration_number}}</td>
-        <td class="cost"></td>
+        <td align="center">{{$order->vehicle_mileage}}</td>
     </tr>
     </tbody>
 </table>
 <br />
-<table class="items" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
+<table width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
     <thead>
     <tr>
-        <td width="10%">Lp</td>
-        <td width="45%">Nazwa</td>
-        <td width="10%">Cena</td>
-        <td width="15%">Ilość</td>
-        <td width="15%">Wartość</td>
+        <td width="5%">Lp</td>
+        <td width="30%">Nazwa</td>
+        <td width="15%">Cena brutto</td>
+        <td width="5%">VAT<br />[%]</td>
+        <td width="5%">Ilość</td>
+        <td width="15%">Wartość netto</td>
+        <td width="15%">Kwota vat</td>
+        <td width="15%">Wartość brutto</td>
     </tr>
     </thead>
     <tbody>
 
-    @foreach($order->positions as $position)
+    @foreach($parts as $position)
         <tr>
             <td align="center">{{$loop->index+1}}</td>
             <td>{{$position->name}}</td>
-            <td align="center" class="cost">{{$position->price}}</td>
+            <td align="right" class="cost">{{$position->price}}</td>
+            <td align="center">23</td>
             <td align="center">{{$position->quantity}}</td>
-            <td class="cost">{{$position->price * $position->quantity}}</td>
+            <td class="cost totals">{{$position->price * $position->quantity}}</td>
+            <td class="cost totals">{{$position->price * $position->quantity}}</td>
+            <td class="cost totals">{{$position->price * $position->quantity}}</td>
         </tr>
     @endforeach
     </tbody>
 </table>
+<br />
+<table width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
+    <thead>
+    <tr>
+        <td width="5%">Lp</td>
+        <td width="30%">Nazwa</td>
+        <td width="15%">Cena brutto</td>
+        <td width="5%">VAT<br />[%]</td>
+        <td width="5%">Ilość</td>
+        <td width="15%">Wartość netto</td>
+        <td width="15%">Kwota vat</td>
+        <td width="15%">Wartość brutto</td>
+    </tr>
+    </thead>
+    <tbody>
 
+    @foreach($services as $position)
+        <tr>
+            <td align="center">{{$loop->index+1}}</td>
+            <td>{{$position->name}}</td>
+            <td align="right" class="cost">{{$position->price}}</td>
+            <td align="center">23</td>
+            <td align="center">{{$position->quantity}}</td>
+            <td class="cost totals">{{$position->price * $position->quantity}}</td>
+            <td class="cost totals">{{$position->price * $position->quantity}}</td>
+            <td class="cost totals">{{$position->price * $position->quantity}}</td>
+        </tr>
+    @endforeach
+    </tbody>
+</table>
+<br />
+<br />
+<table style="font-size: 9pt; border-collapse: collapse; margin-left: auto" cellpadding="8">
+    <thead>
+    <tr>
+        <td>Nazwa</td>
+        <td>Wartość brutto</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Części</td>
+        <td class="cost totals">{{$order->getPartsTotalSum()}}</td>
+    </tr>
+    <tr>
+        <td>Robocizna</td>
+        <td class="cost totals">{{$order->getServicesTotalSum()}}</td>
+    </tr>
+    <tr style="border: 0.1mm solid #000000;">
+        <th style="font-size: 12pt;">Razem do zapłaty</th>
+        <th class="cost totals" style="font-size: 12pt;">{{$order->getServicesTotalSum()}}</th>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

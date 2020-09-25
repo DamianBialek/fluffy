@@ -25,8 +25,6 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
-Route::get("/orders/{id}/invoice", 'OrderController@generatePdf');
-
 Route::middleware("apiJwt")->group(function () {
     Route::resource('parameters', 'ParameterController');
     Route::resource('customers', 'CustomerController');
@@ -37,6 +35,7 @@ Route::middleware("apiJwt")->group(function () {
     Route::post("/orders/{id}/position", 'OrderController@addPosition');
     Route::delete("/orders/{id}/position/{positionId}", 'OrderController@destroyPosition');
     Route::put("/orders/{id}/position/{positionId}", 'OrderController@updatePosition');
+    Route::post("/orders/{id}/invoice/generate", 'OrderController@generateInvoiceNumber');
     Route::resource('orders', 'OrderController');
     Route::resource('mechanics', 'MechanicController');
 });

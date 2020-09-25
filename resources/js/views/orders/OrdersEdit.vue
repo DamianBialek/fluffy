@@ -12,6 +12,7 @@
                 @removePosition="removePosition"
                 @copyPosition="copyPosition"
                 @saveEditedPosition="saveEditedPosition"
+                @generateInvoice="generateInvoice"
             />
         </section>
     </div>
@@ -156,6 +157,13 @@
                     }
 
                     this.$notify("Wystąpił błąd podczas kopiowanie pozycji !", "", "error");
+                })
+            },
+            generateInvoice() {
+                this.setLoading(true);
+                this.$api.post(`/api/orders/${this.$route.params.id}/invoice/generate`).then(res => {
+                    this.order.invoice_number = res.data.data.invoice_number;
+                    this.setLoading(false);
                 })
             }
         }

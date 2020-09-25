@@ -8,6 +8,7 @@ use App\Pdf\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Mpdf\Output\Destination;
 
 class OrderController extends Controller
 {
@@ -224,10 +225,26 @@ class OrderController extends Controller
 
         $data = [
             'date' => date("d-m-y"),
-            'order' => $order
+            'order' => $order,
+            'parts' => $order->getPartsPositions(),
+            'services' => $order->getServicesPositions(),
         ];
 
-        return response((Pdf::loadView("pdf.orderInvoice", $data))->Output());
+        return response((Pdf::loadView("pdf.orderInvoice", $data))->Output($order->invoice_number.'.pdf', Destination::INLINE));
+    }
+
+    public function generateInvoiceNumber($id)
+    {
+        $order = Order::find($id);
+
+        if($order && empty($order->invoice_number)) {
+            $order->generateAndSetInvoiceNumber();
+            $order->update();
+
+            return $this->success(['invoice_number' => $order->invoice_number], 'Invoice generated');
+        }
+
+        return $this->error([], 'Data not found', 404);
     }
 
     public function copy($id)

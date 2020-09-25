@@ -5,6 +5,9 @@
                 <li class="nav-item">
                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Dane</a>
                 </li>
+                <li class="nav-item" v-if="order.invoice_number">
+                    <a class="nav-link" id="documents-tab" data-toggle="tab" href="#documents" role="tab" aria-controls="documents" aria-selected="true">Dokumenty</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" id="positions-tab" data-toggle="tab" href="#positions" role="tab" aria-controls="profile" aria-selected="false">Pozycje zlecenia</a>
                 </li>
@@ -36,6 +39,16 @@
                         <label for="name" class="col-sm-2 col-form-label">Nazwa</label>
                         <div class="col-sm-10">
                             <input v-model="order.name" type="text" class="form-control" id="name">
+                        </div>
+                    </div>
+                </div>
+                <div v-if="order.invoice_number" class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
+                    <div class="form-group row">
+                        <label for="number" class="col-sm-2 col-form-label">Faktura VAT</label>
+                        <div class="col-sm-10">
+                            <b v-if="order.invoice_number">{{order.invoice_number}}</b>
+                            <button v-if="!order.invoice_number" type="button" class="btn btn-outline-secondary" @click="$emit('generateInvoice')">Wygeneruj</button>
+                            <a v-if="order.invoice_number" target="_blank" :href="`/orders/${order.id}/invoice`" class="btn btn-outline-secondary ml-2"><i class="fas fa-eye"></i> Zobacz</a>
                         </div>
                     </div>
                 </div>
