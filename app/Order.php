@@ -27,9 +27,19 @@ class Order extends Model
         return "(Z)(?<number>[0-9]*)(\/".date("Y").")";
     }
 
+    public static function getMysqlNumberRegex()
+    {
+        return "Z[0-9]*\/".date("Y");
+    }
+
     public static function getInvoiceNumberRegex()
     {
         return "(FV)(?<number>[0-9]*)(\/".date("Y").")";
+    }
+
+    public static function getMysqlInvoiceNumberRegex()
+    {
+        return "FV[0-9]*\/".date("Y");
     }
 
     public function generateAndSetNewNumber()
@@ -51,7 +61,7 @@ class Order extends Model
 
         $number = str_pad($number, 4, "0", STR_PAD_LEFT);
 
-        $this->number = "Z{$number}/2020";
+        $this->number = "Z{$number}/".date("Y");;
     }
 
     public function generateAndSetInvoiceNumber()
@@ -79,12 +89,12 @@ class Order extends Model
 
     public static function getLastNumber()
     {
-        return self::where("number", "REGEXP", self::getNumberRegex())->orderBy("id", "desc")->take(1)->get()->first();
+        return self::where("number", "REGEXP", self::getMysqlNumberRegex())->orderBy("id", "desc")->take(1)->get()->first();
     }
 
     public static function getLastInvoiceNumber()
     {
-        return self::where("invoice_number", "REGEXP", self::getInvoiceNumberRegex())->orderBy("invoice_number", "desc")->take(1)->get()->first();
+        return self::where("invoice_number", "REGEXP", self::getMysqlInvoiceNumberRegex())->orderBy("invoice_number", "desc")->take(1)->get()->first();
     }
 
     public static function search($queryString, Builder $query = null)
