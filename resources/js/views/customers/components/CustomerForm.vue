@@ -80,7 +80,7 @@
                                     <td>{{vehicle.registration_number}}</td>
                                     <td>{{`${vehicle.mark} ${vehicle.model} (${vehicle.production_year})`}}</td>
                                     <td class="text-center">
-                                        <button type="button" class="btn btn-outline-danger m-1" @click="unassignCustomerVehicle(vehicle)"><i class="fas fa-trash-alt"></i></button>
+                                        <button v-tooltip="'Usuń'" type="button" class="btn btn-outline-danger m-1" @click="unassignCustomerVehicle(vehicle)"><i class="fas fa-trash-alt"></i></button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -110,7 +110,7 @@
                                 <div class="input-group">
                                     <input @keyup="searchCustomerVehiclesByQuery" v-model="customerVehiclesSearchQuery" aria-label="Szukaj samochodu" type="text" class="form-control" />
                                     <div class="input-group-append">
-                                        <button @click="searchCustomerVehiclesByQuery" type="button" class="btn btn-outline-secondary"><i class="fas fa-search mr-2"></i>Szukaj</button>
+                                        <button v-tooltip="'Szukaj'" @click="searchCustomerVehiclesByQuery" type="button" class="btn btn-outline-secondary"><i class="fas fa-search mr-2"></i>Szukaj</button>
                                     </div>
                                 </div>
                             </div>

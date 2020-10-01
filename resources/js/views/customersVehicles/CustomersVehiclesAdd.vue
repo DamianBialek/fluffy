@@ -1,7 +1,7 @@
 <template>
     <div class="page">
         <div class="my-3 text-right">
-            <router-link tag="button" :to="{name: 'customersCarsList'}" class="btn btn-info"><i class="fas fa-level-up-alt"></i></router-link>
+            <router-link v-tooltip="'Powrót'" tag="button" :to="{name: 'customersCarsList'}" class="btn btn-info"><i class="fas fa-level-up-alt"></i></router-link>
         </div>
         <section>
             <CustomerVehicleForm @submit="saveVehicle" :vehicle="this.vehicle" :error-fields="errorFields" />

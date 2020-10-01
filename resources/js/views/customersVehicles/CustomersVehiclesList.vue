@@ -9,10 +9,10 @@
                     <div class="input-group">
                         <input @keyup="onSearchInputKeyUp" v-model="searchQuery" aria-label="Szukaj samochodu" type="text" class="form-control" />
                         <div class="input-group-append" v-show="searchQuery.length">
-                            <button @click="resetSearchQuery" type="button" class="btn btn-outline-secondary"><i class="fas fa-times"></i></button>
+                            <button v-tooltip="'Resetuj'" @click="resetSearchQuery" type="button" class="btn btn-outline-secondary"><i class="fas fa-times"></i></button>
                         </div>
                         <div class="input-group-append">
-                            <button @click="getVehicles" type="button" class="btn btn-outline-secondary"><i class="fas fa-search"></i></button>
+                            <button v-tooltip="'Szukaj'" @click="getVehicles" type="button" class="btn btn-outline-secondary"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
                 </div>
@@ -33,8 +33,8 @@
                         <td>{{vehicle.registration_number}}</td>
                         <td>{{`${vehicle.mark} ${vehicle.model} (${vehicle.production_year})`}}</td>
                         <td class="text-center">
-                            <router-link tag="button" :to="{name: 'customersCarsEdit', params: {id: vehicle.id}}" class="btn btn-outline-secondary m-1"><i class="fas fa-user-edit"></i></router-link>
-                            <button class="btn btn-outline-danger m-1" @click="deleteVehicle(vehicle)"><i class="fas fa-trash-alt"></i></button>
+                            <router-link v-tooltip="'Edytuj'" tag="button" :to="{name: 'customersCarsEdit', params: {id: vehicle.id}}" class="btn btn-outline-secondary m-1"><i class="fas fa-user-edit"></i></router-link>
+                            <button v-tooltip="'Usuń'" class="btn btn-outline-danger m-1" @click="deleteVehicle(vehicle)"><i class="fas fa-trash-alt"></i></button>
                         </td>
                     </tr>
                     </tbody>

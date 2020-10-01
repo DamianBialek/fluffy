@@ -100,19 +100,24 @@ mpdf-->
     </tr>
     </thead>
     <tbody>
-
-    @foreach($parts as $position)
+    @if($parts->isNotEmpty())
+        @foreach($parts as $position)
+            <tr>
+                <td align="center">{{$loop->index+1}}</td>
+                <td>{{$position->name}}</td>
+                <td align="right" class="cost">{{$position->price}}</td>
+                <td align="center">23</td>
+                <td align="center">{{$position->quantity}}</td>
+                <td class="cost totals">{{$position->price * $position->quantity}}</td>
+                <td class="cost totals">{{$position->price * $position->quantity}}</td>
+                <td class="cost totals">{{$position->price * $position->quantity}}</td>
+            </tr>
+        @endforeach
+    @else
         <tr>
-            <td align="center">{{$loop->index+1}}</td>
-            <td>{{$position->name}}</td>
-            <td align="right" class="cost">{{$position->price}}</td>
-            <td align="center">23</td>
-            <td align="center">{{$position->quantity}}</td>
-            <td class="cost totals">{{$position->price * $position->quantity}}</td>
-            <td class="cost totals">{{$position->price * $position->quantity}}</td>
-            <td class="cost totals">{{$position->price * $position->quantity}}</td>
+            <td style="text-align: center" colspan="8">Brak</td>
         </tr>
-    @endforeach
+    @endif
     </tbody>
 </table>
 <h4>Robocizna</h4>
@@ -130,19 +135,24 @@ mpdf-->
     </tr>
     </thead>
     <tbody>
-
-    @foreach($services as $position)
+    @if($services->isNotEmpty())
+        @foreach($services as $position)
+            <tr>
+                <td align="center">{{$loop->index+1}}</td>
+                <td>{{$position->name}}</td>
+                <td align="right" class="cost">{{$position->price}}</td>
+                <td align="center">23</td>
+                <td align="center">{{$position->quantity}}</td>
+                <td class="cost totals">{{$position->price * $position->quantity}}</td>
+                <td class="cost totals">{{$position->price * $position->quantity}}</td>
+                <td class="cost totals">{{$position->price * $position->quantity}}</td>
+            </tr>
+        @endforeach
+    @else
         <tr>
-            <td align="center">{{$loop->index+1}}</td>
-            <td>{{$position->name}}</td>
-            <td align="right" class="cost">{{$position->price}}</td>
-            <td align="center">23</td>
-            <td align="center">{{$position->quantity}}</td>
-            <td class="cost totals">{{$position->price * $position->quantity}}</td>
-            <td class="cost totals">{{$position->price * $position->quantity}}</td>
-            <td class="cost totals">{{$position->price * $position->quantity}}</td>
+            <td style="text-align: center" colspan="8">Brak</td>
         </tr>
-    @endforeach
+    @endif
     </tbody>
 </table>
 <br />

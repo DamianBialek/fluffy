@@ -5,11 +5,24 @@ import store from "./store";
 import axios from "axios";
 import dialogPlugin from "./plugins/dialog";
 import swal from "sweetalert";
+import route from "./router/modules/calendar";
 
 Vue.use(dialogPlugin);
 
 Vue.prototype.$api = axios;
 Vue.prototype.$notify = swal;
+
+Vue.directive('tooltip', function(el, binding){
+    $(el).tooltip({
+        title: binding.value,
+        trigger: 'hover',
+        html: true
+    })
+})
+
+router.afterEach(() => {
+    document.querySelectorAll('.tooltip').forEach(e => e.remove());
+})
 
 Vue.mixin({
     methods: {

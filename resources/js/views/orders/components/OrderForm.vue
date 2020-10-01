@@ -80,8 +80,8 @@
                                 <td @click="editPosition(position, position.origIndexInArray)" class="text-center align-middle">{{position.quantity}}</td>
                                 <td @click="editPosition(position, position.origIndexInArray)" class="text-center align-middle">{{moneyFormat(positionTotalSum(position))}}</td>
                                 <td class="text-center align-middle">
-                                    <button type="button" class="btn btn-outline-danger m-1" @click="removePosition(position)"><i class="fas fa-trash-alt"></i></button>
-                                    <button type="button" class="btn btn-outline-secondary m-1" @click="copyPosition(position)"><i class="fas fa-clone"></i></button>
+                                    <button v-tooltip="'Kopiuj'" type="button" class="btn btn-outline-secondary m-1" @click="copyPosition(position)"><i class="fas fa-clone"></i></button>
+                                    <button v-tooltip="'Usuń'" type="button" class="btn btn-outline-danger m-1" @click="removePosition(position)"><i class="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>
                             <tr class="lead text-dark" v-if="orderPositionsServices.length">
@@ -116,8 +116,8 @@
                                 <td @click="editPosition(position, position.origIndexInArray)" class="text-center align-middle">{{position.quantity}}</td>
                                 <td @click="editPosition(position, position.origIndexInArray)" class="text-center align-middle">{{moneyFormat(positionTotalSum(position))}}</td>
                                 <td class="text-center align-middle">
-                                    <button type="button" class="btn btn-outline-danger m-1" @click="removePosition(position)"><i class="fas fa-trash-alt"></i></button>
-                                    <button type="button" class="btn btn-outline-secondary m-1" @click="copyPosition(position)"><i class="fas fa-clone"></i></button>
+                                    <button v-tooltip="'Kopiuj'" type="button" class="btn btn-outline-secondary m-1" @click="copyPosition(position)"><i class="fas fa-clone"></i></button>
+                                    <button v-tooltip="'Usuń'" type="button" class="btn btn-outline-danger m-1" @click="removePosition(position)"><i class="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>
                             <tr class="lead text-dark" v-if="orderPositionsParts.length">
