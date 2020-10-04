@@ -30,7 +30,7 @@
                 this.$api.post("/api/vehicles", this.vehicle)
                     .then(res => {
                         if(res.data.success) {
-                            this.$notify("Pomyślnie dodano nowy samochód !", "", "success").then(() => {
+                            this.$notify("Pomyślnie dodano nowy pojazd !", "", "success").then(() => {
                                 this.$router.push({name: 'customersCarsList'})
                             })
                         }
@@ -45,7 +45,7 @@
                         if(Object.keys(this.errorFields).length) {
                             this.$notify("Proszę poprawić błędy w formularzu !", "", "error");
                         } else {
-                            this.$notify("Wystąpił błąd podczas dodawania nowego samochodu !", "", "error");
+                            this.$notify("Wystąpił błąd podczas dodawania nowego pojazdu !", "", "error");
                         }
                     })
                     .finally(() => {

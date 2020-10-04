@@ -6,7 +6,7 @@
                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Dane</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="vehicles-tab" data-toggle="tab" href="#vehicles" role="tab" aria-controls="profile" aria-selected="false">Samochody</a>
+                    <a class="nav-link" id="vehicles-tab" data-toggle="tab" href="#vehicles" role="tab" aria-controls="profile" aria-selected="false">Pojazdy</a>
                 </li>
             </ul>
             <div class="tab-content m-3" id="myTabContent">
@@ -62,14 +62,14 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="vehicles" role="tabpanel" aria-labelledby="vehicles-tab">
-                    <h3 class="text-center" v-if="!hasVehicles">Brak samochodów</h3>
+                    <h3 class="text-center" v-if="!hasVehicles">Brak pojazdów</h3>
                     <div class="customers-vehicles" v-if="hasVehicles">
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th>Numer rejestarcyjny</th>
+                                    <th>Numer rejestracyjny</th>
                                     <th>Marka i model (rok produkcji)</th>
                                     <th></th>
                                 </tr>
@@ -87,7 +87,7 @@
                             </table>
                         </div>
                     </div>
-                    <button @click="openCustomerVehiclesModal" type="button" class="btn btn-outline-secondary"><i class="fa fa-plus text-success mr-2" />Dodaj nowy samochód</button>
+                    <button @click="openCustomerVehiclesModal" type="button" class="btn btn-outline-secondary"><i class="fa fa-plus text-success mr-2" />Dodaj nowy pojazd</button>
                 </div>
             </div>
 
@@ -99,7 +99,7 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Wybierz samochód</h5>
+                        <h5 class="modal-title">Wybierz pojazd</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -108,7 +108,7 @@
                         <div class="row justify-content-center">
                             <div class="col-8">
                                 <div class="input-group">
-                                    <input @keyup="searchCustomerVehiclesByQuery" v-model="customerVehiclesSearchQuery" aria-label="Szukaj samochodu" type="text" class="form-control" />
+                                    <input @keyup="searchCustomerVehiclesByQuery" v-model="customerVehiclesSearchQuery" aria-label="Szukaj pojazdu" type="text" class="form-control" />
                                     <div class="input-group-append">
                                         <button v-tooltip="'Szukaj'" @click="searchCustomerVehiclesByQuery" type="button" class="btn btn-outline-secondary"><i class="fas fa-search mr-2"></i>Szukaj</button>
                                     </div>
@@ -122,7 +122,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th>Numer rejestarcyjny</th>
+                                    <th>Numer rejestracyjny</th>
                                     <th>Marka i model (rok produkcji)</th>
                                     <th></th>
                                 </tr>

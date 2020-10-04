@@ -7,7 +7,7 @@
             <div class="d-flex justify-content-center">
                 <div class="col-8">
                     <div class="input-group">
-                        <input @keyup="onSearchInputKeyUp" v-model="searchQuery" aria-label="Szukaj samochodu" type="text" class="form-control" />
+                        <input @keyup="onSearchInputKeyUp" v-model="searchQuery" aria-label="Szukaj pojazdu" type="text" class="form-control" />
                         <div class="input-group-append" v-show="searchQuery.length">
                             <button v-tooltip="'Resetuj'" @click="resetSearchQuery" type="button" class="btn btn-outline-secondary"><i class="fas fa-times"></i></button>
                         </div>
@@ -23,7 +23,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th>Numer</th>
-                        <th>Rejestracja samochodu</th>
+                        <th>Rejestracja pojazdu</th>
                         <th>Nazwa</th>
                         <th></th>
                     </tr>

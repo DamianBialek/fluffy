@@ -52,7 +52,7 @@
                         if(Object.keys(this.errorFields).length) {
                             this.$notify("Proszę poprawić błędy w formularzu !", "", "error");
                         } else {
-                            this.$notify("Wystąpił błąd podczas edytowania danych samochodu !", "", "error");
+                            this.$notify("Wystąpił błąd podczas edytowania danych pojadu !", "", "error");
                         }
                     })
                     .finally(() => {

@@ -46,7 +46,7 @@ export default {
             redirect: '/customers/cars/list',
             name: "cars",
             meta: {
-                title: 'Samochody',
+                title: 'Pojazdy',
                 inSidebar: true
             },
             children: [
@@ -55,7 +55,7 @@ export default {
                     component: CustomersVehiclesList,
                     name: 'customersCarsList',
                     meta: {
-                        title: "Lista samochodów"
+                        title: "Lista pojazdów"
                     }
 
                 },
@@ -64,7 +64,7 @@ export default {
                     component: CustomersVehiclesAdd,
                     name: 'customersCarsAdd',
                     meta: {
-                        title: "Dodawanie nowego samochodu"
+                        title: "Dodawanie nowego pojazdu"
                     }
 
                 },
@@ -73,7 +73,7 @@ export default {
                     name: 'customersCarsEdit',
                     component: CustomersVehiclesEdit,
                     meta: {
-                        title: 'Edycja danych samochodu'
+                        title: 'Edycja danych pojazdu'
                     }
                 }
             ]

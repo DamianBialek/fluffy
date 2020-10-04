@@ -1,13 +1,13 @@
 <template>
     <div class="page">
         <div class="my-3 text-right">
-            <router-link tag="button" :to="{name: 'customersCarsAdd'}" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Dodaj nowy samochód</router-link>
+            <router-link tag="button" :to="{name: 'customersCarsAdd'}" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Dodaj nowy pojazd</router-link>
         </div>
         <section>
             <div class="d-flex justify-content-center">
                 <div class="col-8">
                     <div class="input-group">
-                        <input @keyup="onSearchInputKeyUp" v-model="searchQuery" aria-label="Szukaj samochodu" type="text" class="form-control" />
+                        <input @keyup="onSearchInputKeyUp" v-model="searchQuery" aria-label="Szukaj pojazdu" type="text" class="form-control" />
                         <div class="input-group-append" v-show="searchQuery.length">
                             <button v-tooltip="'Resetuj'" @click="resetSearchQuery" type="button" class="btn btn-outline-secondary"><i class="fas fa-times"></i></button>
                         </div>
@@ -22,7 +22,7 @@
                     <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th>Numer rejestarcyjny</th>
+                        <th>Numer rejestracyjny</th>
                         <th>Marka i model (rok produkcji)</th>
                         <th></th>
                     </tr>
@@ -67,11 +67,11 @@
         },
         methods: {
             deleteVehicle(vehicle) {
-                this.$confirm(`Czy na pewno chcesz usunać ten samochód ${vehicle.mark} ${vehicle.model} (#${vehicle.id}) ?`)
+                this.$confirm(`Czy na pewno chcesz usunać ten pojazd ${vehicle.mark} ${vehicle.model} (#${vehicle.id}) ?`)
                     .then(() => {
                         this.$api.delete(`/api/vehicles/${vehicle.id}`)
                             .then(() => {
-                                this.$notify("Pomyślnie usunięto samochód !", "", "success").then(() => {
+                                this.$notify("Pomyślnie usunięto pojazd !", "", "success").then(() => {
                                     this.getVehicles();
                                 })
                             })
