@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,11 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
+Route::get("/session", function () {
+//    Session::put('progress', '5%');
+//    Session::save();
+});
+
 Route::middleware("apiJwt")->group(function () {
     Route::resource('parameters', 'ParameterController');
     Route::resource('customers', 'CustomerController');
@@ -38,6 +44,8 @@ Route::middleware("apiJwt")->group(function () {
     Route::post("/orders/{id}/invoice/generate", 'OrderController@generateInvoiceNumber');
     Route::resource('orders', 'OrderController');
     Route::resource('mechanics', 'MechanicController');
+    Route::get("/allegro/api/searchOrderPos/{orderPosId}", "AllegroApiController@search");
+
 });
 
 

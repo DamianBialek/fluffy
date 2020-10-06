@@ -116,6 +116,7 @@
                                 <td @click="editPosition(position, position.origIndexInArray)" class="text-center align-middle">{{position.quantity}}</td>
                                 <td @click="editPosition(position, position.origIndexInArray)" class="text-center align-middle">{{moneyFormat(positionTotalSum(position))}}</td>
                                 <td class="text-center align-middle">
+                                    <button v-tooltip="'Szukaj w serwisie Allegro'" @click="searchOrderPosOnAllegro(position)" type="button" class="btn btn-outline-secondary">Allegro</button>
                                     <button v-tooltip="'Kopiuj'" type="button" class="btn btn-outline-secondary m-1" @click="copyPosition(position)"><i class="fas fa-clone"></i></button>
                                     <button v-tooltip="'Usuń'" type="button" class="btn btn-outline-danger m-1" @click="removePosition(position)"><i class="fas fa-trash-alt"></i></button>
                                 </td>
@@ -306,6 +307,41 @@
                 </div>
             </div>
         </div>
+        <div id="allegroOrderPosResults" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{allegro.activePosition.name}} - Allegro - wyniki wyszukiwania</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" @scroll="onAllegroResultsModalScroll">
+                        <Loading v-if="allegro.loading" />
+                        <table class="table" v-if="!allegro.loading">
+                            <tr v-for="result in allegro.results" :key="result.id">
+                                <td>
+                                    <img style="max-width: 200px;" class="img-fluid" v-if="result.images && result.images[0]" :src="result.images[0].url" />
+                                </td>
+                                <td>
+                                    {{result.name}} <br />
+                                    <strong style="font-size: 18px">{{moneyFormat(result.sellingMode.price.amount)}}</strong>
+                                </td>
+                                <td><a target="_blank" class="btn btn-outline-secondary" :href="`https://allegro.pl/oferta/${result.id}`" v-tooltip="'Otwórz na allegro'"><i class="fas fa-external-link-alt"></i></a></td>
+                            </tr>
+                            <tr v-show="allegro.additionalItemsLoading">
+                                <td colspan="3">
+                                    <Loading />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -338,6 +374,14 @@ export default {
                 'natural_person',
                 'company'
             ],
+            allegro: {
+                loading: false,
+                limit: 15,
+                results: [],
+                additionalItemsLoading: false,
+                resultsPage: 1,
+                activePosition: {}
+            }
         }
     },
     props: {
@@ -423,6 +467,9 @@ export default {
         openEditPositionModal() {
             $("#editedPositionModal").modal("show");
         },
+        openAllegroOrderPosResultsModal() {
+            $("#allegroOrderPosResults").modal("show");
+        },
         hideEditPositionModal() {
             $("#editedPositionModal").modal("hide");
         },
@@ -500,6 +547,31 @@ export default {
         },
         copyPosition(position) {
             this.$emit('copyPosition', position);
+        },
+        searchOrderPosOnAllegro(position) {
+            this.allegro.loading = true;
+            this.allegro.results = [];
+            this.allegro.resultsPage = 1;
+            this.allegro.activePosition = position;
+            this.openAllegroOrderPosResultsModal();
+            this.getResultsFromAllegro(position);
+            this.onAllegroResultsModalScroll();
+        },
+        getResultsFromAllegro() {
+            this.$api.get(`/api/allegro/api/searchOrderPos/${this.allegro.activePosition.id}?offset=${(this.allegro.resultsPage - 1)*this.allegro.limit}&limit=${this.allegro.limit}`)
+                .then(res => {
+                    this.allegro.results.push(...res.data.data.items);
+                    this.allegro.loading = false;
+                    this.allegro.additionalItemsLoading = false;
+                })
+        },
+        onAllegroResultsModalScroll(e) {
+            const {target} = e;
+            this.allegro.additionalItemsLoading = true;
+            if(Math.ceil(target.scrollTop) >= target.scrollHeight - target.offsetHeight) {
+                this.allegro.resultsPage++;
+                this.getResultsFromAllegro()
+            }
         }
     }
 }
