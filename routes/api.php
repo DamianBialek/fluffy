@@ -44,7 +44,7 @@ Route::middleware("apiJwt")->group(function () {
     Route::post("/orders/{id}/invoice/generate", 'OrderController@generateInvoiceNumber');
     Route::resource('orders', 'OrderController');
     Route::resource('mechanics', 'MechanicController');
-    Route::get("/allegro/api/searchOrderPos/{orderPosId}", "AllegroApiController@search");
+    Route::get("/allegro/api/search", "AllegroApiController@search");
 
 });
 

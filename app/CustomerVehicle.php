@@ -11,6 +11,8 @@ class CustomerVehicle extends Model
 
     protected $fillable = ['customer_id', 'vin', 'registration_number', 'mark', 'model', 'production_year'];
 
+    protected $appends = ['name'];
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);
@@ -19,6 +21,11 @@ class CustomerVehicle extends Model
     public function orders()
     {
         return $this->hasMany(Order::class, 'vehicle_id');
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->mark.' '.$this->model;
     }
 
     public static function query()

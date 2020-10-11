@@ -26,15 +26,19 @@ class Api
 
     private function getNewAccessToken()
     {
-        $res = $this->httpClient->request("POST", "https://allegro.pl/auth/oauth/token?grant_type=client_credentials", [
-            'headers' => [
-                'Authorization' => "Basic ".$this->getOauthAuthorizationToken()
-            ]
-        ]);
+        try {
+            $res = $this->httpClient->request("POST", "https://allegro.pl/auth/oauth/token?grant_type=client_credentials", [
+                'headers' => [
+                    'Authorization' => "Basic ".$this->getOauthAuthorizationToken()
+                ]
+            ]);
 
-        $this->accessTokenIsRefreshed = true;
+            $this->accessTokenIsRefreshed = true;
 
-        return json_decode($res->getBody(), true);
+            return json_decode($res->getBody(), true);
+        } catch (\Exception $e) {
+            throw new \Exception("Max unautorized requests limit reached !");
+        }
     }
 
     private function refreshIfExpiredAccessToken()
@@ -99,7 +103,14 @@ class Api
 
     private function getOauthAuthorizationToken()
     {
-        return base64_encode(config("allegro.client_id").":".config("allegro.client_secret"));
+        $clientId = config("allegro.client_id");
+        $clientSecret = config("allegro.client_secret");
+
+        if(empty($clientId) || empty($clientSecret)) {
+            throw new \Exception("Allegro config not found");
+        }
+
+        return base64_encode($clientId.":".$clientSecret);
     }
 
     /**
@@ -126,6 +137,8 @@ class Api
 
                 $this->refreshIfExpiredAccessToken();
                 return $this->apiRequest($method, $url, $headers);
+            } else {
+                throw new \Exception("Connection error with Allegro API");
             }
 
             throw $e;

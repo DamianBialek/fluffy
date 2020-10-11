@@ -311,30 +311,33 @@
             <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">{{allegro.activePosition.name}} - Allegro - wyniki wyszukiwania</h5>
+                        <h5 class="modal-title">Allegro - wyniki wyszukiwania</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body" @scroll="onAllegroResultsModalScroll">
                         <Loading v-if="allegro.loading" />
-                        <table class="table" v-if="!allegro.loading">
-                            <tr v-for="result in allegro.results" :key="result.id">
-                                <td>
-                                    <img style="max-width: 200px;" class="img-fluid" v-if="result.images && result.images[0]" :src="result.images[0].url" />
-                                </td>
-                                <td>
-                                    {{result.name}} <br />
-                                    <strong style="font-size: 18px">{{moneyFormat(result.sellingMode.price.amount)}}</strong>
-                                </td>
-                                <td><a target="_blank" class="btn btn-outline-secondary" :href="`https://allegro.pl/oferta/${result.id}`" v-tooltip="'Otwórz na allegro'"><i class="fas fa-external-link-alt"></i></a></td>
-                            </tr>
-                            <tr v-show="allegro.additionalItemsLoading">
-                                <td colspan="3">
-                                    <Loading />
-                                </td>
-                            </tr>
-                        </table>
+                        <div v-if="!allegro.loading">
+                            <h5 class="text-center mb-3">Wyszukiwana fraza: <b>{{allegro.searchingPhrase}}</b></h5>
+                            <table class="table">
+                                <tr v-for="result in allegro.results" :key="result.id">
+                                    <td>
+                                        <img style="max-width: 200px;" class="img-fluid" v-if="result.images && result.images[0]" :src="result.images[0].url" />
+                                    </td>
+                                    <td>
+                                        {{result.name}} <br />
+                                        <strong style="font-size: 18px">{{moneyFormat(result.sellingMode.price.amount)}}</strong>
+                                    </td>
+                                    <td><a target="_blank" class="btn btn-outline-secondary" :href="`https://allegro.pl/oferta/${result.id}`" v-tooltip="'Otwórz na allegro'"><i class="fas fa-external-link-alt"></i></a></td>
+                                </tr>
+                                <tr v-show="allegro.additionalItemsLoading">
+                                    <td colspan="3">
+                                        <Loading />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                     <div class="modal-footer">
 
@@ -380,7 +383,8 @@ export default {
                 results: [],
                 additionalItemsLoading: false,
                 resultsPage: 1,
-                activePosition: {}
+                activePosition: {},
+                searchingPhrase: ''
             }
         }
     },
@@ -553,19 +557,25 @@ export default {
             this.allegro.results = [];
             this.allegro.resultsPage = 1;
             this.allegro.activePosition = position;
+            this.allegro.searchingPhrase = this.allegro.activePosition.name+' '+this.order.vehicle.name;
             this.openAllegroOrderPosResultsModal();
             this.getResultsFromAllegro(position);
             this.onAllegroResultsModalScroll();
         },
         getResultsFromAllegro() {
-            this.$api.get(`/api/allegro/api/searchOrderPos/${this.allegro.activePosition.id}?offset=${(this.allegro.resultsPage - 1)*this.allegro.limit}&limit=${this.allegro.limit}`)
+            this.$api.get(`/api/allegro/api/search/?phrase=${this.allegro.searchingPhrase}&offset=${(this.allegro.resultsPage - 1)*this.allegro.limit}&limit=${this.allegro.limit}`)
                 .then(res => {
                     this.allegro.results.push(...res.data.data.items);
                     this.allegro.loading = false;
                     this.allegro.additionalItemsLoading = false;
+                    this.allegro.searchingPhrase = res.data.data.searchingPhrase;
                 })
         },
         onAllegroResultsModalScroll(e) {
+            if(!e || !e.target) {
+                return;
+            }
+            
             const {target} = e;
             this.allegro.additionalItemsLoading = true;
             if(Math.ceil(target.scrollTop) >= target.scrollHeight - target.offsetHeight) {

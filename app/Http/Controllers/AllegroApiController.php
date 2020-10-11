@@ -10,25 +10,29 @@ use Illuminate\Http\Request;
 
 class AllegroApiController extends Controller
 {
-    public function search(Request $request, $orderPositionId)
+    public function search(Request $request)
     {
-        $orderPos = OrderPosition::find($orderPositionId);
+        $searchingPhrase = $request->get("phrase");
 
-        if(!$orderPos) {
+        if(empty($searchingPhrase)) {
             return $this->error([], 'Data not found', 404);
         }
 
-        $user = auth("api")->user();
+        try {
+            $user = auth("api")->user();
+            $allegro = new Api($user->getAdditionalToken("allegro"));
 
-        $allegro = new Api($user->getAdditionalToken("allegro"));
+            if($allegro->isAccessTokenRefreshed()) {
+                $user->addAdditionalTokens("allegro", $allegro->getAccessTokenObject());
+                $user->save();
+            }
 
-        $data = $allegro->offersListing($orderPos->name, $request->get("offset", 0), $request->get("limit", 15));
+            $data = $allegro->offersListing($searchingPhrase, $request->get("offset", 0), $request->get("limit", 15));
 
-        if($allegro->isAccessTokenRefreshed()) {
-            $user->addAdditionalTokens("allegro", $allegro->getAccessTokenObject());
-            $user->save();
+
+            return $this->success(array_merge($data, ["searchingPhrase" => $searchingPhrase]));
+        } catch (\Exception $e) {
+            return $this->error([], $e->getMessage());
         }
-
-        return $this->success($data);
     }
 }

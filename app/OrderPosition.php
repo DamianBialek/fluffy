@@ -9,4 +9,9 @@ class OrderPosition extends Model
     public $table = 'orders_positions';
 
     protected $fillable = ['type', 'name', 'price', 'quantity'];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }
