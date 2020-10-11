@@ -480,6 +480,9 @@ export default {
         openCustomerDataModal() {
             $("#customerDataModal").modal("show");
         },
+        hideAllegroOrderPosResultsModal() {
+            $("#allegroOrderPosResults").modal("hide");
+        },
         loadCustomersVehicles() {
             this.customersVehiclesLoading = true;
             this.$api.get("/api/vehicles", {params: {query: this.customerVehiclesSearchQuery, page: this.customersVehiclesPaginationData.current_page}}).then(res => {
@@ -559,11 +562,14 @@ export default {
             this.allegro.activePosition = position;
             this.allegro.searchingPhrase = this.allegro.activePosition.name+' '+this.order.vehicle.name;
             this.openAllegroOrderPosResultsModal();
-            this.getResultsFromAllegro(position);
+            this.getResultsFromAllegro()
+                .catch(() => {
+                    this.hideAllegroOrderPosResultsModal();
+                })
             this.onAllegroResultsModalScroll();
         },
         getResultsFromAllegro() {
-            this.$api.get(`/api/allegro/api/search/?phrase=${this.allegro.searchingPhrase}&offset=${(this.allegro.resultsPage - 1)*this.allegro.limit}&limit=${this.allegro.limit}`)
+            return this.$api.get(`/api/allegro/api/search/?phrase=${this.allegro.searchingPhrase}&offset=${(this.allegro.resultsPage - 1)*this.allegro.limit}&limit=${this.allegro.limit}`)
                 .then(res => {
                     this.allegro.results.push(...res.data.data.items);
                     this.allegro.loading = false;
@@ -575,10 +581,10 @@ export default {
             if(!e || !e.target) {
                 return;
             }
-            
+
             const {target} = e;
-            this.allegro.additionalItemsLoading = true;
             if(Math.ceil(target.scrollTop) >= target.scrollHeight - target.offsetHeight) {
+                this.allegro.additionalItemsLoading = true;
                 this.allegro.resultsPage++;
                 this.getResultsFromAllegro()
             }

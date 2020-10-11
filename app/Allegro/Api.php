@@ -37,7 +37,7 @@ class Api
 
             return json_decode($res->getBody(), true);
         } catch (\Exception $e) {
-            throw new \Exception("Max unautorized requests limit reached !");
+            throw new \Exception("Connection error with Allegro API ! Please try again later");
         }
     }
 
@@ -138,7 +138,7 @@ class Api
                 $this->refreshIfExpiredAccessToken();
                 return $this->apiRequest($method, $url, $headers);
             } else {
-                throw new \Exception("Connection error with Allegro API");
+                throw new \Exception("Connection error with Allegro API ! Please try again later");
             }
 
             throw $e;

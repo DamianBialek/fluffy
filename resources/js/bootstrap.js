@@ -28,7 +28,11 @@ axios.interceptors.response.use(response => {
     return response;
 }, (error) => {
     if(!error.response || !error.response.status || error.response.status === 500) {
-        swal("Wystąpił błąd podczas połączenia z serwerem !", "", "error");
+        if(!error.response.data || typeof error.response.data.success == 'undefined' || !error.response.data.message.length) {
+            swal("Wystąpił błąd podczas połączenia z serwerem !", "", "error");
+        } else {
+            swal(error.response.data.message, "", "error");
+        }
         return Promise.reject(error);
     }
 
