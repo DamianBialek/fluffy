@@ -23,6 +23,14 @@
                             <input disabled v-model="order.number" type="text" class="form-control" id="number">
                         </div>
                     </div>
+                    <div class="form-group row" v-if="order.number">
+                        <label for="stateName" class="col-sm-2 col-form-label">Status</label>
+                        <div class="col-sm-10">
+                            <select v-model="order.state" class="form-control" id="stateName">
+                                 <option v-for="orderState in availableOrderStates" :key="orderState.id" v-bind:value="orderState.id">{{orderState.name}}</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Pojazd</label>
                         <div class="col-sm-10">
@@ -385,7 +393,8 @@ export default {
                 resultsPage: 1,
                 activePosition: {},
                 searchingPhrase: ''
-            }
+            },
+            availableOrderStates: []
         }
     },
     props: {
@@ -461,6 +470,11 @@ export default {
                 quantity: 1
             };
             this.editedPositionModalMode = null;
+        });
+        this.setLoading(true);
+        this.$api.get("/api/orders/getAvailableOrderStates").then(res => {
+            this.availableOrderStates = res.data.data.states;
+            this.setLoading(false);
         })
     },
     methods: {

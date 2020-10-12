@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['number', 'vehicle_id', 'name', 'note', 'active', 'date', 'customer_company', 'customer_name', 'customer_surname', 'customer_address', 'customer_city', 'customer_postcode', 'customer_phone', 'vehicle_mileage', 'finished_at'];
+    protected $fillable = ['number', 'vehicle_id', 'name', 'note', 'active', 'date', 'customer_company', 'customer_name', 'customer_surname', 'customer_address', 'customer_city', 'customer_postcode', 'customer_phone', 'vehicle_mileage', 'state', 'finished_at'];
 
-    protected $appends = ['customer'];
+    protected $appends = ['customer', 'state_name'];
 
-    protected $hidden = ['customer_company', 'customer_name', 'customer_surname', 'customer_address', 'customer_city', 'customer_postcode', 'customer_phone'];
+    protected $hidden = ['customer_company', 'customer_name', 'customer_surname', 'customer_address', 'customer_city', 'customer_postcode', 'customer_phone', 'order_state'];
 
     public static function query()
     {
@@ -208,5 +208,19 @@ class Order extends Model
             'postcode' => $this->customer_postcode,
             'phone' => $this->customer_phone,
         ];
+    }
+
+    public function getStateNameAttribute()
+    {
+        if(!$this->relationLoaded("orderState")) {
+            $this->load("orderState");
+        }
+
+        return $this->orderState->name;
+    }
+
+    public function orderState()
+    {
+        return $this->belongsTo(OrderState::class, 'state');
     }
 }

@@ -11,7 +11,10 @@ class OrdersSeeder extends Seeder
      */
     public function run()
     {
-        \App\CustomerVehicle::find(1)->orders()->save(new \App\Order(['number' => 'Z01/2020']));
+        $order = new \App\Order();
+        $order->generateAndSetNewNumber();
+
+        \App\CustomerVehicle::find(1)->orders()->save($order);
         \App\Order::find(1)->positions()->save(new \App\OrderPosition(['name' => 'test', 'price' => 25]));
     }
 }

@@ -42,6 +42,7 @@ Route::middleware("apiJwt")->group(function () {
     Route::delete("/orders/{id}/position/{positionId}", 'OrderController@destroyPosition');
     Route::put("/orders/{id}/position/{positionId}", 'OrderController@updatePosition');
     Route::post("/orders/{id}/invoice/generate", 'OrderController@generateInvoiceNumber');
+    Route::get("/orders/getAvailableOrderStates", 'OrderController@getAvailableOrderStates');
     Route::resource('orders', 'OrderController');
     Route::resource('mechanics', 'MechanicController');
     Route::get("/allegro/api/search", "AllegroApiController@search");

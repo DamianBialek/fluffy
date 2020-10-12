@@ -18,6 +18,7 @@ class CreateOrdersTable extends Migration
             $table->bigInteger("vehicle_id")->unsigned()->nullable();
             $table->boolean("active")->default(0);
             $table->string("number")->unique();
+            $table->bigInteger("state")->unsigned()->default(1);
             $table->string("name", 255)->nullable();
             $table->text("note")->nullable();
             $table->dateTime("date")->nullable();
@@ -35,6 +36,7 @@ class CreateOrdersTable extends Migration
             $table->timestamp("finished_at")->nullable();
 
             $table->foreign("vehicle_id")->references("id")->on("customers_vehicles")->onDelete("set null");
+            $table->foreign("state")->references("id")->on("order_states");
         });
     }
 

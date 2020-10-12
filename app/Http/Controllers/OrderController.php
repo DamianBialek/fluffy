@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Order;
 use App\OrderPosition;
+use App\OrderState;
 use App\Pdf\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -61,6 +62,7 @@ class OrderController extends Controller
             'customer_postcode' => Arr::get($request->get("customer", []), 'postcode', null),
             'customer_phone' => Arr::get($request->get("customer", []), 'phone', null),
             'vehicle_mileage' => $request->get("vehicle_mileage", null),
+            'state' => 1,
             'finished_at' => $request->get("finished_at", null)
         ]);
 
@@ -140,6 +142,7 @@ class OrderController extends Controller
             'customer_postcode' => Arr::get($request->get("customer", []), 'postcode', null),
             'customer_phone' => Arr::get($request->get("customer", []), 'phone', null),
             'vehicle_mileage' => $request->get("vehicle_mileage", null),
+            'state' => $request->get("state", 1),
             'finished_at' => $request->get("finished_at", null)
         ]);
 
@@ -275,6 +278,11 @@ class OrderController extends Controller
         }
 
         return $this->error([], 'Data not found', 404);
+    }
+
+    public function getAvailableOrderStates()
+    {
+        return $this->success(['states' => OrderState::all()], 'Data found');
     }
 
     protected function validateOrderPosition($request)
