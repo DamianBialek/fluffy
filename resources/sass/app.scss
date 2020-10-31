@@ -16,8 +16,24 @@
     border-color: #1ab394;
 }
 
-.btn-primary:hover, .btn-primary:focus, .btn-primary.focus {
+.btn-primary:hover, .btn-primary:focus, .btn-primary.focus, .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled):active:focus {
     background-color: #18a689;
     border-color: #18a689;
     color: #fff;
+}
+
+.btn-outline-primary {
+    color: #1ab394;
+    border-color: #1ab394;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus, .btn-outline-primary.focus {
+    color: #fff;
+    background-color: #1ab394;
+    border-color: #1ab394;
+    box-shadow: none;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled):active:focus, .btn-outline-primary:not(:disabled):not(.disabled):active {
+    box-shadow: none;
 }
