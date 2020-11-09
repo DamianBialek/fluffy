@@ -52,54 +52,6 @@ export default {
 </script>
 
 <style lang="scss">
-    .mini-navbar {
-        .sidebar {
-            .sidebar-navbar {
-                .list-group-item {
-                    text-align: center;
-                    justify-content: center;
-
-                    .route-title-box {
-                        justify-content: center;
-                    }
-
-                    i {
-                        margin-right: 0 !important;
-                    }
-
-                    &.list-group-root {
-                        position: relative;
-
-                        .route-list-children {
-                            position: absolute;
-                            z-index: 2;
-                            left: 70px;
-                            background-color: $dark;
-                            top: 0;
-                            margin-top: 0;
-                            min-width: 200px;
-                            display: none;
-                        }
-
-                        &:hover {
-                            .route-list-children {
-                                display: flex;
-                            }
-                        }
-                    }
-                }
-
-                > .list-group-item {
-                    > .route-info, .route-title-box {
-                        span.route-title, i.collapse-icon {
-                            display: none;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     .sidebar {
         background-color: $dark;
         min-height: 100vh;
@@ -107,7 +59,7 @@ export default {
         transition: width .4s;
 
         .sidebar-navbar {
-            margin-top: 100px;
+            margin-top: 20px;
 
             .list-group-item {
                 background-color: transparent;
@@ -159,6 +111,60 @@ export default {
 
         .list-group.list-group-root > .list-group > .list-group-item {
             padding-left: 40px;
+        }
+    }
+
+    @media all and (min-width: 768px) {
+        .sidebar .sidebar-navbar {
+            margin-top: 100px;
+        }
+
+        .mini-navbar {
+            .sidebar {
+                .sidebar-navbar {
+                    .list-group-item {
+                        text-align: center;
+                        justify-content: center;
+
+                        .route-title-box {
+                            justify-content: center;
+                        }
+
+                        i {
+                            margin-right: 0 !important;
+                        }
+
+                        &.list-group-root {
+                            position: relative;
+
+                            .route-list-children {
+                                position: absolute;
+                                z-index: 2;
+                                left: 70px;
+                                background-color: $dark;
+                                top: 0;
+                                margin-top: 0;
+                                min-width: 200px;
+                                display: none;
+                            }
+
+                            &:hover {
+                                .route-list-children {
+                                    display: flex;
+                                }
+                            }
+                        }
+                    }
+
+                    > .list-group-item {
+                        > .route-info, .route-title-box {
+                            span.route-title, i.collapse-icon {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 </style>

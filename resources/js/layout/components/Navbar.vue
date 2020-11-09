@@ -1,5 +1,5 @@
 <template>
-    <header>
+    <header class="fixed-top">
         <nav class="navbar justify-content-between" role="navigation">
             <div class="btn bars-btn" @click="$emit('barsBtnClick')">
                 <i class="fa fa-bars"></i>
@@ -33,6 +33,6 @@
     }
 </script>
 
-<style scoped>
+<style>
 
 </style>

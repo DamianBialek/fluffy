@@ -1,6 +1,6 @@
 <template>
     <div :class="['wrapper', {'mini-navbar': miniNavbar}]">
-        <Sidebar :routes="routes" />
+        <Sidebar :routes="routes" :class="{'show': miniNavbar}" />
         <div class="page-content">
             <Navbar @barsBtnClick="miniNavbar = !miniNavbar" />
             <MainContent />
@@ -59,6 +59,20 @@
             routeHasChildren(route) {
                 return !!route.children;
             }
+        },
+        watch: {
+            miniNavbar() {
+                if(window.innerWidth < 768) {
+                    if(this.miniNavbar) {
+                        document.body.classList.add("overflow-hidden");
+                    } else {
+                        document.body.classList.remove("overflow-hidden");
+                    }
+                }
+            },
+            $route() {
+                this.miniNavbar = false;
+            }
         }
     }
 </script>
@@ -69,21 +83,12 @@
         flex-wrap: wrap;
     }
 
-    .mini-navbar {
-        .sidebar {
-            width: 70px;
-        }
-
-        .page-content {
-            width: calc(100% - 70px);
-        }
-    }
-
     .sidebar {
         background-color: $dark;
-        min-height: 100vh;
-        width: 220px;
-        transition: width .4s;
+        height: 100%;
+        display: none;
+        position: fixed;
+        overflow: auto;
     }
 
     .navbar {
@@ -115,15 +120,62 @@
     }
 
     .page-content {
-        width: calc(100% - 220px);
         background-color: #f3f3f4;
         color: $black;
-        transition: width .4s;
+        width: 100%;
 
         .page-wrapper {
             background-color: #fff;
             margin-top: 1rem;
             padding: 0 15px;
+        }
+
+        > header {
+            border-bottom: 1px solid #889AA4;
+
+            .navbar {
+                height: 60px;
+                flex-wrap: nowrap;
+            }
+        }
+    }
+
+    @media all and (min-width: 768px) {
+        .mini-navbar {
+            .sidebar {
+                width: 70px;
+            }
+
+            .page-content, .page-content > header {
+                margin-left: 70px;
+            }
+        }
+
+        .sidebar {
+            display: block;
+            width: 220px;
+            top: 0;
+            left: 0;
+            overflow: unset;
+            z-index: 2;
+        }
+
+        .page-content, .page-content > header {
+            margin-left: 220px;
+            transition: margin-left .4s;
+        }
+    }
+
+    @media all and (max-width: 767.98px) {
+        .sidebar {
+            &.show {
+                display: block;
+                width: 100%;
+                position: absolute;
+                margin-top: 60px;
+                overflow-y: auto;
+                z-index: 1029;
+            }
         }
     }
 </style>

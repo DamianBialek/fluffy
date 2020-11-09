@@ -3,6 +3,14 @@
 @import "~@fortawesome/fontawesome-free/scss/regular";
 @import "~@fortawesome/fontawesome-free/scss/solid";
 
+html, body, .wrapper{
+    min-height: 100vh;
+}
+
+html, body {
+    font-size: 14px;
+}
+
 .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;
 }

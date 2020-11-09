@@ -38,6 +38,8 @@
 
 <style lang="scss">
     main {
+        margin-top: 60px;
+
         padding: 0 15px;
 
         .page-header {
@@ -58,9 +60,11 @@
             margin-top: 1rem;
 
             section {
+                margin-top: 1rem;
                 background-color: #ffffff;
                 padding: 15px;
-                border: 1px solid #e7eaec;
+                border: 1px solid #d3d8db;
+                border-radius: 5px;
             }
         }
 
