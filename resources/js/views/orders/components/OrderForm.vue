@@ -44,6 +44,29 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="order_receipt">Data i godzina przyjęcia pojazdu</label>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col-sm-auto">
+                                    <input v-model="orderDateReceipt" type="date" class="form-control" id="order_receipt">
+                                </div>
+                                <div class="col-sm-auto minutes-hours-col my-2 my-sm-0">
+                                    <div class="input-group mb-3">
+                                        <input v-model="orderHoursDateReceipt" type="number" step="1" min="1" max="24" class="form-control" aria-label="Godzina">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">:</span>
+                                        </div>
+                                        <input v-model="orderMinutesDateReceipt" type="number" step="1" min="0" max="59" class="form-control" aria-label="Minuta">
+                                    </div>
+                                </div>
+                                <div class="col-sm-auto">
+                                    <button @click="setNowOrderReceiptVehicle" type="button" class="btn btn-outline-secondary">Ustaw Teraz</button>
+                                    <button @click="resetOrderReceiptVehicle" type="button" class="btn btn-outline-secondary">Resetuj</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="vehicle_mileage" class="col-sm-2 col-form-label">Przebieg pojazdu</label>
                         <div class="col-sm-10">
                             <input v-model="order.vehicle_mileage" type="text" class="form-control" id="vehicle_mileage">
@@ -400,7 +423,10 @@ export default {
                 activePosition: {},
                 searchingPhrase: ''
             },
-            availableOrderStates: []
+            availableOrderStates: [],
+            orderDateReceipt: null,
+            orderHoursDateReceipt: null,
+            orderMinutesDateReceipt: null
         }
     },
     props: {
@@ -415,7 +441,8 @@ export default {
                         registration_number: ''
                     },
                     name: '',
-                    positions: []
+                    positions: [],
+                    date_receipt_vehicle: null
                 }
             }
         },
@@ -465,6 +492,17 @@ export default {
         },
         orderPositionsParts() {
             return this.orderPositions.filter(p => p.type === 'part');
+        },
+        orderDateReceiptVehicle() {
+            if(!this.orderDateReceipt) {
+                return null;
+            }
+
+            const date = new Date(this.orderDateReceipt);
+            date.setHours(this.orderHoursDateReceipt);
+            date.setMinutes(this.orderMinutesDateReceipt);
+
+            return date;
         }
     },
     mounted() {
@@ -608,11 +646,53 @@ export default {
                 this.allegro.resultsPage++;
                 this.getResultsFromAllegro()
             }
+        },
+        parseOrderReceiptVehicleDateFromApi() {
+            if(!this.order.date_receipt_vehicle) {
+                return;
+            }
+
+            const splitted = this.order.date_receipt_vehicle.split(" ");
+            this.orderDateReceipt = splitted[0];
+
+            const splittedHM = splitted[1].split(":");
+            this.orderHoursDateReceipt = splittedHM[0];
+            this.orderMinutesDateReceipt = splittedHM[1];
+        },
+        resetOrderReceiptVehicle() {
+            this.orderDateReceipt = null;
+            this.orderHoursDateReceipt = null;
+            this.orderMinutesDateReceipt = null;
+        },
+        setNowOrderReceiptVehicle() {
+            const now = new Date();
+            this.order.date_receipt_vehicle = `${now.getFullYear()}-${(now.getMonth() + 1)}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+            this.parseOrderReceiptVehicleDateFromApi();
+        }
+    },
+    watch: {
+        orderDateReceipt() {
+            this.order.date_receipt_vehicle = this.orderDateReceiptVehicle;
+        },
+        orderHoursDateReceipt() {
+            this.order.date_receipt_vehicle = this.orderDateReceiptVehicle;
+        },
+        orderMinutesDateReceipt() {
+            this.order.date_receipt_vehicle = this.orderDateReceiptVehicle;
+        },
+        order() {
+            this.parseOrderReceiptVehicleDateFromApi();
         }
     }
 }
 </script>
 
-<style>
+<style lang="scss">
+.minutes-hours-col {
+    width: 170px;
 
+    .input-group-append {
+        margin-right: -1px;
+    }
+}
 </style>

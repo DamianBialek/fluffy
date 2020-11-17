@@ -6,6 +6,7 @@ use App\Order;
 use App\OrderPosition;
 use App\OrderState;
 use App\Pdf\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -63,6 +64,7 @@ class OrderController extends Controller
             'customer_phone' => Arr::get($request->get("customer", []), 'phone', null),
             'vehicle_mileage' => $request->get("vehicle_mileage", null),
             'state' => 1,
+            'date_receipt_vehicle' => !empty($request->get("date_receipt_vehicle")) ? Carbon::parse($request->get("date_receipt_vehicle")) : null,
             'finished_at' => $request->get("finished_at", null)
         ]);
 
@@ -143,6 +145,7 @@ class OrderController extends Controller
             'customer_phone' => Arr::get($request->get("customer", []), 'phone', null),
             'vehicle_mileage' => $request->get("vehicle_mileage", null),
             'state' => $request->get("state", 1),
+            'date_receipt_vehicle' => !empty($request->get("date_receipt_vehicle")) ? Carbon::parse($request->get("date_receipt_vehicle")) : null,
             'finished_at' => $request->get("finished_at", null)
         ]);
 
