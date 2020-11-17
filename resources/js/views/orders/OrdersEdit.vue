@@ -44,7 +44,8 @@
                         city: '',
                         postcode: '',
                         phone: '',
-                    }
+                    },
+                    note: ''
                 },
                 errorFields: {}
             }

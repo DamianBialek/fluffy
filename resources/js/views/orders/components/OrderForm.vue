@@ -55,6 +55,12 @@
                             <input v-model="order.name" type="text" class="form-control" id="name">
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="note" class="col-sm-2 col-form-label">Zakres prac zleconych przez klienta</label>
+                        <div class="col-sm-10">
+                            <textarea name="note" id="note" class="form-control" rows="5" v-model="order.note"></textarea>
+                        </div>
+                    </div>
                 </div>
                 <div v-if="order.id" class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
                     <div class="form-group row">

@@ -15,7 +15,8 @@ const config = require('./webpack.config');
 mix.webpackConfig(config);
 
 mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css');
+    .sass('resources/sass/app.scss', 'public/css')
+    .version();
 
 mix.options({
     extractVueStyles: 'public/css/style.css',
