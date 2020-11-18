@@ -24,9 +24,9 @@ class Pdf extends Mpdf
         $this->SetDisplayMode("fullpage");
     }
 
-    public static function loadView($view, $data = [], $mergeData = [])
+    public static function loadView($view, $data = [], $mergeData = [], $config = [])
     {
-        $mpdf = new static();
+        $mpdf = new static($config);
         $html = view($view, $data, $mergeData)->render();
         $mpdf->WriteHTML($html);
 

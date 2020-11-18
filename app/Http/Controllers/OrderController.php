@@ -254,6 +254,20 @@ class OrderController extends Controller
         return response((Pdf::loadView("pdf.orderInvoice", $data))->Output($order->invoice_number.'.pdf', Destination::INLINE));
     }
 
+    public function generateAcceptanceReportPdf($id)
+    {
+        $order = Order::with("vehicle")->where("id", $id)->firstOrFail();
+
+        if (!$order) {
+            return $this->error([], 'Data not found', 404);
+        }
+
+        return response((Pdf::loadView("pdf.orderAcceptanceReport", ['order' => $order], [], [
+            'margin_header' => 0,
+            'margin_top' => 10,
+        ]))->Output($order->number.'.pdf', Destination::INLINE));
+    }
+
     public function generateInvoiceNumber($id)
     {
         $order = Order::find($id);

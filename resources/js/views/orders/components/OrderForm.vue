@@ -94,6 +94,12 @@
                             <a v-if="order.invoice_number" target="_blank" :href="`/orders/${order.id}/invoice`" class="btn btn-outline-secondary ml-2"><i class="fas fa-eye"></i> Zobacz</a>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="number" class="col-sm-2 col-form-label">Protokół przyjęcia pojazdu</label>
+                        <div class="col-sm-10">
+                            <a target="_blank" :href="`/orders/${order.id}/acceptance-report`" class="btn btn-outline-secondary ml-2"><i class="fas fa-eye"></i> Zobacz</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="tab-pane fade" id="positions" role="tabpanel" aria-labelledby="positions-tab">
                     <div class="table-responsive">

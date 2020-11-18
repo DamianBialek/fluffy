@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get("/orders/{id}/invoice", 'OrderController@generatePdf');
+Route::get("/orders/{id}/acceptance-report", 'OrderController@generateAcceptanceReportPdf');
 
 Route::get('/{any?}', function () {
     return view('app');
