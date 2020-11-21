@@ -3,34 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 
 class AuthController extends Controller
 {
     public function __construct()
     {
 
-    }
-
-    /**
-     * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function register(Request $request)
-    {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required | email',
-            'password' => 'required | min:6',
-        ]);
-
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->save();
-        return response()->json(['user' => $user]);
     }
 
     /**
@@ -76,7 +56,13 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth('api')->refresh());
+        try {
+            $token = auth('api')->refresh();
+            auth('api')->setToken($token);
+            return $this->respondWithToken($token);
+        } catch (TokenBlacklistedException $e) {
+            throw new UnauthorizedHttpException('jwt-auth', $e->getMessage(), $e, $e->getCode());
+        }
     }
 
     /**

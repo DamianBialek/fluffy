@@ -27,7 +27,9 @@ axios.interceptors.response.use(response => {
     }
     return response;
 }, (error) => {
-    if(!error.response || !error.response.status || error.response.status === 500) {
+    const originalRequest = error.config;
+
+    if(!error.response || !error.response.status || (error.response.status !== 401)) {
         if(!error.response.data || typeof error.response.data.success == 'undefined' || !error.response.data.message.length) {
             swal("Wystąpił błąd podczas połączenia z serwerem !", "", "error");
         } else {
@@ -36,10 +38,30 @@ axios.interceptors.response.use(response => {
         return Promise.reject(error);
     }
 
-    if (error.response.status === 401) {
+    if (error.response.status === 401 && originalRequest.url === '/api/auth/refresh') {
         store.dispatch('logout');
         if(router.currentRoute.name !== 'login') {
             router.push('/login');
+        }
+        return Promise.reject(error);
+    }
+
+    if (error.response.status === 401) {
+        if(!originalRequest._retry) {
+            originalRequest._retry = true;
+            return axios.post('/api/auth/refresh')
+                .then(res => {
+                    if (res.status === 200) {
+                        store.commit("loginSuccess", res.data);
+                        axios.defaults.headers.common['Authorization'] = `Bearer ${getLoggedInUserToken()}`;
+                        return axios(originalRequest);
+                    }
+                })
+        } else {
+            store.dispatch('logout');
+            if(router.currentRoute.name !== 'login') {
+                router.push('/login');
+            }
         }
     }
 

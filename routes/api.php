@@ -20,10 +20,8 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
     Route::post('refresh', 'AuthController@refresh');
 
-    Route::middleware("apiJwt")->group(function () {
-        Route::post('logout', 'AuthController@logout');
-        Route::post('me', 'AuthController@me');
-    });
+    Route::post('logout', 'AuthController@logout');
+    Route::post('me', 'AuthController@me');
 });
 
 Route::get("/session", function () {
@@ -31,7 +29,7 @@ Route::get("/session", function () {
 //    Session::save();
 });
 
-Route::middleware("apiJwt")->group(function () {
+Route::middleware(["jwt"])->group(function () {
     Route::resource('parameters', 'ParameterController');
     Route::resource('customers', 'CustomerController');
     Route::get("/vehicles/getUnassignedVehicles", 'CustomerVehicleController@getUnassignedVehicles');
