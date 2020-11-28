@@ -65,6 +65,7 @@ class OrderController extends Controller
             'vehicle_mileage' => $request->get("vehicle_mileage", null),
             'state' => 1,
             'date_receipt_vehicle' => !empty($request->get("date_receipt_vehicle")) ? Carbon::parse($request->get("date_receipt_vehicle")) : null,
+            'start_date' => !empty($request->get("start_date")) ? Carbon::parse($request->get("start_date")) : null,
             'finished_at' => $request->get("finished_at", null)
         ]);
 
@@ -146,6 +147,7 @@ class OrderController extends Controller
             'vehicle_mileage' => $request->get("vehicle_mileage", null),
             'state' => $request->get("state", 1),
             'date_receipt_vehicle' => !empty($request->get("date_receipt_vehicle")) ? Carbon::parse($request->get("date_receipt_vehicle")) : null,
+            'start_date' => !empty($request->get("start_date")) ? Carbon::parse($request->get("start_date")) : null,
             'finished_at' => $request->get("finished_at", null)
         ]);
 

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['number', 'vehicle_id', 'name', 'note', 'active', 'date', 'customer_company', 'customer_name', 'customer_surname', 'customer_address', 'customer_city', 'customer_postcode', 'customer_phone', 'vehicle_mileage', 'state', 'date_receipt_vehicle', 'finished_at'];
+    protected $fillable = ['number', 'vehicle_id', 'name', 'note', 'active', 'date', 'customer_company', 'customer_name', 'customer_surname', 'customer_address', 'customer_city', 'customer_postcode', 'customer_phone', 'vehicle_mileage', 'state', 'date_receipt_vehicle', 'start_date', 'finished_at'];
 
     protected $appends = ['customer', 'state_name'];
 
@@ -208,6 +208,21 @@ class Order extends Model
             'postcode' => $this->customer_postcode,
             'phone' => $this->customer_phone,
         ];
+    }
+
+    public function getCreatedAtAttribute()
+    {
+        return Carbon::parse($this->attributes['created_at'])->format("d-m-Y H:i:s");
+    }
+
+    public function getUpdatedAtAttribute()
+    {
+        return Carbon::parse($this->attributes['updated_at'])->format("d-m-Y H:i:s");
+    }
+
+    public function getStartDateAttribute()
+    {
+        return Carbon::parse($this->attributes['start_date'])->format("Y-m-d");
     }
 
     public function getStateNameAttribute()

@@ -32,6 +32,12 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="start_date" class="col-sm-2 col-form-label">Data rozpoczęcia</label>
+                        <div class="col-sm-auto">
+                            <input v-model="order.start_date" type="date" class="form-control" id="start_date">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Pojazd</label>
                         <div class="col-sm-10">
                             <div @click="openCustomerVehiclesModal" class="form-control">{{order.vehicle && order.vehicle.mark ? `${order.vehicle.mark} ${order.vehicle.model} (${order.vehicle.registration_number})` : ''}}</div>
@@ -175,8 +181,21 @@
                     <button @click="createNewPosition('part')" type="button" class="btn btn-outline-secondary"><i class="fa fa-plus text-success mr-2" />Dodaj nową część</button>
                 </div>
             </div>
-
-
+            <div v-if="order.id" class="my-5 mx-3">
+                <hr />
+                <div class="form-group row">
+                    <label for="created_at" class="col-sm-2 col-form-label">Data utworzenia</label>
+                    <div class="col-sm-10">
+                        <input disabled v-model="order.created_at" type="text" class="form-control" id="created_at">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="updated_at" class="col-sm-2 col-form-label">Data modyfikacji</label>
+                    <div class="col-sm-10">
+                        <input disabled v-model="order.updated_at" type="text" class="form-control" id="updated_at">
+                    </div>
+                </div>
+            </div>
             <div class="text-right">
                 <button class="btn btn-primary">Zapisz</button>
             </div>
@@ -509,6 +528,15 @@ export default {
             date.setMinutes(this.orderMinutesDateReceipt);
 
             return `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        },
+        formatStartDate() {
+            if(!this.order.start_date) {
+                return null;
+            }
+
+            const date = new Date(this.order.start_date);
+
+            return `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()}`;
         }
     },
     mounted() {
