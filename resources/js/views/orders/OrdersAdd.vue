@@ -44,7 +44,9 @@
                         postcode: '',
                         phone: '',
                     },
-                    note: ''
+                    note: '',
+                    responsible_person: null,
+                    responsible_person_id: null
                 },
                 errorFields: {}
             }

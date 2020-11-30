@@ -51,6 +51,7 @@ class OrderController extends Controller
 
         $order = new Order([
             'vehicle_id' => $request->get("vehicle_id", null),
+            'responsible_person_id' => $request->get("responsible_person_id", null),
             'active' => $request->get("active", 0),
             'name' => $request->get("name", null),
             'note' => $request->get("note", null),
@@ -102,7 +103,7 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $order = Order::with("vehicle", "positions")->where("id", $id)->firstOrFail();
+        $order = Order::with("vehicle", "positions", "responsiblePerson")->where("id", $id)->firstOrFail();
 
         if($order) {
             return $this->success(['order' => $order], 'Data found');
@@ -134,6 +135,7 @@ class OrderController extends Controller
 
         $order->update([
             'vehicle_id' => $request->get("vehicle_id", null),
+            'responsible_person_id' => $request->get("responsible_person_id", null),
             'active' => $request->get("active", 0),
             'name' => $request->get("name", null),
             'note' => $request->get("note", null),

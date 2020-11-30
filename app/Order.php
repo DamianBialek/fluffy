@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['number', 'vehicle_id', 'name', 'note', 'active', 'date', 'customer_company', 'customer_name', 'customer_surname', 'customer_address', 'customer_city', 'customer_postcode', 'customer_phone', 'vehicle_mileage', 'state', 'date_receipt_vehicle', 'date_delivery_vehicle', 'start_date', 'finished_at'];
+    protected $fillable = ['number', 'vehicle_id', 'responsible_person_id', 'name', 'note', 'active', 'date', 'customer_company', 'customer_name', 'customer_surname', 'customer_address', 'customer_city', 'customer_postcode', 'customer_phone', 'vehicle_mileage', 'state', 'date_receipt_vehicle', 'date_delivery_vehicle', 'start_date', 'finished_at'];
 
     protected $appends = ['customer', 'state_name'];
 
@@ -17,7 +17,7 @@ class Order extends Model
     public static function query()
     {
         $query = parent::query();
-        $query->with("vehicle")->orderBy("id", "desc");
+        $query->with("vehicle", "responsiblePerson")->orderBy("id", "desc");
 
         return $query;
     }
@@ -120,6 +120,11 @@ class Order extends Model
     public function vehicle()
     {
         return $this->belongsTo(CustomerVehicle::class);
+    }
+
+    public function responsiblePerson()
+    {
+        return $this->belongsTo(Mechanic::class);
     }
 
     public function positions()

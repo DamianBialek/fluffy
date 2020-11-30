@@ -31,6 +31,12 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Osoba odpowiedzialna</label>
+                        <div class="col-sm-10">
+                            <div @click="openResponsiblePeopleModal" class="form-control">{{order.responsible_person ? `${order.responsible_person.name} ${order.responsible_person.surname}` : ''}}</div>
+                        </div>
+                    </div>
                     <DateHoursInput label="Data rozpoczęcia" v-model="order.start_date" />
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Pojazd</label>
@@ -219,6 +225,60 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="responsiblePeopleModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Wybierz osobę odpowiedzialną za zlecenie</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row justify-content-center">
+                            <div class="col-8">
+                                <div class="input-group">
+                                    <input @keyup="searchResponsiblePerson" v-model="responsiblePersonSearchQuery" aria-label="Szukaj osoby" type="text" class="form-control" />
+                                    <div class="input-group-append">
+                                        <button @click="searchResponsiblePerson" type="button" class="btn btn-outline-secondary"><i class="fas fa-search mr-2"></i>Szukaj</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <Loading v-if="responsiblePersonLoading" />
+                        <div v-show="!responsiblePersonLoading" class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th>Imię</th>
+                                    <th>Nazwisko</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="person in responsiblePeople" :key="person.id">
+                                    <th scope="row">{{person.id}}</th>
+                                    <td>{{person.name}}</td>
+                                    <td>{{person.surname}}</td>
+                                    <td class="text-center">
+                                        <button @click="selectResponsiblePerson(person)" type="button" class="btn btn-outline-secondary m-1"><i class="fa fa-plus text-success mr-2" />Wybierz</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-3 pb-3 d-flex justify-content-center">
+                            <Pagination :pagination="responsiblePeoplePaginationData" @paginate="loadResponsiblePeople()" :offset="2"></Pagination>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
                     </div>
                 </div>
             </div>
@@ -427,7 +487,11 @@ export default {
             availableOrderStates: [],
             orderDateReceipt: null,
             orderHoursDateReceipt: null,
-            orderMinutesDateReceipt: null
+            orderMinutesDateReceipt: null,
+            responsiblePersonSearchQuery: null,
+            responsiblePersonLoading: false,
+            responsiblePeople: [],
+            responsiblePeoplePaginationData: {},
         }
     },
     props: {
@@ -444,7 +508,9 @@ export default {
                     name: '',
                     positions: [],
                     date_receipt_vehicle: null,
-                    date_delivery_vehicle: null
+                    date_delivery_vehicle: null,
+                    responsible_person: null,
+                    responsible_person_id: null
                 }
             }
         },
@@ -679,6 +745,30 @@ export default {
             const now = new Date();
             this.order.date_receipt_vehicle = `${now.getFullYear()}-${(now.getMonth() + 1)}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
             this.parseOrderReceiptVehicleDateFromApi();
+        },
+        openResponsiblePeopleModal() {
+            $("#responsiblePeopleModal").modal("show");
+            this.loadResponsiblePeople();
+        },
+        loadResponsiblePeople() {
+            this.responsiblePersonLoading = true;
+            this.$api.get("/api/mechanics", {params: {query: this.responsiblePersonSearchQuery, page: this.customersVehiclesPaginationData.current_page}}).then(res => {
+                this.responsiblePersonLoading = false;
+                this.responsiblePeople = res.data.data.mechanics;
+                this.responsiblePeoplePaginationData = res.data.data.pagination;
+            })
+        },
+        searchResponsiblePerson(e) {
+            if(e instanceof KeyboardEvent && e.code !== 'Enter') {
+                return;
+            }
+
+            this.loadResponsiblePeople();
+        },
+        selectResponsiblePerson(person) {
+            this.order.responsible_person = person;
+            this.order.responsible_person_id = person.id;
+            $("#responsiblePeopleModal").modal("hide");
         }
     },
     watch: {
