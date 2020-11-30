@@ -31,12 +31,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="start_date" class="col-sm-2 col-form-label">Data rozpoczęcia</label>
-                        <div class="col-sm-auto">
-                            <input v-model="order.start_date" type="date" class="form-control" id="start_date">
-                        </div>
-                    </div>
+                    <DateHoursInput label="Data rozpoczęcia" v-model="order.start_date" />
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Pojazd</label>
                         <div class="col-sm-10">
@@ -49,29 +44,7 @@
                             <div @click="openCustomerDataModal" class="form-control">{{order.customer && order.customer.name ? `${order.customer.name} ${order.customer.surname}` : ''}}</div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" for="order_receipt">Data i godzina przyjęcia pojazdu</label>
-                        <div class="col-sm-10">
-                            <div class="row">
-                                <div class="col-sm-auto">
-                                    <input v-model="orderDateReceipt" type="date" class="form-control" id="order_receipt">
-                                </div>
-                                <div class="col-sm-auto minutes-hours-col my-2 my-sm-0">
-                                    <div class="input-group mb-3">
-                                        <input v-model="orderHoursDateReceipt" type="number" step="1" min="1" max="24" class="form-control" aria-label="Godzina">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">:</span>
-                                        </div>
-                                        <input v-model="orderMinutesDateReceipt" type="number" step="1" min="0" max="59" class="form-control" aria-label="Minuta">
-                                    </div>
-                                </div>
-                                <div class="col-sm-auto">
-                                    <button @click="setNowOrderReceiptVehicle" type="button" class="btn btn-outline-secondary">Ustaw Teraz</button>
-                                    <button @click="resetOrderReceiptVehicle" type="button" class="btn btn-outline-secondary">Resetuj</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <DateHoursInput label="Data i godzina przyjęcia pojazdu" v-model="order.date_receipt_vehicle" />
                     <div class="form-group row">
                         <label for="vehicle_mileage" class="col-sm-2 col-form-label">Przebieg pojazdu</label>
                         <div class="col-sm-10">
@@ -415,10 +388,12 @@ import Loading from "../../../components/Loading";
 import Pagination from "../../../components/Pagination";
 import { moneyFormat } from "../../../helpers/utils";
 import CustomerForm from "../../customers/components/CustomerForm";
+import DateHoursInput from "../../../components/DateHoursInput";
 
 export default {
     name: "OrderForm",
     components: {
+        DateHoursInput,
         Loading,
         Pagination,
         CustomerForm

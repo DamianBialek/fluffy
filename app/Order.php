@@ -220,11 +220,6 @@ class Order extends Model
         return Carbon::parse($this->attributes['updated_at'])->format("d-m-Y H:i:s");
     }
 
-    public function getStartDateAttribute()
-    {
-        return Carbon::parse($this->attributes['start_date'])->format("Y-m-d");
-    }
-
     public function getStateNameAttribute()
     {
         if(!$this->relationLoaded("orderState")) {
