@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['number', 'vehicle_id', 'name', 'note', 'active', 'date', 'customer_company', 'customer_name', 'customer_surname', 'customer_address', 'customer_city', 'customer_postcode', 'customer_phone', 'vehicle_mileage', 'state', 'date_receipt_vehicle', 'start_date', 'finished_at'];
+    protected $fillable = ['number', 'vehicle_id', 'name', 'note', 'active', 'date', 'customer_company', 'customer_name', 'customer_surname', 'customer_address', 'customer_city', 'customer_postcode', 'customer_phone', 'vehicle_mileage', 'state', 'date_receipt_vehicle', 'date_delivery_vehicle', 'start_date', 'finished_at'];
 
     protected $appends = ['customer', 'state_name'];
 

@@ -45,6 +45,7 @@
                         </div>
                     </div>
                     <DateHoursInput label="Data i godzina przyjęcia pojazdu" v-model="order.date_receipt_vehicle" />
+                    <DateHoursInput label="Data i godzina odbioru pojazdu" v-model="order.date_delivery_vehicle" />
                     <div class="form-group row">
                         <label for="vehicle_mileage" class="col-sm-2 col-form-label">Przebieg pojazdu</label>
                         <div class="col-sm-10">
@@ -442,7 +443,8 @@ export default {
                     },
                     name: '',
                     positions: [],
-                    date_receipt_vehicle: null
+                    date_receipt_vehicle: null,
+                    date_delivery_vehicle: null
                 }
             }
         },
