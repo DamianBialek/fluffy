@@ -143,6 +143,11 @@ class CustomerVehicleController extends Controller
         return $this->success([], 'Vehicle deleted', 200);
     }
 
+    public function countOrders()
+    {
+        return $this->success(['count' => CustomerVehicle::count()]);
+    }
+
     protected function validate($request, $exceptId = null)
     {
         $rules = [

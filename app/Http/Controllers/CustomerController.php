@@ -141,6 +141,11 @@ class CustomerController extends Controller
         return $this->success([], 'Customer deleted', 200);
     }
 
+    public function countOrders()
+    {
+        return $this->success(['count' => Customer::count()]);
+    }
+
     protected function validate($request)
     {
         return Validator::make($request->all(), [

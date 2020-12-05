@@ -308,6 +308,11 @@ class OrderController extends Controller
         return $this->success(['states' => OrderState::all()], 'Data found');
     }
 
+    public function countOrders()
+    {
+        return $this->success(['count' => Order::count()]);
+    }
+
     protected function validateOrderPosition($request)
     {
         return Validator::make($request->all(), [

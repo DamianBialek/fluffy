@@ -119,6 +119,11 @@ class MechanicController extends Controller
         return $this->success([], 'Mechanic deleted', 200);
     }
 
+    public function countOrders()
+    {
+        return $this->success(['count' => Mechanic::count()]);
+    }
+
     protected function validate($request)
     {
         return Validator::make($request->all(), [

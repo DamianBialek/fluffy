@@ -31,7 +31,9 @@ Route::get("/session", function () {
 
 Route::middleware(["jwt"])->group(function () {
     Route::resource('parameters', 'ParameterController');
+    Route::get("/customers/count", 'CustomerController@countOrders');
     Route::resource('customers', 'CustomerController');
+    Route::get("/vehicles/count", 'CustomerVehicleController@countOrders');
     Route::get("/vehicles/getUnassignedVehicles", 'CustomerVehicleController@getUnassignedVehicles');
     Route::resource('vehicles', 'CustomerVehicleController');
     Route::resource('services', 'ServiceController');
@@ -41,7 +43,9 @@ Route::middleware(["jwt"])->group(function () {
     Route::put("/orders/{id}/position/{positionId}", 'OrderController@updatePosition');
     Route::post("/orders/{id}/invoice/generate", 'OrderController@generateInvoiceNumber');
     Route::get("/orders/getAvailableOrderStates", 'OrderController@getAvailableOrderStates');
+    Route::get("/orders/count", 'OrderController@countOrders');
     Route::resource('orders', 'OrderController');
+    Route::get("/mechanics/count", 'MechanicController@countOrders');
     Route::resource('mechanics', 'MechanicController');
     Route::get("/allegro/api/search", "AllegroApiController@search");
 
