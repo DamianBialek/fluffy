@@ -724,28 +724,6 @@ export default {
                 this.getResultsFromAllegro()
             }
         },
-        parseOrderReceiptVehicleDateFromApi() {
-            if(!this.order.date_receipt_vehicle) {
-                return;
-            }
-
-            const splitted = this.order.date_receipt_vehicle.split(" ");
-            this.orderDateReceipt = splitted[0];
-
-            const splittedHM = splitted[1].split(":");
-            this.orderHoursDateReceipt = splittedHM[0];
-            this.orderMinutesDateReceipt = splittedHM[1];
-        },
-        resetOrderReceiptVehicle() {
-            this.orderDateReceipt = null;
-            this.orderHoursDateReceipt = null;
-            this.orderMinutesDateReceipt = null;
-        },
-        setNowOrderReceiptVehicle() {
-            const now = new Date();
-            this.order.date_receipt_vehicle = `${now.getFullYear()}-${(now.getMonth() + 1)}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-            this.parseOrderReceiptVehicleDateFromApi();
-        },
         openResponsiblePeopleModal() {
             $("#responsiblePeopleModal").modal("show");
             this.loadResponsiblePeople();
@@ -780,9 +758,6 @@ export default {
         },
         orderMinutesDateReceipt() {
             this.order.date_receipt_vehicle = this.orderDateReceiptVehicle;
-        },
-        order() {
-            this.parseOrderReceiptVehicleDateFromApi();
         }
     }
 }

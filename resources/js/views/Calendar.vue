@@ -20,6 +20,9 @@
                     <div :class="['day-box', {'empty': !isCurrentMonth(day)}, {'current-day': isCurrentDay(day)}]" v-for="day in calendar.days">
                         <div class="day">
                             <div class="day-top text-right">{{day.getDate()}}</div>
+                            <div class="day-orders">
+                                <router-link :to="{name: 'ordersEdit', params: {id: order.id}}" class="badge badge-success d-block my-2" v-for="order in getOrdersByDate(day)" :key="order.id">{{order.number}}</router-link>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -62,12 +65,26 @@ export default {
                 daysInMonth: null
             },
             activeDate: null,
-            days: []
+            days: [],
+            orders: []
         }
     },
     created() {
         this.calendar.dateObj = new Date();
         this.init();
+    },
+    mounted() {
+        this.setLoading(true);
+        this.$api.get("/api/orders")
+            .then(res => {
+                this.orders = res.data.data.orders;
+                this.orders.map(o => {
+                    return Object.assign(o, {
+                        start_date: this.parseDateFromApi(o.start_date)
+                    })
+                })
+                this.setLoading(false);
+            })
     },
     computed: {
         monthHeader() {
@@ -122,6 +139,30 @@ export default {
         },
         daysInMonth(dateObj) {
             return new Date(dateObj.getFullYear(), dateObj.getMonth() + 1, 0).getDate();
+        },
+        parseDateFromApi(date) {
+            if(!date) {
+                return null;
+            }
+            const splitted = date.split(" ");
+            return new Date(splitted[0]);
+        },
+        getOrdersByDate(date) {
+            if(!this.orders.length) {
+                return [];
+            }
+
+            const orders = [];
+
+            this.orders.forEach(o => {
+               if(o.start_date) {
+                   if(date.getDate() == o.start_date.getDate() && date.getMonth() == o.start_date.getMonth() && date.getYear() == o.start_date.getYear()) {
+                       orders.push(o)
+                   }
+               }
+            });
+
+            return orders;
         }
     }
 }
@@ -141,7 +182,7 @@ export default {
     .calendar-days {
         margin-top: 1rem;
         display: grid;
-        grid-template-columns: repeat(7, auto);
+        grid-template-columns: repeat(7, 1fr);
 
         .header-day {
             color: #aaa;
@@ -151,6 +192,17 @@ export default {
         .day-box {
             height: 80px;
             border: 1px solid #ddd;
+
+            .day-orders {
+                overflow-y: auto;
+                max-height: 45px;
+                margin-top: 5px;
+                padding: 0 10px;
+            }
+
+            .day-top {
+                height: 20px;
+            }
 
             .day {
                 padding: 4px;

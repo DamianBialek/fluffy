@@ -1,10 +1,10 @@
 <template>
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label" for="order_receipt">{{ label }}</label>
+        <label class="col-sm-2 col-form-label">{{ label }}</label>
         <div class="col-sm-10">
             <div class="row">
                 <div class="col-sm-auto">
-                    <input v-model="date" type="date" class="form-control" id="order_receipt">
+                    <input v-model="date" type="date" class="form-control" aria-label="Data">
                 </div>
                 <div class="col-sm-auto minutes-hours-col my-2 my-sm-0">
                     <div class="input-group mb-3">
@@ -74,20 +74,39 @@ export default {
             }
 
             const splitted = this.fullDate.split(" ");
-            this.date = splitted[0];
+            this.date = splitted[0].split("-").map(d => d < 10 ? `0${d}` : d).join("-");
 
             const splittedHM = splitted[1].split(":");
             this.hours = splittedHM[0];
             this.minutes = splittedHM[1];
         },
+        setFullDate() {
+            if(!this.date) {
+                return null;
+            }
+
+            const date = new Date(this.date);
+            date.setHours(this.hours);
+            date.setMinutes(this.minutes);
+
+            this.fullDate = `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        }
     },
     watch: {
         value() {
             this.fullDate = this.value;
         },
+        date() {
+            this.setFullDate();
+        },
+        hours() {
+            this.setFullDate();
+        },
+        minutes() {
+            this.setFullDate();
+        },
         fullDate() {
             this.parseOrderReceiptVehicleDateFromApi();
-            console.log(this.formattedDate)
             this.$emit("input", this.formattedDate);
         }
     }
