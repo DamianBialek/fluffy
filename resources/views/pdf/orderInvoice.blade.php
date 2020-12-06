@@ -105,12 +105,12 @@ mpdf-->
             <tr>
                 <td align="center">{{$loop->index+1}}</td>
                 <td>{{$position->name}}</td>
-                <td align="right" class="cost">{{$position->price}}</td>
-                <td align="center">23</td>
+                <td align="right" class="cost">{{formatPrice($position->price)}}</td>
+                <td align="center">{{appConfig("tax")}}</td>
                 <td align="center">{{$position->quantity}}</td>
-                <td class="cost totals">{{$position->price * $position->quantity}}</td>
-                <td class="cost totals">{{$position->price * $position->quantity}}</td>
-                <td class="cost totals">{{$position->price * $position->quantity}}</td>
+                <td class="cost totals">{{formatPrice(calcNetFromGross($position->price * $position->quantity))}}</td>
+                <td class="cost totals">{{formatPrice(getTaxAmount($position->price * $position->quantity))}}</td>
+                <td class="cost totals">{{formatPrice($position->price * $position->quantity)}}</td>
             </tr>
         @endforeach
     @else
@@ -140,12 +140,12 @@ mpdf-->
             <tr>
                 <td align="center">{{$loop->index+1}}</td>
                 <td>{{$position->name}}</td>
-                <td align="right" class="cost">{{$position->price}}</td>
-                <td align="center">23</td>
+                <td align="right" class="cost">{{formatPrice($position->price)}}</td>
+                <td align="center">{{appConfig("tax")}}</td>
                 <td align="center">{{$position->quantity}}</td>
-                <td class="cost totals">{{$position->price * $position->quantity}}</td>
-                <td class="cost totals">{{$position->price * $position->quantity}}</td>
-                <td class="cost totals">{{$position->price * $position->quantity}}</td>
+                <td class="cost totals">{{formatPrice(calcNetFromGross($position->price * $position->quantity))}}</td>
+                <td class="cost totals">{{formatPrice(getTaxAmount($position->price * $position->quantity))}}</td>
+                <td class="cost totals">{{formatPrice($position->price * $position->quantity)}}</td>
             </tr>
         @endforeach
     @else
@@ -161,21 +161,33 @@ mpdf-->
     <thead>
     <tr>
         <td>Nazwa</td>
+        <td>Wartość netto</td>
+        <td>Stawka VAT</td>
+        <td>Kwota VAT</td>
         <td>Wartość brutto</td>
     </tr>
     </thead>
     <tbody>
     <tr>
         <td>Części</td>
-        <td class="cost totals">{{$order->getPartsTotalSum()}}</td>
+        <td class="cost totals">{{formatPrice(calcNetFromGross($order->getPartsTotalSum()))}}</td>
+        <td class="cost totals">{{appConfig("tax")}} %</td>
+        <td class="cost totals">{{formatPrice(getTaxAmount($order->getPartsTotalSum()))}}</td>
+        <td class="cost totals">{{formatPrice($order->getPartsTotalSum())}}</td>
     </tr>
     <tr>
         <td>Robocizna</td>
-        <td class="cost totals">{{$order->getServicesTotalSum()}}</td>
+        <td class="cost totals">{{formatPrice(calcNetFromGross($order->getServicesTotalSum()))}}</td>
+        <td class="cost totals">{{appConfig("tax")}} %</td>
+        <td class="cost totals">{{formatPrice(getTaxAmount($order->getServicesTotalSum()))}}</td>
+        <td class="cost totals">{{formatPrice($order->getServicesTotalSum())}}</td>
     </tr>
     <tr style="border: 0.1mm solid #000000;">
         <th style="font-size: 12pt;">Razem do zapłaty</th>
-        <th class="cost totals" style="font-size: 12pt;">{{$order->getTotalSum()}}</th>
+        <th class="cost totals" style="font-size: 12pt;">{{formatPrice(calcNetFromGross($order->getTotalSum()))}}</th>
+        <th class="cost totals" style="font-size: 12pt;">x</th>
+        <th class="cost totals" style="font-size: 12pt;">{{formatPrice(getTaxAmount($order->getTotalSum()))}}</th>
+        <th class="cost totals" style="font-size: 12pt;">{{formatPrice($order->getTotalSum())}}</th>
     </tr>
     </tbody>
 </table>
