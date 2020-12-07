@@ -4,7 +4,7 @@
             <h1 class="text-center">Statystyki</h1>
             <div class="col mt-3">
                 <div class="row">
-                    <div class="col-3" v-for="count in counts" :key="count.name">
+                    <div class="col-sm-4 col-md-3 my-2" v-for="count in counts" :key="count.name">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title text-center">{{ count.name }}</h5>
