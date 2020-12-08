@@ -35,6 +35,7 @@ Route::middleware(["jwt"])->group(function () {
     Route::resource('customers', 'CustomerController');
     Route::get("/vehicles/count", 'CustomerVehicleController@countOrders');
     Route::get("/vehicles/getUnassignedVehicles", 'CustomerVehicleController@getUnassignedVehicles');
+    Route::get("/vehicles/{id}/orders", 'CustomerVehicleController@vehiclesOrders');
     Route::resource('vehicles', 'CustomerVehicleController');
     Route::resource('services', 'ServiceController');
     Route::get("/orders/{id}/copy", 'OrderController@copy');

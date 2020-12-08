@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CustomerVehicle;
+use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -146,6 +147,11 @@ class CustomerVehicleController extends Controller
     public function countOrders()
     {
         return $this->success(['count' => CustomerVehicle::count()]);
+    }
+
+    public function vehiclesOrders($id)
+    {
+        return $this->success(['orders' => Order::where("vehicle_id", $id)->get()]);
     }
 
     protected function validate($request, $exceptId = null)
