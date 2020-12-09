@@ -46,9 +46,16 @@
                     },
                     note: '',
                     responsible_person: null,
-                    responsible_person_id: null
+                    responsible_person_id: null,
+                    start_date: ''
                 },
-                errorFields: {}
+                errorFields: {},
+                start: null
+            }
+        },
+        mounted() {
+            if(this.$route.query && this.$route.query.date && this.$route.query.date.length) {
+                this.order.start_date = this.$route.query.date;
             }
         },
         methods: {

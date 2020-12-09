@@ -8,7 +8,7 @@
                 </div>
                 <div class="col-sm-auto minutes-hours-col my-2 my-sm-0">
                     <div class="input-group mb-3">
-                        <input v-model="hours" type="number" step="1" min="1" max="24" class="form-control" aria-label="Godzina">
+                        <input v-model="hours" type="number" step="1" min="0" max="24" class="form-control" aria-label="Godzina">
                         <div class="input-group-append">
                             <span class="input-group-text">:</span>
                         </div>

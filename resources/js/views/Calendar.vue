@@ -17,7 +17,7 @@
                 </div>
                 <div class="calendar-days">
                     <div class="header-day" v-for="headerDay in calendar.header">{{headerDay}}</div>
-                    <div :class="['day-box', {'empty': !isCurrentMonth(day)}, {'current-day': isCurrentDay(day)}]" v-for="day in calendar.days">
+                    <div :class="['day-box', {'empty': !isCurrentMonth(day)}, {'current-day': isCurrentDay(day)}]" v-for="day in calendar.days" @click="openOrdersListModal(day)">
                         <div class="day">
                             <div class="day-top text-right">{{day.getDate()}}</div>
                             <div class="day-orders">
@@ -32,15 +32,44 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Lista zleceń dla </h5>
+                        <h5 class="modal-title">Lista zleceń dla {{`${selectedDate.getDate()}/${selectedDate.getMonth() + 1}/${selectedDate.getFullYear()}`}}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div class="table-responsive mt-3">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th>Numer</th>
+                                    <th>Status</th>
+                                    <th>Nazwa</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="order in getOrdersByDate(selectedDate)" :key="order.id">
+                                    <th scope="row">{{order.id}}</th>
+                                    <th>{{order.number}}</th>
+                                    <th>{{order.state_name}}</th>
+                                    <td>{{order.name && order.name.length ? order.name : '---'}}</td>
+                                    <td class="text-center">
+                                        <router-link v-tooltip="'Podgląd'" tag="button" :to="{name: 'ordersEdit', params: {id: order.id}}" class="btn btn-outline-secondary m-1"><i class="fas fa-search"></i></router-link>
+                                        <a v-tooltip="'Zobacz fakturę'" v-if="order.invoice_number" target="_blank" :href="`/orders/${order.id}/invoice`" class="btn btn-outline-secondary ml-2"><i class="far fa-file-pdf"></i></a>
+                                    </td>
+                                </tr>
+                                <tr v-if="!getOrdersByDate(selectedDate).length">
+                                    <td colspan="4" class="text-center"><strong>Brak zleceń</strong></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button @click="createNewOrder" type="button" class="btn btn-outline-secondary"><i class="fa fa-plus text-success mr-2" />Dodaj nowe zlecenie</button>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
                     </div>
                 </div>
             </div>
@@ -66,7 +95,8 @@ export default {
             },
             activeDate: null,
             days: [],
-            orders: []
+            orders: [],
+            selectedDate: new Date()
         }
     },
     created() {
@@ -163,6 +193,14 @@ export default {
             });
 
             return orders;
+        },
+        openOrdersListModal(day) {
+            this.selectedDate = day;
+            $("#ordersListModal").modal("show");
+        },
+        createNewOrder() {
+            const date = `${this.selectedDate.getFullYear()}-${this.selectedDate.getMonth() + 1}-${this.selectedDate.getDate()} 0:0:0`;
+            this.$router.push({name: 'ordersAdd', query: {date: date}})
         }
     }
 }

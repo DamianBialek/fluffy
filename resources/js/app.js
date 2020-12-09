@@ -22,6 +22,7 @@ Vue.directive('tooltip', function(el, binding){
 
 router.afterEach(() => {
     document.querySelectorAll('.tooltip').forEach(e => e.remove());
+    $(".modal").modal("hide");
 })
 
 Vue.mixin({
