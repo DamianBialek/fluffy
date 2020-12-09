@@ -42,7 +42,7 @@
                 this.$api.put(`/api/customers/${this.customer.id}`, this.customer)
                     .then(res => {
                         if(res.data.success) {
-                            this.$notify("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
+                            this.$notify("Pomyślnie zaktualizowano dane !", "", "success").then(() => {
                                 this.$router.push({name: 'customersList'})
                             })
                         }
@@ -72,7 +72,7 @@
                 this.updateCustomerVehicleData(vehicle)
                     .then(res => {
                         if(res.data.success) {
-                            this.$notify("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
+                            this.$notify("Pomyślnie zaktualizowano dane !", "", "success").then(() => {
                                 this.customer.vehicles.splice(this.customer.vehicles.findIndex(v => v.id === vehicle.id), 1);
                             })
                         }
@@ -86,7 +86,7 @@
                 this.updateCustomerVehicleData(vehicle)
                     .then(res => {
                         if(res.data.success) {
-                            this.$notify("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
+                            this.$notify("Pomyślnie zaktualizowano dane !", "", "success").then(() => {
                                 this.customer.vehicles.push(vehicle);
                                 this.$store.commit("removeUnassignedCustomerVehicles", vehicle.id);
                             })

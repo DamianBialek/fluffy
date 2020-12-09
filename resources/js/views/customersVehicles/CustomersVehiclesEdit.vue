@@ -37,7 +37,7 @@
                 this.$api.put(`/api/vehicles/${this.vehicle.id}`, this.vehicle)
                     .then(res => {
                         if(res.data.success) {
-                            this.$notify("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
+                            this.$notify("Pomyślnie zaktualizowano dane !", "", "success").then(() => {
                                 this.$router.push({name: 'customersCarsList'})
                             })
                         }

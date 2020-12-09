@@ -66,7 +66,7 @@
                 this.$api.put(`/api/orders/${this.order.id}`, this.order)
                     .then(res => {
                         if(res.data.success) {
-                            this.$notify("Pomyślnie zaaktulizowano dane !", "", "success").then(() => {
+                            this.$notify("Pomyślnie zaktualizowano dane !", "", "success").then(() => {
                                 this.$router.push({name: 'ordersList'})
                             })
                         }

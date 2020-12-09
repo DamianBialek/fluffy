@@ -89,7 +89,7 @@ export default {
             this.$api.put(`/api/parameters/${this.editedParameter.id}`, this.editedParameter)
                 .then(res => {
                     if(res.data.success) {
-                        this.$notify("Pomyślnie zaaktualizowano dane !", "", "success").then(() => {
+                        this.$notify("Pomyślnie zaktualizowano dane !", "", "success").then(() => {
                             this.getParameters();
                         })
                     }

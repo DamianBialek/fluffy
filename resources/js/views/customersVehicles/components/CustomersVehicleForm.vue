@@ -4,7 +4,7 @@
             <li class="nav-item">
                 <a class="nav-link active" id="data-tab" data-toggle="tab" href="#data" role="tab" aria-controls="data" aria-selected="true">Dane</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="vehicle.id">
                 <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="true">Zlecenia</a>
             </li>
         </ul>
