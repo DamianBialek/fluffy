@@ -73,17 +73,17 @@
                 </div>
                 <div v-if="order.id" class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
                     <div class="form-group row">
+                        <label for="number" class="col-sm-2 col-form-label">Protokół przyjęcia pojazdu</label>
+                        <div class="col-sm-10">
+                            <a target="_blank" :href="`/orders/${order.id}/acceptance-report`" class="btn btn-outline-secondary ml-2"><i class="fas fa-eye"></i> Zobacz</a>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="number" class="col-sm-2 col-form-label">Faktura VAT</label>
                         <div class="col-sm-10">
                             <b v-if="order.invoice_number">{{order.invoice_number}}</b>
                             <button v-if="!order.invoice_number" type="button" class="btn btn-outline-secondary" @click="$emit('generateInvoice')">Wygeneruj</button>
                             <a v-if="order.invoice_number" target="_blank" :href="`/orders/${order.id}/invoice`" class="btn btn-outline-secondary ml-2"><i class="fas fa-eye"></i> Zobacz</a>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="number" class="col-sm-2 col-form-label">Protokół przyjęcia pojazdu</label>
-                        <div class="col-sm-10">
-                            <a target="_blank" :href="`/orders/${order.id}/acceptance-report`" class="btn btn-outline-secondary ml-2"><i class="fas fa-eye"></i> Zobacz</a>
                         </div>
                     </div>
                 </div>

@@ -21,7 +21,6 @@ class Api
     {
         $this->httpClient = new Client();
         $this->accessTokenObject = $accessTokenObject;
-        $this->refreshIfExpiredAccessToken();
     }
 
     private function getNewAccessToken()
@@ -37,30 +36,8 @@ class Api
 
             return json_decode($res->getBody(), true);
         } catch (\Exception $e) {
-            throw new \Exception("Connection error with Allegro API ! Please try again later");
+            $this->throwAllegroException();
         }
-    }
-
-    private function refreshIfExpiredAccessToken()
-    {
-        if(empty($this->accessTokenObject) || empty($this->accessTokenObject['access_token'])) {
-            $this->accessTokenObject = $this->getNewAccessToken();
-        }
-
-        $decodedToken = $this->decodeAccessToken($this->accessTokenObject['access_token']);
-
-        if($this->checkIfTokenIsExpired($decodedToken)) {
-            $this->accessTokenObject = $this->getNewAccessToken();
-        }
-    }
-
-    private function checkIfTokenIsExpired($decodedToken)
-    {
-        if(empty($decodedToken['exp'])) {
-            return true;
-        }
-
-        return Carbon::parse($decodedToken['exp']) < Carbon::now();
     }
 
     private function decodeAccessToken($token)
@@ -87,10 +64,7 @@ class Api
 
     public function offersListing($phrase, $offset = 0, $limit = 15)
     {
-        $res = $this->apiRequest("GET", "https://api.allegro.pl/offers/listing?searchMode=DESCRIPTIONS&limit={$limit}&offset={$offset}&phrase=".urlencode($phrase), [
-            'Accept' => 'application/vnd.allegro.public.v1+json',
-            'Authorization' => "Bearer ".$this->getAccessToken()
-        ]);
+        $res = $this->apiRequest("GET", "https://api.allegro.pl/offers/listing?searchMode=DESCRIPTIONS&limit={$limit}&offset={$offset}&phrase=".urlencode($phrase));
 
         $data = json_decode($res->getBody(), true);
         $data = array_intersect_key($data, array_flip(['items', 'searchMeta']));
@@ -107,7 +81,7 @@ class Api
         $clientSecret = config("allegro.client_secret");
 
         if(empty($clientId) || empty($clientSecret)) {
-            throw new \Exception("Allegro config not found");
+            $this->throwAllegroException();
         }
 
         return base64_encode($clientId.":".$clientSecret);
@@ -125,24 +99,38 @@ class Api
     {
         try {
             return $this->httpClient->request($method, $url, [
-                'headers' => $headers
+                'headers' => array_merge($headers, [
+                    'Accept' => 'application/vnd.allegro.public.v1+json',
+                    'Authorization' => "Bearer ".$this->getAccessToken()
+                ])
             ]);
         } catch (ClientException $e) {
             if($e->getCode() == '401') {
                 $this->unautorizedRequests++;
 
                 if($this->unautorizedRequests > $this->maxUnautorizedRequests) {
-                    throw new \Exception("Max unautorized requests limit reached !");
+                    $this->throwAllegroException();
                 }
 
-                $this->refreshIfExpiredAccessToken();
+                if($json = json_decode((string)$e->getResponse()->getBody(), true)) {
+                    if($json['error'] == 'invalid_token') {
+                        $this->accessTokenObject = $this->getNewAccessToken();
+                    }
+                }
+
+
                 return $this->apiRequest($method, $url, $headers);
             } else {
-                throw new \Exception("Connection error with Allegro API ! Please try again later");
+                $this->throwAllegroException();
             }
 
             throw $e;
         }
+    }
+
+    private function throwAllegroException()
+    {
+        throw new \Exception("Connection error with Allegro API ! Please check API keys and try again later");
     }
 
     public function debugInfo()

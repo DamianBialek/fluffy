@@ -24,11 +24,6 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('me', 'AuthController@me');
 });
 
-Route::get("/session", function () {
-//    Session::put('progress', '5%');
-//    Session::save();
-});
-
 Route::middleware(["jwt"])->group(function () {
     Route::resource('parameters', 'ParameterController');
     Route::get("/customers/count", 'CustomerController@countOrders');
