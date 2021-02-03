@@ -10,6 +10,7 @@ Vue.use(VueRouter);
 const modulesRoutes = Object.keys(modules).map(key => modules[key])
 
 const router = new VueRouter({
+    base: window.Config.base,
     mode: 'history',
     routes: [
         {

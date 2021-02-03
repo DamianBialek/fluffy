@@ -9,6 +9,7 @@ import swal from 'sweetalert';
 window.$ = window.jQuery = jquery;
 
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.baseURL = window.Config.baseUrl;
 
 let token = document.head.querySelector('meta[name="csrf-token"]');
 

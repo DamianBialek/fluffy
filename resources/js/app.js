@@ -5,7 +5,6 @@ import store from "./store";
 import axios from "axios";
 import dialogPlugin from "./plugins/dialog";
 import swal from "sweetalert";
-import route from "./router/modules/calendar";
 
 Vue.use(dialogPlugin);
 

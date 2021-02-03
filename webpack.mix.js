@@ -13,6 +13,7 @@ const config = require('./webpack.config');
  */
 
 mix.webpackConfig(config);
+mix.setResourceRoot("./../");
 
 mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
