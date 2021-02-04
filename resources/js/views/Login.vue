@@ -28,8 +28,8 @@
         data() {
             return {
                 formData: {
-                    email: 'test@test.pl',
-                    password: 'test'
+                    email: '',
+                    password: ''
                 }
             }
         },

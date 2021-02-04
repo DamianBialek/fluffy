@@ -44,7 +44,7 @@ Route::middleware(["jwt"])->group(function () {
     Route::get("/mechanics/count", 'MechanicController@countOrders');
     Route::resource('mechanics', 'MechanicController');
     Route::get("/allegro/api/search", "AllegroApiController@search");
-
+    Route::put("/user", "UserController@update");
 });
 
 

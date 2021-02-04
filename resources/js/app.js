@@ -10,6 +10,9 @@ Vue.use(dialogPlugin);
 
 Vue.prototype.$api = axios;
 Vue.prototype.$notify = swal;
+Vue.prototype.$laravel = {
+    config: window.Config
+}
 
 Vue.directive('tooltip', function(el, binding){
     $(el).tooltip({

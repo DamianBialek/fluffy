@@ -44,11 +44,13 @@
             Object.keys(layoutRoutes).forEach(module => {
                 const route = layoutRoutes[module];
 
-                if(this.modulesIcons.hasOwnProperty(module)) {
-                    route['icon'] = this.modulesIcons[module];
-                }
+                if(!route.meta.hideInSidebar) {
+                    if(this.modulesIcons.hasOwnProperty(module)) {
+                        route['icon'] = this.modulesIcons[module];
+                    }
 
-                this.routes.push(route);
+                    this.routes.push(route);
+                }
             });
 
             const modulesOrder = Object.keys(this.modulesIcons);
